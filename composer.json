@@ -1,0 +1,32 @@
+{
+  "name": "othercode/rest",
+  "type": "library",
+  "license": "MIT",
+  "description": "Rest client to make GET, POST, PUT, DELETE, PATCH, etc calls.",
+  "keywords": [
+    "http",
+    "curl",
+    "rest",
+    "requests"
+  ],
+  "authors": [
+    {
+      "name": "Unay Santisteban",
+      "email": "usantisteban@othercode.es",
+      "homepage": "http://othercode.es/",
+      "role": "developer"
+    }
+  ],
+  "require": {
+    "php": ">=5.3.3",
+    "ext-curl": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "OtherCode\\Rest\\": "src/"
+    }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "*"
+  }
+}
