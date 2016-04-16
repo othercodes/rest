@@ -24,14 +24,14 @@ Via: 1.1 vegur';
 
         $headers = new Headers($rawHeaders);
         $this->assertInstanceOf('OtherCode\Rest\Payloads\Headers', $headers);
-        $this->assertCount(14, $headers);
+        $this->assertCount(13, $headers);
     }
 
     public function testConstructWithArray()
     {
         $arrayHeaders = array(
             'some_header' => 'some_value',
-            'other_header' >= 'other_value'
+            'other_header' => 'other_value'
         );
 
         $headers = new Headers($arrayHeaders);

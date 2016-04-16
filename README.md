@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/othercodes/rest.svg?branch=master)](https://travis-ci.org/othercodes/rest) [![Latest Stable Version](https://poser.pugx.org/othercode/rest/v/stable)](https://packagist.org/packages/othercode/rest) [![License](https://poser.pugx.org/othercode/rest/license)](https://packagist.org/packages/othercode/rest)
 
-Rest client to make GET, POST, PUT, DELETE, PATCH, etc calls.
+[Rest client](http://othercode.es/packages/rest-client.html) to make GET, POST, PUT, DELETE, PATCH, etc calls.
 
 ## Installation
 
@@ -22,7 +22,7 @@ composer update
 
 ### Install without Composer
 
-Also we can use this library without Composer, we only have to include in our script the **"scitrest/autoload.php"** file.
+Also we can use this library without Composer, we only have to include in our script the **"rest/autoload.php"** file.
 ```php
 require_once "rest/autoload.php".
 ```
