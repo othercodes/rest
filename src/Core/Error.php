@@ -6,7 +6,7 @@ namespace OtherCode\Rest\Core;
  * Class Error
  * @author Unay Santisteban <usantisteban@othercode.es>
  * @version 1.0
- * @package OtherCode\Rest
+ * @package OtherCode\Rest\Core
  */
 class Error
 {

@@ -1,16 +1,10 @@
 <?php namespace OtherCode\Rest\Core;
 
-use Exception;
-use OtherCode\Rest\Payloads\Request;
-use OtherCode\Rest\Payloads\Response;
-use OtherCode\Rest\Modules\BaseModule;
-use OtherCode\Rest\Exceptions\RestException;
-
 /**
- * Class SCITRestCore
+ * Class Core
  * @author Unay Santisteban <usantisteban@othercode.es>
- * @version 1.0
- * @package OtherCode\Rest
+ * @version 1.1
+ * @package OtherCode\Rest\Core
  */
 abstract class Core
 {
@@ -18,29 +12,29 @@ abstract class Core
     /**
      * Core version
      */
-    const VERSION = "2.5.2";
+    const VERSION = "1.1";
 
     /**
      * Configuration class
-     * @var Configuration
+     * @var \OtherCode\Rest\Core\Configuration
      */
     public $configuration;
 
     /**
      * Last known error
-     * @var Error
+     * @var \OtherCode\Rest\Core\Error
      */
     public $error;
 
     /**
      * The data to be send
-     * @var Request
+     * @var \OtherCode\Rest\Payloads\Request
      */
     protected $request;
 
     /**
      * Stack with the response data
-     * @var Response
+     * @var \OtherCode\Rest\Payloads\Response
      */
     protected $response;
 
@@ -63,7 +57,7 @@ abstract class Core
      * Main constructor
      * @param Configuration $configuration
      */
-    public function __construct(Configuration $configuration = null)
+    public function __construct(\OtherCode\Rest\Core\Configuration $configuration = null)
     {
         $this->curl = curl_init();
 
@@ -74,11 +68,11 @@ abstract class Core
         if (isset($configuration)) {
             $this->configuration = $configuration;
         } else {
-            $this->configuration = new Configuration();
+            $this->configuration = new \OtherCode\Rest\Core\Configuration();
         }
 
-        $this->response = new Response();
-        $this->request = new Request();
+        $this->response = new \OtherCode\Rest\Payloads\Response();
+        $this->request = new \OtherCode\Rest\Payloads\Request();
         $this->request->setHeaders($this->configuration->httpheader);
 
         $this->configure();
@@ -87,16 +81,16 @@ abstract class Core
     /**
      * Configure main options
      * @param Configuration $configuration
-     * @throws RestException
+     * @throws \OtherCode\Rest\Exceptions\RestException
      * @return $this
      */
-    public function configure(Configuration $configuration = null)
+    public function configure(\OtherCode\Rest\Core\Configuration $configuration = null)
     {
         if (isset($configuration)) {
             $this->configuration = $configuration;
         }
         if (!curl_setopt_array($this->curl, $this->configuration->toArray())) {
-            throw new RestException("It has not been possible to configure the instance, check your configuration options");
+            throw new \OtherCode\Rest\Exceptions\RestException("It has not been possible to configure the instance, check your configuration options");
         }
         return $this;
     }
@@ -106,8 +100,8 @@ abstract class Core
      * @param string $method
      * @param string $url
      * @param mixed $body
-     * @throws RestException
-     * @return Response
+     * @throws \OtherCode\Rest\Exceptions\RestException
+     * @return \OtherCode\Rest\Payloads\Response
      */
     protected function call($method, $url, $body = null)
     {
@@ -154,7 +148,7 @@ abstract class Core
                 }
                 break;
             default:
-                throw new RestException('Method "' . $method . '" not supported!');
+                throw new \OtherCode\Rest\Exceptions\RestException('Method "' . $method . '" not supported!');
         }
 
         /**
@@ -214,7 +208,7 @@ abstract class Core
 
     /**
      * Return the last error.
-     * @return Error
+     * @return \OtherCode\Rest\Core\Error
      */
     public function getError()
     {
@@ -228,13 +222,13 @@ abstract class Core
      */
     protected function setError($code, $message)
     {
-        $this->error = new Error($code, $message);
+        $this->error = new \OtherCode\Rest\Core\Error($code, $message);
     }
 
     /**
      * Run all the registered modules
      * @param string $hook Hook module name
-     * @throws RestException
+     * @throws \OtherCode\Rest\Exceptions\RestException
      */
     private function dispatchModules($hook)
     {
@@ -245,11 +239,11 @@ abstract class Core
         foreach ($this->modules[$hook] as $module) {
             try {
                 $module->run();
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 /**
                  * Transform the initial exception to a custom one.
                  */
-                throw new RestException($e->getMessage(), $e->getCode());
+                throw new \OtherCode\Rest\Exceptions\RestException($e->getMessage(), $e->getCode());
             }
         }
     }
@@ -257,11 +251,11 @@ abstract class Core
     /**
      * Register a new module instance
      * @param string $moduleName
-     * @param BaseModule $moduleInstance
+     * @param \OtherCode\Rest\Modules\BaseModule $moduleInstance
      * @param string $hook
      * @return boolean
      */
-    protected function registerModule($moduleName, BaseModule $moduleInstance, $hook)
+    protected function registerModule($moduleName, \OtherCode\Rest\Modules\BaseModule $moduleInstance, $hook)
     {
         if (!in_array($hook, array_keys($this->modules))) {
             return false;

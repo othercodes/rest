@@ -8,7 +8,7 @@ use OtherCode\Rest\Core\Error;
  * Class Response
  * @author Unay Santisteban <usantisteban@othercode.es>
  * @version 1.0
- * @package OtherCode\Rest
+ * @package OtherCode\Rest\Payloads
  */
 class Response
 {
@@ -33,19 +33,19 @@ class Response
 
     /**
      * The response body
-     * @var
+     * @var string
      */
     public $body;
 
     /**
      * The response headers
-     * @var Headers
+     * @var \OtherCode\Rest\Payloads\Headers
      */
     public $headers;
 
     /**
      * The last known error
-     * @var Error
+     * @var \OtherCode\Rest\Core\Error
      */
     public $error;
 
@@ -84,7 +84,7 @@ class Response
         $response = explode("\r\n\r\n", $response);
 
         $this->body = array_pop($response);
-        $this->headers = new Headers(array_pop($response));
+        $this->headers = new \OtherCode\Rest\Payloads\Headers(array_pop($response));
 
 
         if (isset($this->headers['Content-Type'])) {

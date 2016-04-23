@@ -1,14 +1,12 @@
 <?php namespace OtherCode\Rest\Modules\Decoders;
 
-use SimpleXMLElement;
-
 /**
- * Class SCITRestDecoder
+ * Class XMLDecoder
  * @author Unay Santisteban <usantisteban@othercode.es>
  * @version 1.0
- * @package OtherCode\Rest
+ * @package OtherCode\Rest\Modules\Decoders
  */
-class XMLDecoder extends BaseDecoder
+class XMLDecoder extends \OtherCode\Rest\Modules\Decoders\BaseDecoder
 {
 
     /**
@@ -26,7 +24,7 @@ class XMLDecoder extends BaseDecoder
         /**
          * Preform the actual decode
          */
-        $this->body = new SimpleXMLElement($this->body);
+        $this->body = new \SimpleXMLElement($this->body);
 
         /**
          * set the new error code and message

@@ -1,15 +1,14 @@
-<?php namespace OtherCode\Rest\Modules\Encoders;
+<?php
 
-use OtherCode\Rest\Exceptions\RestException;
-use OtherCode\Rest\Modules\BaseModule;
+namespace OtherCode\Rest\Modules\Encoders;
 
 /**
  * Class BaseEncoder
  * @author Unay Santisteban <usantisteban@othercode.es>
  * @version 1.0
- * @package OtherCode\Rest
+ * @package OtherCode\Rest\Modules\Encoders
  */
-abstract class BaseEncoder extends BaseModule
+abstract class BaseEncoder extends \OtherCode\Rest\Modules\BaseModule
 {
     /**
      * The content type that trigger the decoder
@@ -31,7 +30,7 @@ abstract class BaseEncoder extends BaseModule
     public function run()
     {
         if (!is_array($this->methods)) {
-            throw new RestException('The "methods" property MUST be an array.');
+            throw new \OtherCode\Rest\Exceptions\RestException('The "methods" property MUST be an array.');
         }
 
         if (in_array($this->method, $this->methods)) {

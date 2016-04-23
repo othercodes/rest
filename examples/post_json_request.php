@@ -2,7 +2,7 @@
 
 require_once '../autoload.php';
 
-$api = new OtherCode\Rest\Rest();
+$api = new \OtherCode\Rest\Rest();
 $api->configuration->url = "http://jsonplaceholder.typicode.com/";
 $api->configuration->addHeader('some_header', 'some_value');
 $api->configure();

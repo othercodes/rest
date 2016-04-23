@@ -1,7 +1,5 @@
 <?php namespace OtherCode\Rest\Modules;
 
-use stdClass;
-
 /**
  * Class BaseModule
  * @author Unay Santisteban <usantisteban@othercode.es>
@@ -12,7 +10,7 @@ abstract class BaseModule
 {
     /**
      * Main data to work with
-     * @var stdClass
+     * @var \stdClass
      */
     private $bindings;
 

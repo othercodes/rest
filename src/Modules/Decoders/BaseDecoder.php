@@ -1,14 +1,12 @@
 <?php namespace OtherCode\Rest\Modules\Decoders;
 
-use OtherCode\Rest\Modules\BaseModule;
-
 /**
  * Class BaseDecoder
  * @author Unay Santisteban <usantisteban@othercode.es>
  * @version 1.0
- * @package OtherCode\Rest
+ * @package OtherCode\Rest\Modules\Decoders
  */
-abstract class BaseDecoder extends BaseModule
+abstract class BaseDecoder extends \OtherCode\Rest\Modules\BaseModule
 {
     /**
      * The content type that trigger the decoder

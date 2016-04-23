@@ -1,13 +1,12 @@
 <?php namespace OtherCode\Rest\Modules\Decoders;
 
-
 /**
  * Class XMLRPCDecoder
  * @author Unay Santisteban <usantisteban@othercode.es>
  * @version 1.0
- * @package OtherCode\Rest
+ * @package OtherCode\Rest\Modules\Decoders
  */
-class XMLRPCDecoder extends BaseDecoder
+class XMLRPCDecoder extends \OtherCode\Rest\Modules\Decoders\BaseDecoder
 {
 
     /**

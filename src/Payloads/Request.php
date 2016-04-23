@@ -6,7 +6,7 @@ namespace OtherCode\Rest\Payloads;
  * Class Request
  * @author Unay Santisteban <usantisteban@othercode.es>
  * @version 1.0
- * @package OtherCode\Rest
+ * @package OtherCode\Rest\Payloads
  */
 class Request
 {
@@ -24,7 +24,7 @@ class Request
 
     /**
      * Request headers
-     * @var Headers
+     * @var \OtherCode\Rest\Payloads\Headers
      */
     public $headers;
 
@@ -41,7 +41,7 @@ class Request
      * @param array|object $body
      * @param Headers|null $headers
      */
-    public function __construct($method = null, $url = null, $body = null, Headers $headers = null)
+    public function __construct($method = null, $url = null, $body = null, \OtherCode\Rest\Payloads\Headers $headers = null)
     {
         $this->method = $method;
         $this->url = $url;
@@ -54,12 +54,12 @@ class Request
      * Set the headers
      * @param Headers $headers
      */
-    public function setHeaders(Headers $headers = null)
+    public function setHeaders(\OtherCode\Rest\Payloads\Headers $headers = null)
     {
         if (isset($headers)) {
             $this->headers = $headers;
         } else {
-            $this->headers = new Headers();
+            $this->headers = new \OtherCode\Rest\Payloads\Headers();
         }
     }
 }

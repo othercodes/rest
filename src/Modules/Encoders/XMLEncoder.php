@@ -6,9 +6,9 @@ namespace OtherCode\Rest\Modules\Encoders;
  * Class XMLEncoder
  * @author Unay Santisteban <usantisteban@othercode.es>
  * @version 1.0
- * @package OtherCode\Rest
+ * @package OtherCode\Rest\Modules\Encoders
  */
-class XMLEncoder extends BaseEncoder
+class XMLEncoder extends \OtherCode\Rest\Modules\Encoders\BaseEncoder
 {
     /**
      * Methods that will trigger the encoder

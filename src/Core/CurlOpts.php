@@ -1,14 +1,11 @@
 <?php namespace OtherCode\Rest\Core;
 
-use OtherCode\Rest\Payloads\Headers;
-
-
 /**
  * Class CurlOpts
  * @see http://php.net/manual/es/function.curl-setopt.php
  * @author Unay Santisteban <usantisteban@othercode.es>
  * @version 1.0
- * @package OtherCode\Rest
+ * @package OtherCode\Rest\Core
  */
 abstract class CurlOpts
 {
@@ -341,7 +338,7 @@ abstract class CurlOpts
 
     /**
      * Main headers
-     * @var Headers
+     * @var \OtherCode\Rest\Payloads\Headers
      */
     public $httpheader;
 

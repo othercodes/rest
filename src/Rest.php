@@ -1,6 +1,5 @@
 <?php namespace OtherCode\Rest;
 
-use InvalidArgumentException;
 use OtherCode\Rest\Core\Core;
 use OtherCode\Rest\Payloads\Response;
 
@@ -97,7 +96,7 @@ class Rest extends Core
     public function setDecoder($name, $decoder = null)
     {
         if (!isset($decoder)) {
-            $decoder = 'OtherCode\Rest\Modules\Decoders\\' . strtoupper($name) . 'Decoder';
+            $decoder = '\OtherCode\Rest\Modules\Decoders\\' . strtoupper($name) . 'Decoder';
         }
 
         if (class_exists($decoder, true)) {
@@ -115,7 +114,7 @@ class Rest extends Core
     public function setEncoder($name, $encoder = null)
     {
         if (!isset($encoder)) {
-            $encoder = 'OtherCode\Rest\Modules\Encoders\\' . strtoupper($name) . 'Encoder';
+            $encoder = '\OtherCode\Rest\Modules\Encoders\\' . strtoupper($name) . 'Encoder';
         }
 
         if (class_exists($encoder, true)) {
@@ -129,6 +128,7 @@ class Rest extends Core
      * @param string $name Module unique name
      * @param string $module Module class name with namespace
      * @param string $hook The name the hook
+     * @throws \InvalidArgumentException
      * @return $this
      */
     public function setModule($name, $module, $hook = 'after')
@@ -142,7 +142,7 @@ class Rest extends Core
                     $param = $this->response;
                     break;
                 default:
-                    throw new InvalidArgumentException("Invalid hook name!");
+                    throw new \InvalidArgumentException("Invalid hook name!");
             }
             $this->registerModule($name, new $module($param), $hook);
         }

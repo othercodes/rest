@@ -1,7 +1,5 @@
 <?php
 
-use OtherCode\Rest\Payloads\Headers;
-
 class HeadersTest extends \PHPUnit_Framework_TestCase
 {
 
@@ -22,8 +20,8 @@ Content-Length: 292
 Date: Mon, 07 Mar 2016 09:51:49 GMT
 Via: 1.1 vegur';
 
-        $headers = new Headers($rawHeaders);
-        $this->assertInstanceOf('OtherCode\Rest\Payloads\Headers', $headers);
+        $headers = new \OtherCode\Rest\Payloads\Headers($rawHeaders);
+        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Headers', $headers);
         $this->assertCount(13, $headers);
     }
 
@@ -34,8 +32,8 @@ Via: 1.1 vegur';
             'other_header' => 'other_value'
         );
 
-        $headers = new Headers($arrayHeaders);
-        $this->assertInstanceOf('OtherCode\Rest\Payloads\Headers', $headers);
+        $headers = new \OtherCode\Rest\Payloads\Headers($arrayHeaders);
+        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Headers', $headers);
         $this->assertCount(2, $headers);
 
         return $headers;
@@ -44,9 +42,8 @@ Via: 1.1 vegur';
     /**
      * @depends testConstructWithArray
      */
-    public function testBuildHeaders(Headers $headers)
+    public function testBuildHeaders(\OtherCode\Rest\Payloads\Headers $headers)
     {
-
         $this->assertInternalType('array', $headers->build());
         $this->assertCount(2, $headers);
 

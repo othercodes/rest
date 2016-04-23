@@ -1,14 +1,12 @@
 <?php namespace OtherCode\Rest\Exceptions;
 
-use Exception;
-
 /**
- * Class SCITRestException
+ * Class RestException
  * @author Unay Santisteban <usantisteban@othercode.es>
  * @version 1.0
- * @package OtherCode\Rest
+ * @package OtherCode\Rest\Exceptions
  */
-class RestException extends Exception
+class RestException extends \Exception
 {
 
 }

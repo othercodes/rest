@@ -1,13 +1,12 @@
 <?php namespace OtherCode\Rest\Modules\Decoders;
 
-
 /**
  * Class JSONDecoder
  * @author Unay Santisteban <usantisteban@othercode.es>
  * @version 1.0
- * @package OtherCode\Rest
+ * @package OtherCode\Rest\Modules\Decoders
  */
-class JSONDecoder extends BaseDecoder
+class JSONDecoder extends \OtherCode\Rest\Modules\Decoders\BaseDecoder
 {
     /**
      * The content type that trigger the decoder

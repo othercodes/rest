@@ -2,22 +2,20 @@
 
 namespace OtherCode\Rest\Core;
 
-use OtherCode\Rest\Payloads\Headers;
-
 /**
  * Class Configuration
  * @author Unay Santisteban <usantisteban@othercode.es>
  * @version 1.0
- * @package OtherCode\Rest
+ * @package OtherCode\Rest\Core
  */
-class Configuration extends CurlOpts
+class Configuration extends \OtherCode\Rest\Core\CurlOpts
 {
     /**
      * Configuration constructor.
      */
     public function __construct()
     {
-        $this->httpheader = new Headers();
+        $this->httpheader = new \OtherCode\Rest\Payloads\Headers();
     }
 
     /**

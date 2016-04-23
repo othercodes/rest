@@ -6,9 +6,9 @@ namespace OtherCode\Rest\Modules\Encoders;
  * Class XMLRPCEncoder
  * @author Unay Santisteban <usantisteban@othercode.es>
  * @version 1.0
- * @package OtherCode\Rest
+ * @package OtherCode\Rest\Modules\Encoders
  */
-class XMLRPCEncoder extends BaseEncoder
+class XMLRPCEncoder extends \OtherCode\Rest\Modules\Encoders\BaseEncoder
 {
     /**
      * Method

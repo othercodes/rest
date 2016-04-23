@@ -2,16 +2,13 @@
 
 namespace OtherCode\Rest\Payloads;
 
-use ArrayAccess;
-use Countable;
-
 /**
  * Class Headers
  * @author Unay Santisteban <usantisteban@othercode.es>
  * @version 1.0
- * @package OtherCode\Rest
+ * @package OtherCode\Rest\Payloads
  */
-class Headers implements ArrayAccess, Countable
+class Headers implements \ArrayAccess, \Countable
 {
     /**
      * Class constructor

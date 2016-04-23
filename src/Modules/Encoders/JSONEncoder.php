@@ -2,15 +2,13 @@
 
 namespace OtherCode\Rest\Modules\Encoders;
 
-use OtherCode\Rest\Exceptions\RestException;
-
 /**
  * Class JSONEncoder
  * @author Unay Santisteban <usantisteban@othercode.es>
  * @version 1.0
- * @package OtherCode\Rest
+ * @package OtherCode\Rest\Modules\Encoders
  */
-class JSONEncoder extends BaseEncoder
+class JSONEncoder extends \OtherCode\Rest\Modules\Encoders\BaseEncoder
 {
     /**
      * Method
@@ -54,7 +52,7 @@ class JSONEncoder extends BaseEncoder
          * throw an exception
          */
         if (isset($error)) {
-            throw new RestException($error);
+            throw new \OtherCode\Rest\Exceptions\RestException($error);
         }
     }
 }
