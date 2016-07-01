@@ -27,7 +27,7 @@ class RestTest extends \PHPUnit_Framework_TestCase
          * There are 3 options configured by default, so if we configure
          * two we have a total of 5
          */
-        $this->assertCount(5, $api->configuration->toArray());
+        $this->assertCount(6, $api->configuration->toArray());
 
         $api->configure();
         return $api;
