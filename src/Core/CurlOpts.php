@@ -54,7 +54,7 @@ abstract class CurlOpts
      * kept at 2 (default value).
      * @var int
      */
-    public $ssl_verifyhost;
+    public $ssl_verifyhost = false;
 
     /**
      * The HTTP authentication method(s) to use. The options are:

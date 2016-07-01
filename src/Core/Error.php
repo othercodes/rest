@@ -14,7 +14,7 @@ class Error
      * The last error code
      * @var int
      */
-    public $code;
+    public $code = 0;
 
     /**
      * The last error message
@@ -26,10 +26,12 @@ class Error
      * @param $code
      * @param $message
      */
-    public function __construct($code, $message)
+    public function __construct($code = 0, $message)
     {
         $this->code = $code;
-        $this->message = $message;
+        if ($code !== 0) {
+            $this->message = $message;
+        }
     }
 
     /**

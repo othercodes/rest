@@ -59,12 +59,9 @@ abstract class Core
      */
     public function __construct(\OtherCode\Rest\Core\Configuration $configuration = null)
     {
-        $this->curl = curl_init();
-
-        curl_setopt($this->curl, CURLOPT_FRESH_CONNECT, true);
-        curl_setopt($this->curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($this->curl, CURLOPT_HEADER, true);
-
+        /**
+         * @TODO In future versions move this to configure method
+         */
         if (isset($configuration)) {
             $this->configuration = $configuration;
         } else {
@@ -89,9 +86,6 @@ abstract class Core
         if (isset($configuration)) {
             $this->configuration = $configuration;
         }
-        if (!curl_setopt_array($this->curl, $this->configuration->toArray())) {
-            throw new \OtherCode\Rest\Exceptions\RestException("It has not been possible to configure the instance, check your configuration options");
-        }
         return $this;
     }
 
@@ -105,6 +99,16 @@ abstract class Core
      */
     protected function call($method, $url, $body = null)
     {
+        $this->curl = curl_init();
+
+        curl_setopt($this->curl, CURLOPT_FRESH_CONNECT, true);
+        curl_setopt($this->curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($this->curl, CURLOPT_HEADER, true);
+
+        if (!curl_setopt_array($this->curl, $this->configuration->toArray())) {
+            throw new \OtherCode\Rest\Exceptions\RestException("It has not been possible to configure the instance, check your configuration options");
+        }
+
         $method = strtoupper($method);
 
         $this->request->body = $body;
@@ -169,7 +173,7 @@ abstract class Core
         $this->setError(curl_errno($this->curl), curl_error($this->curl));
 
         $this->response->parseResponse($response);
-        $this->response->setMetadata($this->getMetadata());
+        $this->response->setMetadata(curl_getinfo($this->curl));
         $this->response->setError($this->error);
 
         /**
@@ -177,6 +181,11 @@ abstract class Core
          * "after" hook, we run them here
          */
         $this->dispatchModules('after');
+
+        /**
+         * Close the current connection
+         */
+        curl_close($this->curl);
 
         /**
          * Return the final response processed or not
@@ -203,7 +212,7 @@ abstract class Core
      */
     public function getMetadata()
     {
-        return curl_getinfo($this->curl);
+        return $this->response->metadata;
     }
 
     /**
@@ -232,19 +241,8 @@ abstract class Core
      */
     private function dispatchModules($hook)
     {
-        /**
-         * run each module with try catch
-         * structure
-         */
         foreach ($this->modules[$hook] as $module) {
-            try {
-                $module->run();
-            } catch (\Exception $e) {
-                /**
-                 * Transform the initial exception to a custom one.
-                 */
-                throw new \OtherCode\Rest\Exceptions\RestException($e->getMessage(), $e->getCode());
-            }
+            $module->run();
         }
     }
 
@@ -283,16 +281,6 @@ abstract class Core
             return true;
         }
         return null;
-    }
-
-    /**
-     * Class destructor
-     */
-    public function __destruct()
-    {
-        if (gettype($this->curl) == 'resource') {
-            curl_close($this->curl);
-        }
     }
 
 }
