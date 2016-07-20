@@ -29,7 +29,6 @@ class RestTest extends \PHPUnit_Framework_TestCase
          */
         $this->assertCount(6, $api->configuration->toArray());
 
-        $api->configure();
         return $api;
     }
 
