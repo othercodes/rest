@@ -4,7 +4,6 @@ require_once '../autoload.php';
 
 $api = new \OtherCode\Rest\Rest();
 $api->configuration->url = "http://jsonplaceholder.typicode.com/";
-$api->configure();
 
 $api->setDecoder("json");
 

@@ -5,7 +5,7 @@ namespace OtherCode\Rest\Core;
 /**
  * Class Core
  * @author Unay Santisteban <usantisteban@othercode.es>
- * @version 1.1
+ * @version 1.2
  * @package OtherCode\Rest\Core
  */
 abstract class Core
@@ -14,7 +14,7 @@ abstract class Core
     /**
      * Core version
      */
-    const VERSION = "1.1";
+    const VERSION = "1.2";
 
     /**
      * Configuration class
@@ -61,20 +61,11 @@ abstract class Core
      */
     public function __construct(\OtherCode\Rest\Core\Configuration $configuration = null)
     {
-        /**
-         * @TODO In future versions move this to configure method
-         */
-        if (isset($configuration)) {
-            $this->configuration = $configuration;
-        } else {
-            $this->configuration = new \OtherCode\Rest\Core\Configuration();
-        }
+        $this->configure($configuration);
 
         $this->response = new \OtherCode\Rest\Payloads\Response();
         $this->request = new \OtherCode\Rest\Payloads\Request();
         $this->request->setHeaders($this->configuration->httpheader);
-
-        $this->configure();
     }
 
     /**
@@ -87,6 +78,8 @@ abstract class Core
     {
         if (isset($configuration)) {
             $this->configuration = $configuration;
+        } else {
+            $this->configuration = new \OtherCode\Rest\Core\Configuration();
         }
         return $this;
     }
