@@ -1,4 +1,6 @@
-<?php namespace OtherCode\Rest\Core;
+<?php
+
+namespace OtherCode\Rest\Core;
 
 /**
  * Class Core
@@ -95,6 +97,7 @@ abstract class Core
      * @param string $url
      * @param mixed $body
      * @throws \OtherCode\Rest\Exceptions\RestException
+     * @throws \OtherCode\Rest\Exceptions\ConfigurationException
      * @return \OtherCode\Rest\Payloads\Response
      */
     protected function call($method, $url, $body = null)
@@ -106,7 +109,7 @@ abstract class Core
         curl_setopt($this->curl, CURLOPT_HEADER, true);
 
         if (!curl_setopt_array($this->curl, $this->configuration->toArray())) {
-            throw new \OtherCode\Rest\Exceptions\RestException("It has not been possible to configure the instance, check your configuration options");
+            throw new \OtherCode\Rest\Exceptions\ConfigurationException("It has not been possible to configure the instance, check your configuration options");
         }
 
         $method = strtoupper($method);

@@ -2,8 +2,6 @@
 
 namespace OtherCode\Rest\Payloads;
 
-use OtherCode\Rest\Core\Error;
-
 /**
  * Class Response
  * @author Unay Santisteban <usantisteban@othercode.es>

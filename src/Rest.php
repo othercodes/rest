@@ -1,7 +1,6 @@
-<?php namespace OtherCode\Rest;
+<?php
 
-use OtherCode\Rest\Core\Core;
-use OtherCode\Rest\Payloads\Response;
+namespace OtherCode\Rest;
 
 /**
  * Perform request to Rest API
@@ -9,13 +8,13 @@ use OtherCode\Rest\Payloads\Response;
  * @version 1.0
  * @package OtherCode\Rest
  */
-class Rest extends Core
+class Rest extends \OtherCode\Rest\Core\Core
 {
 
     /**
      * @param string $url
      * @param null|array $body
-     * @return Response
+     * @return \OtherCode\Rest\Payloads\Response
      */
     public function get($url, $body = null)
     {
@@ -25,7 +24,7 @@ class Rest extends Core
     /**
      * @param string $url
      * @param null|array $body
-     * @return Response
+     * @return \OtherCode\Rest\Payloads\Response
      */
     public function post($url, $body = null)
     {
@@ -35,7 +34,7 @@ class Rest extends Core
     /**
      * @param string $url
      * @param null|array $body
-     * @return Response
+     * @return \OtherCode\Rest\Payloads\Response
      */
     public function delete($url, $body = null)
     {
@@ -45,7 +44,7 @@ class Rest extends Core
     /**
      * @param string $url
      * @param null|array $body
-     * @return Response
+     * @return \OtherCode\Rest\Payloads\Response
      */
     public function put($url, $body = null)
     {
@@ -55,7 +54,7 @@ class Rest extends Core
     /**
      * @param string $url
      * @param null|array $body
-     * @return Response
+     * @return \OtherCode\Rest\Payloads\Response
      */
     public function patch($url, $body = null)
     {

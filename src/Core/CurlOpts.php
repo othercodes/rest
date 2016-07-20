@@ -1,4 +1,6 @@
-<?php namespace OtherCode\Rest\Core;
+<?php
+
+namespace OtherCode\Rest\Core;
 
 /**
  * Class CurlOpts
