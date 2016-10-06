@@ -61,11 +61,10 @@ abstract class Core
      */
     public function __construct(\OtherCode\Rest\Core\Configuration $configuration = null)
     {
-        $this->configure($configuration);
-
         $this->response = new \OtherCode\Rest\Payloads\Response();
         $this->request = new \OtherCode\Rest\Payloads\Request();
-        $this->request->setHeaders($this->configuration->httpheader);
+
+        $this->configure($configuration);
     }
 
     /**
@@ -81,6 +80,7 @@ abstract class Core
         } else {
             $this->configuration = new \OtherCode\Rest\Core\Configuration();
         }
+        $this->request->setHeaders($this->configuration->httpheader);
         return $this;
     }
 
@@ -91,6 +91,7 @@ abstract class Core
      * @param mixed $body
      * @throws \OtherCode\Rest\Exceptions\RestException
      * @throws \OtherCode\Rest\Exceptions\ConfigurationException
+     * @throws \OtherCode\Rest\Exceptions\ConnectionException
      * @return \OtherCode\Rest\Payloads\Response
      */
     protected function call($method, $url, $body = null)
@@ -164,9 +165,13 @@ abstract class Core
 
         /**
          * we get the last request headers and the
-         * possible error and description
+         * possible error and description. Also
+         * we launch a ConnectionException if needed.
          */
         $this->setError(curl_errno($this->curl), curl_error($this->curl));
+        if($this->error->code !== 0){
+            throw new \OtherCode\Rest\Exceptions\ConnectionException($this->error->code, $this->error->message);
+        }
 
         $this->response->parseResponse($response);
         $this->response->setMetadata(curl_getinfo($this->curl));

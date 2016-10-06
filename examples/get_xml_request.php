@@ -2,14 +2,17 @@
 
 require_once '../autoload.php';
 
-$api = new \OtherCode\Rest\Rest();
-$api->configuration->url = "http://www.thomas-bayer.com/";
+try {
 
-$api->setDecoder("xml");
+    $api = new \OtherCode\Rest\Rest();
+    $api->configuration->url = "http://www.thomas-bayer.com/";
+    $api->setDecoder("xml");
 
-$response = $api->get("sqlrest/CUSTOMER/22");
+    $response = $api->get("sqlrest/CUSTOMER/22");
+    var_dump($response);
 
-if ($api->getError()->hasError() !== 0) {
-    echo $api->getError()->message;
+} catch (\Exception $e) {
+
+    print $e->getMessage();
+
 }
-var_dump($response);

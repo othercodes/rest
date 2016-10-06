@@ -66,6 +66,8 @@ class Response
 
         if (isset($error)) {
             $this->setError($error);
+        } else {
+            $this->setError(new \OtherCode\Rest\Core\Error());
         }
 
         if (isset($metadata)) {

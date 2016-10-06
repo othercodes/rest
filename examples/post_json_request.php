@@ -2,21 +2,29 @@
 
 require_once '../autoload.php';
 
-$api = new \OtherCode\Rest\Rest();
-$api->configuration->url = "http://jsonplaceholder.typicode.com/";
-$api->configuration->addHeader('some_header', 'some_value');
+try {
 
-$api->setEncoder("json");
-$api->setDecoder("json");
+    $api = new \OtherCode\Rest\Rest();
+    $api->configuration->url = "http://jsonplaceholder.typicode.com/";
+    $api->configuration->addHeader('some_header', 'some_value');
 
-$payload = new stdClass();
-$payload->userId = 3400;
-$payload->title = "Some title";
-$payload->body = "Some test data";
+    $api->setEncoder("json");
+    $api->setDecoder("json");
 
-$response = $api->post("posts/", $payload);
+    $payload = new stdClass();
+    $payload->userId = 3400;
+    $payload->title = "Some title";
+    $payload->body = "Some test data";
 
-if ($api->getError()->hasError() !== 0) {
-    echo $api->getError()->message;
+    $response = $api->post("posts/", $payload);
+
+    if ($api->getError()->hasError() !== 0) {
+        echo $api->getError()->message;
+    }
+    var_dump($response);
+
+} catch (\Exception $e) {
+
+    print $e->getMessage();
+
 }
-var_dump($response);

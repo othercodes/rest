@@ -26,16 +26,15 @@ class Error
      * @param $code
      * @param $message
      */
-    public function __construct($code = 0, $message)
+    public function __construct($code = 0, $message = 'none')
     {
         $this->code = $code;
-        if ($code !== 0) {
-            $this->message = $message;
-        }
+        $this->message = $message;
     }
 
     /**
      * Return if an error exists
+     * @deprecated Will be removed in v2
      * @return bool
      */
     public function hasError()
@@ -44,5 +43,14 @@ class Error
             return true;
         }
         return false;
+    }
+
+    /**
+     * Return the object in string format
+     * @return string
+     */
+    public function __toString()
+    {
+        return 'There was a connection error, code: ' . $this->code . ' ' . $this->message;
     }
 }

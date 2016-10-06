@@ -159,4 +159,16 @@ class Rest extends \OtherCode\Rest\Core\Core
         $this->unregisterModule($moduleName, $hook);
         return $this;
     }
+
+    /**
+     * Return if an error exists
+     * @return bool
+     */
+    public function hasError()
+    {
+        if ($this->response->code !== 0) {
+            return true;
+        }
+        return false;
+    }
 }

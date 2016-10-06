@@ -2,14 +2,18 @@
 
 require_once '../autoload.php';
 
-$api = new \OtherCode\Rest\Rest();
-$api->configuration->url = "http://jsonplaceholder.typicode.com/";
+try {
 
-$api->setDecoder("json");
+    $api = new \OtherCode\Rest\Rest();
+    $api->configuration->url = "http://jsonplaceholder.typicode.com/";
+    $api->setDecoder("json");
 
-$response = $api->get("posts/1");
+    $response = $api->get("posts/1");
+    var_dump($response);
 
-if ($api->getError()->hasError() !== 0) {
-    echo $api->getError()->message;
+} catch (\Exception $e) {
+
+    print $e->getMessage();
+
 }
-var_dump($response);
+
