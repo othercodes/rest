@@ -13,12 +13,11 @@ class Rest extends \OtherCode\Rest\Core\Core
 
     /**
      * @param string $url
-     * @param null|array $body
      * @return \OtherCode\Rest\Payloads\Response
      */
-    public function get($url, $body = null)
+    public function get($url)
     {
-        return $this->call("GET", $url, $body);
+        return $this->call("GET", $url);
     }
 
     /**
@@ -33,12 +32,11 @@ class Rest extends \OtherCode\Rest\Core\Core
 
     /**
      * @param string $url
-     * @param null|array $body
      * @return \OtherCode\Rest\Payloads\Response
      */
-    public function delete($url, $body = null)
+    public function delete($url)
     {
-        return $this->call("DELETE", $url, $body);
+        return $this->call("DELETE", $url);
     }
 
     /**
@@ -90,6 +88,7 @@ class Rest extends \OtherCode\Rest\Core\Core
      * Set a new decoder instance
      * @param string $name Decoder unique name
      * @param string $decoder Decoder class name with namespace
+     * @throws \OtherCode\Rest\Exceptions\ModuleNotFoundException
      * @return $this
      */
     public function setDecoder($name, $decoder = null)
@@ -100,6 +99,8 @@ class Rest extends \OtherCode\Rest\Core\Core
 
         if (class_exists($decoder, true)) {
             $this->registerModule($name, new $decoder($this->response), 'after');
+        } else {
+            throw new \OtherCode\Rest\Exceptions\ModuleNotFoundException('Decoder ' . $name . ' not found!');
         }
         return $this;
     }
@@ -108,6 +109,7 @@ class Rest extends \OtherCode\Rest\Core\Core
      * Set a new encoder instance
      * @param string $name Encoder unique name
      * @param string $encoder Encoder class name with namespace
+     * @throws \OtherCode\Rest\Exceptions\ModuleNotFoundException
      * @return $this
      */
     public function setEncoder($name, $encoder = null)
@@ -118,6 +120,8 @@ class Rest extends \OtherCode\Rest\Core\Core
 
         if (class_exists($encoder, true)) {
             $this->registerModule($name, new $encoder($this->request), 'before');
+        } else {
+            throw new \OtherCode\Rest\Exceptions\ModuleNotFoundException('Encoder ' . $name . ' not found!');
         }
         return $this;
     }
@@ -128,6 +132,7 @@ class Rest extends \OtherCode\Rest\Core\Core
      * @param string $module Module class name with namespace
      * @param string $hook The name the hook
      * @throws \InvalidArgumentException
+     * @throws \OtherCode\Rest\Exceptions\ModuleNotFoundException
      * @return $this
      */
     public function setModule($name, $module, $hook = 'after')
@@ -144,6 +149,8 @@ class Rest extends \OtherCode\Rest\Core\Core
                     throw new \InvalidArgumentException("Invalid hook name!");
             }
             $this->registerModule($name, new $module($param), $hook);
+        } else {
+            throw new \OtherCode\Rest\Exceptions\ModuleNotFoundException('Module ' . $name . ' not found!');
         }
         return $this;
     }
@@ -162,6 +169,7 @@ class Rest extends \OtherCode\Rest\Core\Core
 
     /**
      * Return if an error exists
+     * @deprecated
      * @return bool
      */
     public function hasError()

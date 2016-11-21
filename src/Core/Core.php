@@ -5,7 +5,7 @@ namespace OtherCode\Rest\Core;
 /**
  * Class Core
  * @author Unay Santisteban <usantisteban@othercode.es>
- * @version 1.2
+ * @version 1.3
  * @package OtherCode\Rest\Core
  */
 abstract class Core
@@ -14,7 +14,7 @@ abstract class Core
     /**
      * Core version
      */
-    const VERSION = "1.2";
+    const VERSION = "1.3";
 
     /**
      * Configuration class
@@ -106,6 +106,10 @@ abstract class Core
             throw new \OtherCode\Rest\Exceptions\ConfigurationException("It has not been possible to configure the instance, check your configuration options");
         }
 
+        if (isset($body) && !in_array(gettype($body), array('object', 'array'))) {
+            throw new \OtherCode\Rest\Exceptions\RestException("The body has an invalid type, it must be array or object.");
+        }
+
         $method = strtoupper($method);
 
         $this->request->body = $body;
@@ -170,7 +174,7 @@ abstract class Core
          */
         $this->setError(curl_errno($this->curl), curl_error($this->curl));
         if($this->error->code !== 0){
-            throw new \OtherCode\Rest\Exceptions\ConnectionException($this->error->code, $this->error->message);
+            throw new \OtherCode\Rest\Exceptions\ConnectionException($this->error->message, $this->error->code);
         }
 
         $this->response->parseResponse($response);

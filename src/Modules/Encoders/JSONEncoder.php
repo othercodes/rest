@@ -14,7 +14,7 @@ class JSONEncoder extends \OtherCode\Rest\Modules\Encoders\BaseEncoder
      * Method
      * @var array
      */
-    protected $methods = array('POST');
+    protected $methods = array('POST','PUT','PATCH');
 
     /**
      * create a xml rpc document based on the

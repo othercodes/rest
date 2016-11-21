@@ -8,7 +8,7 @@ namespace OtherCode\Rest\Payloads;
  * @version 1.0
  * @package OtherCode\Rest\Payloads
  */
-class Headers implements \ArrayAccess, \Countable
+class Headers implements \ArrayAccess, \Countable, \IteratorAggregate
 {
     /**
      * Class constructor
@@ -58,6 +58,16 @@ class Headers implements \ArrayAccess, \Countable
     }
 
     /**
+     * Return the iterator element
+     * @return mixed
+     */
+    public function getIterator()
+    {
+        return new \ArrayIterator($this);
+    }
+
+    /**
+     * Check if an offset exists
      * @param string $offset
      * @return bool
      */
@@ -67,6 +77,7 @@ class Headers implements \ArrayAccess, \Countable
     }
 
     /**
+     * Return an offset
      * @param string $offset
      * @return mixed
      */
@@ -79,6 +90,7 @@ class Headers implements \ArrayAccess, \Countable
     }
 
     /**
+     * Set an offset
      * @param string $offset
      * @param string $value
      */
@@ -88,6 +100,7 @@ class Headers implements \ArrayAccess, \Countable
     }
 
     /**
+     * Unset an offset
      * @param string $offset
      */
     public function offsetUnset($offset)
@@ -96,6 +109,7 @@ class Headers implements \ArrayAccess, \Countable
     }
 
     /**
+     * Return the number of properties
      * @return int
      */
     public function count()
