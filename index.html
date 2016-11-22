@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Rest by othercodes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Rest</h1>
+      <h2 class="project-tagline">Rest client to make GET, POST, PUT, DELETE, PATCH, etc calls.</h2>
+      <a href="https://github.com/othercodes/rest" class="btn">View on GitHub</a>
+      <a href="https://github.com/othercodes/rest/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/othercodes/rest/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="rest-client" class="anchor" href="#rest-client" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Rest Client</h1>
+
+<p><a href="https://travis-ci.org/othercodes/rest"><img src="https://travis-ci.org/othercodes/rest.svg?branch=master" alt="Build Status"></a> <a href="https://packagist.org/packages/othercode/rest"><img src="https://poser.pugx.org/othercode/rest/v/stable" alt="Latest Stable Version"></a> <a href="https://packagist.org/packages/othercode/rest"><img src="https://poser.pugx.org/othercode/rest/license" alt="License"></a></p>
+
+<p><a href="http://othercode.es/packages/rest-client.html">Rest client</a> to make GET, POST, PUT, DELETE, PATCH, etc calls.</p>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>To install the package we only have to add the dependency to <strong><em>scripts/composer.json</em></strong> file:</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-s"><span class="pl-pds">"</span>require<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+  <span class="pl-s"><span class="pl-pds">"</span>othercode/rest<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>*<span class="pl-pds">"</span></span>
+}</pre></div>
+
+<p>And run the following command:</p>
+
+<div class="highlight highlight-source-shell"><pre>composer update</pre></div>
+
+<h3>
+<a id="install-without-composer" class="anchor" href="#install-without-composer" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Install without Composer</h3>
+
+<p>Also we can use this library without Composer, we only have to include in our script the <strong>"rest/autoload.php"</strong> file.</p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-k">require_once</span> <span class="pl-s"><span class="pl-pds">"</span>rest/autoload.php<span class="pl-pds">"</span></span><span class="pl-k">.</span></span></pre></div>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>To use the Rest we only have to instantiate it and configure the params we want. We can 
+establish the configuration accessing to the <code>-&gt;configuration-&gt;configure_property</code>, for example 
+to configure the url of the call we only have to set the <code>-&gt;configuration-&gt;url parameter</code> and the 
+confirm the changes with the <code>-&gt;configure()</code> method, like we can see as follows:</p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$api</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">OtherCode\Rest\</span><span class="pl-c1">Rest</span>();</span>
+<span class="pl-s1"><span class="pl-smi">$api</span><span class="pl-k">-&gt;</span><span class="pl-smi">configuration</span><span class="pl-k">-&gt;</span><span class="pl-smi">url</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>http://jsonplaceholder.typicode.com/<span class="pl-pds">"</span></span>;</span>
+<span class="pl-s1"><span class="pl-smi">$api</span><span class="pl-k">-&gt;</span>configure();</span></pre></div>
+
+<p>After this we have to set the type of call and the parameters that we wil use, in this case we are
+going to perform a <strong>GET</strong> request to the <strong>"posts/1"</strong> endpoint:</p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$response</span> <span class="pl-k">=</span> <span class="pl-smi">$api</span><span class="pl-k">-&gt;</span>get(<span class="pl-s"><span class="pl-pds">"</span>posts/1<span class="pl-pds">"</span></span>);</span></pre></div>
+
+<p>To control the possible error we only have to check if the code error is different of 0.</p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-k">if</span> (<span class="pl-smi">$api</span><span class="pl-k">-&gt;</span>getError()<span class="pl-k">-&gt;</span>hasError() <span class="pl-k">!</span><span class="pl-k">==</span> <span class="pl-c1">0</span>) {</span>
+<span class="pl-s1">    <span class="pl-c1">echo</span> <span class="pl-smi">$api</span><span class="pl-k">-&gt;</span>getError()<span class="pl-k">-&gt;</span><span class="pl-smi">message</span>;</span>
+<span class="pl-s1">}</span></pre></div>
+
+<p><strong>NOTE: These errors are related to the session cURL, here is the <a href="https://curl.haxx.se/libcurl/c/libcurl-errors.html">complete list</a></strong></p>
+
+<h2>
+<a id="methods" class="anchor" href="#methods" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Methods</h2>
+
+<p>The available methods to work with are:</p>
+
+<h4>
+<a id="-get" class="anchor" href="#-get" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><code>-&gt;get()</code>
+</h4>
+
+<p>Perform a GET request.</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameters</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$url</code></td>
+<td>String</td>
+<td>Required. The URL to which the request is made</td>
+</tr>
+<tr>
+<td><code>$data</code></td>
+<td>Array</td>
+<td>Optional. Associative array of data parameters</td>
+</tr>
+</tbody>
+</table>
+
+<p><strong>Return</strong>: Response object</p>
+
+<h4>
+<a id="-post" class="anchor" href="#-post" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><code>-&gt;post()</code>
+</h4>
+
+<p>Perform a POST request.</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameters</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$url</code></td>
+<td>String</td>
+<td>Required. The URL to which the request is made</td>
+</tr>
+<tr>
+<td><code>$data</code></td>
+<td>Array</td>
+<td>Optional. Associative array of data parameters</td>
+</tr>
+</tbody>
+</table>
+
+<p><strong>Return</strong>: Response object</p>
+
+<h4>
+<a id="-delete" class="anchor" href="#-delete" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><code>-&gt;delete()</code>
+</h4>
+
+<p>Perform a DELETE request.</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameters</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$url</code></td>
+<td>String</td>
+<td>Required. The URL to which the request is made</td>
+</tr>
+<tr>
+<td><code>$data</code></td>
+<td>Array</td>
+<td>Optional. Associative array of data parameters</td>
+</tr>
+</tbody>
+</table>
+
+<p><strong>Return</strong>: Response object</p>
+
+<h4>
+<a id="-put" class="anchor" href="#-put" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><code>-&gt;put()</code>
+</h4>
+
+<p>Perform a PUT request.</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameters</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$url</code></td>
+<td>String</td>
+<td>Required. The URL to which the request is made</td>
+</tr>
+<tr>
+<td><code>$data</code></td>
+<td>Array</td>
+<td>Optional. Associative array of data parameters</td>
+</tr>
+</tbody>
+</table>
+
+<p><strong>Return</strong>: Response object</p>
+
+<h4>
+<a id="-patch" class="anchor" href="#-patch" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><code>-&gt;patch()</code>
+</h4>
+
+<p>Perform a PATCH request.</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameters</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$url</code></td>
+<td>String</td>
+<td>Required. The URL to which the request is made</td>
+</tr>
+<tr>
+<td><code>$data</code></td>
+<td>Array</td>
+<td>Optional. Associative array of data parameters</td>
+</tr>
+</tbody>
+</table>
+
+<p><strong>Return</strong>: Response object</p>
+
+<h4>
+<a id="-getmetadata" class="anchor" href="#-getmetadata" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><code>-&gt;getMetadata()</code>
+</h4>
+
+<p>Return the metadata of the request.</p>
+
+<p><strong>Return</strong>: Array</p>
+
+<h4>
+<a id="-geterror" class="anchor" href="#-geterror" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><code>-&gt;getError()</code>
+</h4>
+
+<p>Return the last known error.</p>
+
+<p><strong>Return</strong>: <code>Error</code> object</p>
+
+<h4>
+<a id="-getpayloads" class="anchor" href="#-getpayloads" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><code>-&gt;getPayloads()</code>
+</h4>
+
+<p>Return an array with the <code>Response</code> and <code>Request</code> objects.</p>
+
+<p><strong>Return</strong>: Array</p>
+
+<h4>
+<a id="-configure" class="anchor" href="#-configure" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><code>-&gt;configure()</code>
+</h4>
+
+<p>Set the main configuration of the cURL instance</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameters</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$configuration</code></td>
+<td>Configuration</td>
+<td>Optional. A new instance of Configuration object.</td>
+</tr>
+</tbody>
+</table>
+
+<p><strong>Return</strong>: Boolean TRUE on success, FALSE on fail.</p>
+
+<h4>
+<a id="-setdecoder" class="anchor" href="#-setdecoder" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><code>-&gt;setDecoder()</code>
+</h4>
+
+<p>Set a new Decoder.</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameters</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$name</code></td>
+<td>String</td>
+<td>Required. The unique name of the decoder.</td>
+</tr>
+<tr>
+<td><code>$decoder</code></td>
+<td>String</td>
+<td>Optional. The class name with namespace of the new decoder.</td>
+</tr>
+</tbody>
+</table>
+
+<p><strong>Return</strong>: Rest object</p>
+
+<h4>
+<a id="-setencoder" class="anchor" href="#-setencoder" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><code>-&gt;setEncoder()</code>
+</h4>
+
+<p>Set a new Encoder.</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameters</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$name</code></td>
+<td>String</td>
+<td>Required. The unique name of the encoder.</td>
+</tr>
+<tr>
+<td><code>$encoder</code></td>
+<td>String</td>
+<td>Optional. The class name with namespace of the new encoder.</td>
+</tr>
+</tbody>
+</table>
+
+<p><strong>Return</strong>: Rest object</p>
+
+<h4>
+<a id="-setmodule" class="anchor" href="#-setmodule" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><code>-&gt;setModule()</code>
+</h4>
+
+<p>Set a new Module.</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameters</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$name</code></td>
+<td>String</td>
+<td>Required. The unique name of the module.</td>
+</tr>
+<tr>
+<td><code>$module</code></td>
+<td>String</td>
+<td>Required. The class name with namespace of the new module.</td>
+</tr>
+<tr>
+<td><code>$hook</code></td>
+<td>String</td>
+<td>Optional. The hook name (after/before) that will trigger the module, 'after' by default.</td>
+</tr>
+</tbody>
+</table>
+
+<p><strong>Return</strong>: Rest object</p>
+
+<h4>
+<a id="-unsetmodule" class="anchor" href="#-unsetmodule" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><code>-&gt;unsetModule()</code>
+</h4>
+
+<p>Unregister a module.</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameters</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$moduleName</code></td>
+<td>String</td>
+<td>Required. The unique name of the decoder.</td>
+</tr>
+<tr>
+<td><code>$hook</code></td>
+<td>String</td>
+<td>Optional. The hook name (after/before) from where delete the module.</td>
+</tr>
+</tbody>
+</table>
+
+<p><strong>Return</strong>: Rest object</p>
+
+<h4>
+<a id="-addheader" class="anchor" href="#-addheader" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><code>-&gt;addHeader()</code>
+</h4>
+
+<p>Add a new header.</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameters</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$header</code></td>
+<td>String</td>
+<td>Required. The unique name of the header.</td>
+</tr>
+<tr>
+<td><code>$value</code></td>
+<td>String</td>
+<td>Requires. The value of the header.</td>
+</tr>
+</tbody>
+</table>
+
+<p><strong>Return</strong>: Rest object</p>
+
+<h4>
+<a id="-addheaders" class="anchor" href="#-addheaders" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><code>-&gt;addHeaders()</code>
+</h4>
+
+<p>Add an array of headers.</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameters</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$headers</code></td>
+<td>String</td>
+<td>Required. An array of headers.</td>
+</tr>
+</tbody>
+</table>
+
+<p><strong>Return</strong>: Rest object</p>
+
+<p><strong>NOTE: We can use the <code>addHeader()</code> and <code>addHeaders()</code> methods with the <code>Rest</code> instance or with the <code>configuration</code> object</strong></p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$api</span><span class="pl-k">-&gt;</span>addHeader(<span class="pl-s"><span class="pl-pds">'</span>some_header<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>some_value<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s1"><span class="pl-smi">$api</span><span class="pl-k">-&gt;</span>addHeaders(<span class="pl-c1">array</span>(<span class="pl-s"><span class="pl-pds">'</span>some_header<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>some_value<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>other_header<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>other_value<span class="pl-pds">'</span></span>));</span></pre></div>
+
+<p>is the same as</p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$api</span><span class="pl-k">-&gt;</span><span class="pl-smi">configuration</span><span class="pl-k">-&gt;</span>addHeader(<span class="pl-s"><span class="pl-pds">'</span>some_header<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>some_value<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s1"><span class="pl-smi">$api</span><span class="pl-k">-&gt;</span><span class="pl-smi">configuration</span><span class="pl-k">-&gt;</span>addHeaders(<span class="pl-c1">array</span>(<span class="pl-s"><span class="pl-pds">'</span>some_header<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>some_value<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>other_header<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>other_value<span class="pl-pds">'</span></span>));</span></pre></div>
+
+<h2>
+<a id="modules" class="anchor" href="#modules" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Modules</h2>
+
+<p>This package allow you to create modules to perform task before and after the request..
+To create a new module we only have to use this template:</p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-k">class</span> <span class="pl-en">CustomModule</span> <span class="pl-k">extends</span> <span class="pl-e">BaseModule</span></span>
+<span class="pl-s1">{</span>
+<span class="pl-s1">    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-en">run</span>()</span>
+<span class="pl-s1">    {</span>
+<span class="pl-s1">        <span class="pl-c">// do something</span></span>
+<span class="pl-s1">    }</span>
+<span class="pl-s1">}</span></pre></div>
+
+<p><strong>IMPORTANT: Any module MUST extends BaseModule</strong></p>
+
+<p>The only method that is mandatory is <code>-&gt;run()</code>, this method execute your custom code of the module.</p>
+
+<p>Once we have our module we can register it with the <code>-&gt;setModule()</code> method. This method needs three parameters,
+the first one is the name of the module, the second one is the complete namespace of the module, and the third one 
+is the hook name for our module, it can be "before" and "after" depends when we want to launch our module.</p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$api</span><span class="pl-k">-&gt;</span>setModule(<span class="pl-s"><span class="pl-pds">'</span>module_name<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>Module\Complete\Namespace<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>after<span class="pl-pds">'</span></span>);</span></pre></div>
+
+<p>For "before" modules you can use all the properties of the Request object.</p>
+
+<ul>
+<li><code>-&gt;method</code></li>
+<li>
+<code>-&gt;url</code> </li>
+<li><code>-&gt;headers</code></li>
+<li><code>-&gt;body</code></li>
+</ul>
+
+<p>For "after" modules you can use all the properties of the Response object.</p>
+
+<p>All modules are executed in the order that we register them into the Rest client, this also affect 
+to Decoders and Encoders.</p>
+
+<h2>
+<a id="decoders" class="anchor" href="#decoders" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Decoders</h2>
+
+<p>A decoder is a kind of module that allows you to automatically decode de response in xml or json, to use them 
+we only have to set the decoder we want with the <code>-&gt;setDecoder()</code> method:</p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$api</span><span class="pl-k">-&gt;</span>setDecoder(<span class="pl-s"><span class="pl-pds">"</span>json<span class="pl-pds">"</span></span>);</span></pre></div>
+
+<p>The default allowed values for this method are: <strong><em>json</em></strong>, <strong><em>xml</em></strong> and <strong><em>xmlrpc</em></strong>. All the decoders are always executed 
+in the "after" hook. </p>
+
+<h3>
+<a id="custom-decoders" class="anchor" href="#custom-decoders" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Custom Decoders</h3>
+
+<p>To create a new decoder we only have to use this template:</p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-k">class</span> <span class="pl-en">CustomDecoder</span> <span class="pl-k">extends</span> <span class="pl-e">BaseDecoder</span></span>
+<span class="pl-s1">{</span>
+<span class="pl-s1">    <span class="pl-k">protected</span> <span class="pl-smi">$contentType</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>application/json<span class="pl-pds">'</span></span>;</span>
+<span class="pl-s1"></span>
+<span class="pl-s1">    <span class="pl-k">protected</span> <span class="pl-k">function</span> <span class="pl-en">decode</span>()</span>
+<span class="pl-s1">    {</span>
+<span class="pl-s1">        <span class="pl-c">// decode $this-&gt;body</span></span>
+<span class="pl-s1">    }</span>
+<span class="pl-s1">}</span></pre></div>
+
+<p>Like in modules, we have the Response object available to work. The $contentType property is the content-type 
+that will trigger the decoder, in the example above all responses with content-type "application/json" will 
+trigger this decoder.</p>
+
+<h2>
+<a id="complete-example" class="anchor" href="#complete-example" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Complete Example</h2>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-k">require_once</span> <span class="pl-s"><span class="pl-pds">'</span>../autoload.php<span class="pl-pds">'</span></span>;</span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-smi">$api</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">OtherCode\Rest\</span><span class="pl-c1">Rest</span>();</span>
+<span class="pl-s1"><span class="pl-smi">$api</span><span class="pl-k">-&gt;</span><span class="pl-smi">configuration</span><span class="pl-k">-&gt;</span><span class="pl-smi">url</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>http://jsonplaceholder.typicode.com/<span class="pl-pds">"</span></span>;</span>
+<span class="pl-s1"><span class="pl-smi">$api</span><span class="pl-k">-&gt;</span><span class="pl-smi">configuration</span><span class="pl-k">-&gt;</span>addHeader(<span class="pl-s"><span class="pl-pds">'</span>some_header<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>some_value<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s1"><span class="pl-smi">$api</span><span class="pl-k">-&gt;</span>configure();</span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-smi">$api</span><span class="pl-k">-&gt;</span>setDecoder(<span class="pl-s"><span class="pl-pds">"</span>json<span class="pl-pds">"</span></span>);</span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-smi">$response</span> <span class="pl-k">=</span> <span class="pl-smi">$api</span><span class="pl-k">-&gt;</span>get(<span class="pl-s"><span class="pl-pds">"</span>posts/1<span class="pl-pds">"</span></span>);</span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-k">if</span> (<span class="pl-smi">$api</span><span class="pl-k">-&gt;</span>getError()<span class="pl-k">-&gt;</span>hasError() <span class="pl-k">!</span><span class="pl-k">==</span> <span class="pl-c1">0</span>) {</span>
+<span class="pl-s1">    <span class="pl-c1">echo</span> <span class="pl-smi">$api</span><span class="pl-k">-&gt;</span>getError()<span class="pl-k">-&gt;</span><span class="pl-smi">message</span>;</span>
+<span class="pl-s1">}</span>
+<span class="pl-s1"><span class="pl-c1">var_dump</span>(<span class="pl-smi">$response</span>);</span></pre></div>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/othercodes/rest">Rest</a> is maintained by <a href="https://github.com/othercodes">othercodes</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
