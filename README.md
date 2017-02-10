@@ -31,13 +31,11 @@ require_once "rest/autoload.php".
 
 To use the Rest we only have to instantiate it and configure the params we want. We can 
 establish the configuration accessing to the `->configuration->configure_property`, for example 
-to configure the url of the call we only have to set the `->configuration->url parameter` and the 
-confirm the changes with the `->configure()` method, like we can see as follows:
+to configure the url of the call we only have to set the `->configuration->url parameter` like we can see as follows:
 
 ```php
 $api = new OtherCode\Rest\Rest();
 $api->configuration->url = "http://jsonplaceholder.typicode.com/";
-$api->configure();
 ```
 
 After this we have to set the type of call and the parameters that we wil use, in this case we are
@@ -133,16 +131,6 @@ Return the last known error.
 Return an array with the `Response` and `Request` objects.
 
 **Return**: Array
-
-#### `->configure()`
-
-Set the main configuration of the cURL instance
-
-Parameters                    | Type          | Description
------------------------------ | ------------- | -------------------------------------------
-`$configuration`              | Configuration | Optional. A new instance of Configuration object.
-
-**Return**: Boolean TRUE on success, FALSE on fail.
 
 #### `->setDecoder()`
 
@@ -303,7 +291,6 @@ require_once '../autoload.php';
 $api = new OtherCode\Rest\Rest();
 $api->configuration->url = "http://jsonplaceholder.typicode.com/";
 $api->configuration->addHeader('some_header','some_value');
-$api->configure();
 
 $api->setDecoder("json");
 
