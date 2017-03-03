@@ -20,7 +20,7 @@ class DecodersTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetJSonDecoder(\OtherCode\Rest\Rest $api)
     {
-        $this->assertInstanceOf('OtherCode\Rest\Rest', $api->setDecoder("json"));
+        $this->assertInstanceOf('\OtherCode\Rest\Rest', $api->setDecoder("json"));
         return $api;
     }
 
@@ -52,7 +52,7 @@ class DecodersTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetXMLDecoder(\OtherCode\Rest\Rest $api)
     {
-        $this->assertInstanceOf('OtherCode\Rest\Rest', $api->setDecoder("xml"));
+        $this->assertInstanceOf('\OtherCode\Rest\Rest', $api->setDecoder("xml"));
         return $api;
     }
 

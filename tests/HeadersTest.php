@@ -23,7 +23,7 @@ Date: Mon, 07 Mar 2016 09:51:49 GMT
 Via: 1.1 vegur';
 
         $headers = new \OtherCode\Rest\Payloads\Headers($rawHeaders);
-        $this->assertInstanceOf('OtherCode\Rest\Payloads\Headers', $headers);
+        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Headers', $headers);
         $this->assertCount(14, $headers);
     }
 
@@ -35,7 +35,7 @@ Via: 1.1 vegur';
         );
 
         $headers = new \OtherCode\Rest\Payloads\Headers($arrayHeaders);
-        $this->assertInstanceOf('OtherCode\Rest\Payloads\Headers', $headers);
+        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Headers', $headers);
         $this->assertCount(2, $headers);
 
         return $headers;

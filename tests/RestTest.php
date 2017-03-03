@@ -9,8 +9,8 @@ class RestTest extends \PHPUnit_Framework_TestCase
     {
         $api = new \OtherCode\Rest\Rest();
 
-        $this->assertInstanceOf('OtherCode\Rest\Rest', $api);
-        $this->assertInstanceOf('OtherCode\Rest\Core\Configuration', $api->configuration);
+        $this->assertInstanceOf('\OtherCode\Rest\Rest', $api);
+        $this->assertInstanceOf('\OtherCode\Rest\Core\Configuration', $api->configuration);
 
         $api->configuration->url = "http://jsonplaceholder.typicode.com/";
         $api->configuration->timeout = 10;
@@ -59,9 +59,9 @@ class RestTest extends \PHPUnit_Framework_TestCase
             'userId' => 1
         )));
 
-        $this->assertInstanceOf('OtherCode\Rest\Payloads\Response', $response);
-        $this->assertInstanceOf('OtherCode\Rest\Payloads\Headers', $response->headers);
-        $this->assertInstanceOf('OtherCode\Rest\Core\Error', $response->error);
+        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Response', $response);
+        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Headers', $response->headers);
+        $this->assertInstanceOf('\OtherCode\Rest\Core\Error', $response->error);
 
         $this->assertInternalType('array', $response->metadata);
         $this->assertInternalType('int', $response->code);
@@ -82,9 +82,9 @@ class RestTest extends \PHPUnit_Framework_TestCase
             'userId' => 1
         )));
 
-        $this->assertInstanceOf('OtherCode\Rest\Payloads\Response', $response);
-        $this->assertInstanceOf('OtherCode\Rest\Payloads\Headers', $response->headers);
-        $this->assertInstanceOf('OtherCode\Rest\Core\Error', $response->error);
+        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Response', $response);
+        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Headers', $response->headers);
+        $this->assertInstanceOf('\OtherCode\Rest\Core\Error', $response->error);
 
         $this->assertInternalType('array', $response->metadata);
         $this->assertInternalType('int', $response->code);
@@ -102,9 +102,9 @@ class RestTest extends \PHPUnit_Framework_TestCase
             'body' => 'bar',
         )));
 
-        $this->assertInstanceOf('OtherCode\Rest\Payloads\Response', $response);
-        $this->assertInstanceOf('OtherCode\Rest\Payloads\Headers', $response->headers);
-        $this->assertInstanceOf('OtherCode\Rest\Core\Error', $response->error);
+        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Response', $response);
+        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Headers', $response->headers);
+        $this->assertInstanceOf('\OtherCode\Rest\Core\Error', $response->error);
 
         $this->assertInternalType('array', $response->metadata);
         $this->assertInternalType('int', $response->code);
@@ -120,9 +120,9 @@ class RestTest extends \PHPUnit_Framework_TestCase
     {
         $response = $api->delete("posts/1");
 
-        $this->assertInstanceOf('OtherCode\Rest\Payloads\Response', $response);
-        $this->assertInstanceOf('OtherCode\Rest\Payloads\Headers', $response->headers);
-        $this->assertInstanceOf('OtherCode\Rest\Core\Error', $response->error);
+        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Response', $response);
+        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Headers', $response->headers);
+        $this->assertInstanceOf('\OtherCode\Rest\Core\Error', $response->error);
 
         $this->assertInternalType('array', $response->metadata);
         $this->assertInternalType('int', $response->code);
@@ -138,9 +138,9 @@ class RestTest extends \PHPUnit_Framework_TestCase
     {
         $response = $api->head("posts");
 
-        $this->assertInstanceOf('OtherCode\Rest\Payloads\Response', $response);
-        $this->assertInstanceOf('OtherCode\Rest\Payloads\Headers', $response->headers);
-        $this->assertInstanceOf('OtherCode\Rest\Core\Error', $response->error);
+        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Response', $response);
+        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Headers', $response->headers);
+        $this->assertInstanceOf('\OtherCode\Rest\Core\Error', $response->error);
 
         $this->assertInternalType('array', $response->metadata);
         $this->assertInternalType('int', $response->code);
@@ -156,7 +156,7 @@ class RestTest extends \PHPUnit_Framework_TestCase
      */
     public function testErrorControl(\OtherCode\Rest\Rest $api)
     {
-        $this->assertInstanceOf('OtherCode\Rest\Core\Error', $api->getError());
+        $this->assertInstanceOf('\OtherCode\Rest\Core\Error', $api->getError());
         $this->assertInternalType('boolean', $api->hasError());
     }
 
@@ -168,8 +168,8 @@ class RestTest extends \PHPUnit_Framework_TestCase
     {
         $payloads = $api->getPayloads();
 
-        $this->assertInstanceOf('OtherCode\Rest\Payloads\Request', $payloads['request']);
-        $this->assertInstanceOf('OtherCode\Rest\Payloads\Response', $payloads['response']);
+        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Request', $payloads['request']);
+        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Response', $payloads['response']);
     }
 
     /**
