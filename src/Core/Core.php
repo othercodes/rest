@@ -106,14 +106,8 @@ abstract class Core
             throw new \OtherCode\Rest\Exceptions\ConfigurationException("It has not been possible to configure the instance, check your configuration options");
         }
 
-        if (isset($body) && !in_array(gettype($body), array('object', 'array'))) {
-            throw new \OtherCode\Rest\Exceptions\RestException("The body has an invalid type, it must be array or object.");
-        }
-
-        $method = strtoupper($method);
-
         $this->request->body = $body;
-        $this->request->method = $method;
+        $this->request->method = strtoupper($method);
         $this->request->url = $this->configuration->url . $url;
 
         /**
@@ -123,37 +117,44 @@ abstract class Core
         $this->dispatchModules('before');
 
         /**
+         * Ensure that the body is serialized,
+         * if not throw exception.
+         */
+        if (isset($this->request->body) && !is_string($this->request->body)) {
+            throw new \OtherCode\Rest\Exceptions\RestException('Cannot send an ' . gettype($this->request->body) . ' as body argument, it must be serialized (json, xml, query string, etc).');
+        }
+
+        /**
+         * Ensure that the body is serialized,
+         * if not throw exception.
+         */
+        if (isset($this->request->body) && !is_string($this->request->body)) {
+            throw new \OtherCode\Rest\Exceptions\RestException('Cannot send an ' . gettype($this->request->body) . ' as body argument, it must be serialized (json, xml or query string).');
+        }
+
+        /**
          * Switch between the different configurations
          * depending the method used
          */
-        switch ($method) {
+        switch ($this->request->method) {
+            case "HEAD":
+                curl_setopt($this->curl, CURLOPT_NOBODY, true);
+                break;
             case "GET":
-                curl_setopt($this->curl, CURLOPT_HTTPGET, true);
+            case "DELETE":
+                curl_setopt($this->curl, CURLOPT_CUSTOMREQUEST, $this->request->method);
                 if (isset($this->request->body)) {
-                    $this->request->url = sprintf("%s?%s", $this->request->url, http_build_query($this->request->body));
+                    curl_setopt($this->curl, CURLOPT_POSTFIELDS, $this->request->body);
                 }
                 break;
             case "POST":
-                curl_setopt($this->curl, CURLOPT_POST, true);
-                if (isset($this->request->body)) {
-                    curl_setopt($this->curl, CURLOPT_POSTFIELDS, $this->request->body);
-                }
-                break;
             case "PUT":
             case "PATCH":
-                curl_setopt($this->curl, CURLOPT_CUSTOMREQUEST, $method);
-                if (isset($this->request->body)) {
-                    curl_setopt($this->curl, CURLOPT_POSTFIELDS, $this->request->body);
-                }
-                break;
-            case "DELETE":
-                curl_setopt($this->curl, CURLOPT_CUSTOMREQUEST, $method);
-                if (isset($this->request->body)) {
-                    $this->request->url = sprintf("%s?%s", $this->request->url, http_build_query($this->request->body));
-                }
+                curl_setopt($this->curl, CURLOPT_CUSTOMREQUEST, $this->request->method);
+                curl_setopt($this->curl, CURLOPT_POSTFIELDS, $this->request->body);
                 break;
             default:
-                throw new \OtherCode\Rest\Exceptions\RestException('Method "' . $method . '" not supported!');
+                throw new \OtherCode\Rest\Exceptions\RestException('Method "' . $this->request->method . '" not supported!');
         }
 
         /**
@@ -173,7 +174,7 @@ abstract class Core
          * we launch a ConnectionException if needed.
          */
         $this->setError(curl_errno($this->curl), curl_error($this->curl));
-        if($this->error->code !== 0){
+        if ($this->error->code !== 0) {
             throw new \OtherCode\Rest\Exceptions\ConnectionException($this->error->message, $this->error->code);
         }
 
@@ -247,7 +248,9 @@ abstract class Core
     private function dispatchModules($hook)
     {
         foreach ($this->modules[$hook] as $module) {
-            $module->run();
+            if (method_exists($module, 'run')) {
+                $module->run();
+            }
         }
     }
 

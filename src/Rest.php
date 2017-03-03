@@ -22,7 +22,7 @@ class Rest extends \OtherCode\Rest\Core\Core
 
     /**
      * @param string $url
-     * @param null|array $body
+     * @param mixed $body
      * @return \OtherCode\Rest\Payloads\Response
      */
     public function post($url, $body = null)
@@ -32,16 +32,17 @@ class Rest extends \OtherCode\Rest\Core\Core
 
     /**
      * @param string $url
+     * @param mixed $body
      * @return \OtherCode\Rest\Payloads\Response
      */
-    public function delete($url)
+    public function delete($url, $body = null)
     {
-        return $this->call("DELETE", $url);
+        return $this->call("DELETE", $url, $body);
     }
 
     /**
      * @param string $url
-     * @param null|array $body
+     * @param mixed $body
      * @return \OtherCode\Rest\Payloads\Response
      */
     public function put($url, $body = null)
@@ -51,12 +52,21 @@ class Rest extends \OtherCode\Rest\Core\Core
 
     /**
      * @param string $url
-     * @param null|array $body
+     * @param mixed $body
      * @return \OtherCode\Rest\Payloads\Response
      */
     public function patch($url, $body = null)
     {
         return $this->call("PATCH", $url, $body);
+    }
+
+    /**
+     * @param $url
+     * @return \OtherCode\Rest\Payloads\Response
+     */
+    public function head($url)
+    {
+        return $this->call('HEAD', $url);
     }
 
     /**
@@ -81,6 +91,28 @@ class Rest extends \OtherCode\Rest\Core\Core
         foreach ($headers as $header => $value) {
             $this->configuration->addHeader($header, $value);
         }
+        return $this;
+    }
+
+    /**
+     * Remove a header
+     * @param string $header
+     * @return $this
+     */
+    public function removeHeader($header)
+    {
+        $this->configuration->removeHeader($header);
+        return $this;
+    }
+
+    /**
+     * Remove a set of headers
+     * @param array $headers
+     * @return $this
+     */
+    public function removeHeaders(array $headers)
+    {
+        $this->configuration->removeHeaders($headers);
         return $this;
     }
 

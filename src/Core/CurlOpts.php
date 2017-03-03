@@ -56,7 +56,7 @@ abstract class CurlOpts
      * kept at 2 (default value).
      * @var int
      */
-    public $ssl_verifyhost = false;
+    public $ssl_verifyhost;
 
     /**
      * The HTTP authentication method(s) to use. The options are:
@@ -288,15 +288,6 @@ abstract class CurlOpts
      * @var string
      */
     public $krb4level;
-
-    /**
-     * A custom request method to use instead of "GET" or
-     * "HEAD" when doing a HTTP request. This is useful
-     * for doing "DELETE" or other, more obscure HTTP
-     * requests.
-     * @var string
-     */
-    public $customrequest;
 
     /**
      * The HTTP proxy to tunnel requests through.

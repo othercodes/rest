@@ -84,6 +84,10 @@ class Response
         $response = explode("\r\n\r\n", $response);
 
         $this->body = array_pop($response);
+        if(empty($this->body)){
+            $this->body = null;
+        }
+
         $this->headers = new \OtherCode\Rest\Payloads\Headers(array_pop($response));
 
 

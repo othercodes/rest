@@ -6,4 +6,4 @@ php:
   - '5.6'
   - '7.0'
 script:
-  - phpunit -c ./tests/phpunit.xml
+  - phpunit -c ./phpunit.xml
