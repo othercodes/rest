@@ -2,22 +2,16 @@
 
 class RestTest extends \PHPUnit_Framework_TestCase
 {
-
-    public function testInstantiation()
+    /**
+     * @return \OtherCode\Rest\Rest
+     */
+    public function testInstantiationAndConfiguration()
     {
         $api = new \OtherCode\Rest\Rest();
 
-        $this->assertInstanceOf('\OtherCode\Rest\Rest', $api);
-        $this->assertInstanceOf('\OtherCode\Rest\Core\Configuration', $api->configuration);
+        $this->assertInstanceOf('OtherCode\Rest\Rest', $api);
+        $this->assertInstanceOf('OtherCode\Rest\Core\Configuration', $api->configuration);
 
-        return $api;
-    }
-
-    /**
-     * @depends testInstantiation
-     */
-    public function testConfiguration(\OtherCode\Rest\Rest $api)
-    {
         $api->configuration->url = "http://jsonplaceholder.typicode.com/";
         $api->configuration->timeout = 10;
 
@@ -27,30 +21,23 @@ class RestTest extends \PHPUnit_Framework_TestCase
          * There are 3 options configured by default, so if we configure
          * two we have a total of 5
          */
-        $this->assertCount(6, $api->configuration->toArray());
+        $this->assertCount(5, $api->configuration->toArray());
 
         return $api;
     }
 
     /**
-     * @depends testConfiguration
+     * @param \OtherCode\Rest\Rest $api
+     * @depends testInstantiationAndConfiguration
+     * @return \OtherCode\Rest\Rest
      */
-    public function testSetDecoder(\OtherCode\Rest\Rest $api)
-    {
-        $this->assertInstanceOf('\OtherCode\Rest\Rest', $api->setDecoder("json"));
-        return $api;
-    }
-
-    /**
-     * @depends testSetDecoder
-     */
-    public function testGetRequest(\OtherCode\Rest\Rest $api)
+    public function testGetMethod(\OtherCode\Rest\Rest $api)
     {
         $response = $api->get("posts/1");
 
-        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Response', $response);
-        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Headers', $response->headers);
-        $this->assertInstanceOf('\OtherCode\Rest\Core\Error', $response->error);
+        $this->assertInstanceOf('OtherCode\Rest\Payloads\Response', $response);
+        $this->assertInstanceOf('OtherCode\Rest\Payloads\Headers', $response->headers);
+        $this->assertInstanceOf('OtherCode\Rest\Core\Error', $response->error);
 
         $this->assertInternalType('array', $response->metadata);
         $this->assertInternalType('int', $response->code);
@@ -61,23 +48,171 @@ class RestTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @depends testGetRequest
+     * @param \OtherCode\Rest\Rest $api
+     * @depends testInstantiationAndConfiguration
      */
-    public function testErrorControl(\OtherCode\Rest\Rest $api)
+    public function testPostMethod(\OtherCode\Rest\Rest $api)
     {
-        $this->assertInstanceOf('\OtherCode\Rest\Core\Error', $api->getError());
-        $this->assertInternalType('boolean', $api->getError()->hasError());
+        $response = $api->post("posts", json_encode(array(
+            'title' => 'foo',
+            'body' => 'bar',
+            'userId' => 1
+        )));
+
+        $this->assertInstanceOf('OtherCode\Rest\Payloads\Response', $response);
+        $this->assertInstanceOf('OtherCode\Rest\Payloads\Headers', $response->headers);
+        $this->assertInstanceOf('OtherCode\Rest\Core\Error', $response->error);
+
+        $this->assertInternalType('array', $response->metadata);
+        $this->assertInternalType('int', $response->code);
+        $this->assertInternalType('string', $response->content_type);
+        $this->assertInternalType('string', $response->charset);
     }
 
     /**
-     * @depends testGetRequest
+     * @param \OtherCode\Rest\Rest $api
+     * @depends testInstantiationAndConfiguration
+     */
+    public function testPutMethod(\OtherCode\Rest\Rest $api)
+    {
+        $response = $api->put("posts/1", json_encode(array(
+            'id' => 1,
+            'title' => 'foo',
+            'body' => 'bar',
+            'userId' => 1
+        )));
+
+        $this->assertInstanceOf('OtherCode\Rest\Payloads\Response', $response);
+        $this->assertInstanceOf('OtherCode\Rest\Payloads\Headers', $response->headers);
+        $this->assertInstanceOf('OtherCode\Rest\Core\Error', $response->error);
+
+        $this->assertInternalType('array', $response->metadata);
+        $this->assertInternalType('int', $response->code);
+        $this->assertInternalType('string', $response->content_type);
+        $this->assertInternalType('string', $response->charset);
+    }
+
+    /**
+     * @param \OtherCode\Rest\Rest $api
+     * @depends testInstantiationAndConfiguration
+     */
+    public function testPatchMethod(\OtherCode\Rest\Rest $api)
+    {
+        $response = $api->patch("posts/1", json_encode(array(
+            'body' => 'bar',
+        )));
+
+        $this->assertInstanceOf('OtherCode\Rest\Payloads\Response', $response);
+        $this->assertInstanceOf('OtherCode\Rest\Payloads\Headers', $response->headers);
+        $this->assertInstanceOf('OtherCode\Rest\Core\Error', $response->error);
+
+        $this->assertInternalType('array', $response->metadata);
+        $this->assertInternalType('int', $response->code);
+        $this->assertInternalType('string', $response->content_type);
+        $this->assertInternalType('string', $response->charset);
+    }
+
+    /**
+     * @param \OtherCode\Rest\Rest $api
+     * @depends testInstantiationAndConfiguration
+     */
+    public function testDeleteMethod(\OtherCode\Rest\Rest $api)
+    {
+        $response = $api->delete("posts/1");
+
+        $this->assertInstanceOf('OtherCode\Rest\Payloads\Response', $response);
+        $this->assertInstanceOf('OtherCode\Rest\Payloads\Headers', $response->headers);
+        $this->assertInstanceOf('OtherCode\Rest\Core\Error', $response->error);
+
+        $this->assertInternalType('array', $response->metadata);
+        $this->assertInternalType('int', $response->code);
+        $this->assertInternalType('string', $response->content_type);
+        $this->assertInternalType('string', $response->charset);
+    }
+
+    /**
+     * @param \OtherCode\Rest\Rest $api
+     * @depends testInstantiationAndConfiguration
+     */
+    public function testHeadMethod(\OtherCode\Rest\Rest $api)
+    {
+        $response = $api->head("posts");
+
+        $this->assertInstanceOf('OtherCode\Rest\Payloads\Response', $response);
+        $this->assertInstanceOf('OtherCode\Rest\Payloads\Headers', $response->headers);
+        $this->assertInstanceOf('OtherCode\Rest\Core\Error', $response->error);
+
+        $this->assertInternalType('array', $response->metadata);
+        $this->assertInternalType('int', $response->code);
+        $this->assertInternalType('string', $response->content_type);
+        $this->assertInternalType('string', $response->charset);
+
+        $this->assertNull($response->body);
+    }
+
+    /**
+     * @param \OtherCode\Rest\Rest $api
+     * @depends testInstantiationAndConfiguration
+     */
+    public function testErrorControl(\OtherCode\Rest\Rest $api)
+    {
+        $this->assertInstanceOf('OtherCode\Rest\Core\Error', $api->getError());
+        $this->assertInternalType('boolean', $api->hasError());
+    }
+
+    /**
+     * @param \OtherCode\Rest\Rest $api
+     * @depends testGetMethod
      */
     public function testPayloads(\OtherCode\Rest\Rest $api)
     {
         $payloads = $api->getPayloads();
 
-        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Request', $payloads['request']);
-        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Response', $payloads['response']);
+        $this->assertInstanceOf('OtherCode\Rest\Payloads\Request', $payloads['request']);
+        $this->assertInstanceOf('OtherCode\Rest\Payloads\Response', $payloads['response']);
     }
 
+    /**
+     * @param \OtherCode\Rest\Rest $api
+     * @depends testInstantiationAndConfiguration
+     * @expectedException \OtherCode\Rest\Exceptions\ConnectionException
+     */
+    public function testException(\OtherCode\Rest\Rest $api)
+    {
+        $api->configuration->url = "http://thisurlnotexists.com/";
+        $api->get("posts/1");
+    }
+
+    /**
+     * @param \OtherCode\Rest\Rest $api
+     * @depends testInstantiationAndConfiguration
+     * @expectedException \OtherCode\Rest\Exceptions\RestException
+     */
+    public function testPostWrongBodyType(\OtherCode\Rest\Rest $api)
+    {
+        $api->configuration->url = "http://jsonplaceholder.typicode.com/";
+        $api->post("posts/", array('post' => 'will explode!'));
+    }
+
+    /**
+     * @param \OtherCode\Rest\Rest $api
+     * @depends testInstantiationAndConfiguration
+     * @expectedException \OtherCode\Rest\Exceptions\RestException
+     */
+    public function testPutWrongBodyType(\OtherCode\Rest\Rest $api)
+    {
+        $api->configuration->url = "http://jsonplaceholder.typicode.com/";
+        $api->put("posts/1", array('put' => 'will explode!'));
+    }
+
+    /**
+     * @param \OtherCode\Rest\Rest $api
+     * @depends testInstantiationAndConfiguration
+     * @expectedException \OtherCode\Rest\Exceptions\RestException
+     */
+    public function testPatchWrongBodyType(\OtherCode\Rest\Rest $api)
+    {
+        $api->configuration->url = "http://jsonplaceholder.typicode.com/";
+        $api->patch("posts/1", array('patch' => 'will explode!'));
+    }
 }

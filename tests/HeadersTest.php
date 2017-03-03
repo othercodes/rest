@@ -1,5 +1,6 @@
 <?php
 
+
 class HeadersTest extends \PHPUnit_Framework_TestCase
 {
 
@@ -17,12 +18,13 @@ Expires: -1
 X-Content-Type-Options: nosniff
 Content-Type: application/json; charset=utf-8
 Content-Length: 292
+Etag: W/"124-yv65LoT2uMHrpn06wNpAcQ"
 Date: Mon, 07 Mar 2016 09:51:49 GMT
 Via: 1.1 vegur';
 
         $headers = new \OtherCode\Rest\Payloads\Headers($rawHeaders);
-        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Headers', $headers);
-        $this->assertCount(13, $headers);
+        $this->assertInstanceOf('OtherCode\Rest\Payloads\Headers', $headers);
+        $this->assertCount(14, $headers);
     }
 
     public function testConstructWithArray()
@@ -33,7 +35,7 @@ Via: 1.1 vegur';
         );
 
         $headers = new \OtherCode\Rest\Payloads\Headers($arrayHeaders);
-        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Headers', $headers);
+        $this->assertInstanceOf('OtherCode\Rest\Payloads\Headers', $headers);
         $this->assertCount(2, $headers);
 
         return $headers;
@@ -46,7 +48,6 @@ Via: 1.1 vegur';
     {
         $this->assertInternalType('array', $headers->build());
         $this->assertCount(2, $headers);
-
     }
 
 }
