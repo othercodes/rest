@@ -85,6 +85,28 @@ class Rest extends \OtherCode\Rest\Core\Core
     }
 
     /**
+     * Remove a header
+     * @param string $header
+     * @return $this
+     */
+    public function removeHeader($header)
+    {
+        $this->configuration->removeHeader($header);
+        return $this;
+    }
+
+    /**
+     * Remove a set of headers
+     * @param array $headers
+     * @return $this
+     */
+    public function removeHeaders(array $headers)
+    {
+        $this->configuration->removeHeaders($headers);
+        return $this;
+    }
+
+    /**
      * Set a new decoder instance
      * @param string $name Decoder unique name
      * @param string $decoder Decoder class name with namespace
