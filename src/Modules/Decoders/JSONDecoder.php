@@ -1,9 +1,10 @@
-<?php namespace OtherCode\Rest\Modules\Decoders;
+<?php
+
+namespace OtherCode\Rest\Modules\Decoders;
 
 /**
  * Class JSONDecoder
  * @author Unay Santisteban <usantisteban@othercode.es>
- * @version 1.0
  * @package OtherCode\Rest\Modules\Decoders
  */
 class JSONDecoder extends \OtherCode\Rest\Modules\Decoders\BaseDecoder
@@ -16,7 +17,7 @@ class JSONDecoder extends \OtherCode\Rest\Modules\Decoders\BaseDecoder
 
     /**
      * Decode the data of a request
-     * @return mixed
+     * @throws \OtherCode\Rest\Exceptions\RestException
      */
     protected function decode()
     {
@@ -25,27 +26,27 @@ class JSONDecoder extends \OtherCode\Rest\Modules\Decoders\BaseDecoder
          */
         $this->body = json_decode($this->body);
 
-        /**
-         * set the new error code and message
-         */
-        $this->error->code = json_last_error();
-
-        switch (json_last_error()) {
+        $errorCode = json_last_error();
+        switch ($errorCode) {
             case JSON_ERROR_DEPTH:
-                $this->error->message = 'The maximum stack depth has been exceeded';
+                $errorMessage = 'The maximum stack depth has been exceeded';
                 break;
             case JSON_ERROR_STATE_MISMATCH:
-                $this->error->message = 'Invalid or malformed JSON';
+                $errorMessage = 'Invalid or malformed JSON';
                 break;
             case JSON_ERROR_CTRL_CHAR:
-                $this->error->message = 'Control character error, possibly incorrectly encoded';
+                $errorMessage = 'Control character error, possibly incorrectly encoded';
                 break;
             case JSON_ERROR_SYNTAX:
-                $this->error->message = 'Syntax error';
+                $errorMessage = 'Syntax error';
                 break;
             case JSON_ERROR_UTF8:
-                $this->error->message = 'Malformed UTF-8 characters, possibly incorrectly encoded';
+                $errorMessage = 'Malformed UTF-8 characters, possibly incorrectly encoded';
                 break;
+        }
+
+        if ($errorCode !== 0 && isset($errorMessage)) {
+            throw new \OtherCode\Rest\Exceptions\RestException($errorMessage, $errorCode);
         }
     }
 }

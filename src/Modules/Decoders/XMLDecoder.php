@@ -3,7 +3,6 @@
 /**
  * Class XMLDecoder
  * @author Unay Santisteban <usantisteban@othercode.es>
- * @version 1.0
  * @package OtherCode\Rest\Modules\Decoders
  */
 class XMLDecoder extends \OtherCode\Rest\Modules\Decoders\BaseDecoder
@@ -17,7 +16,6 @@ class XMLDecoder extends \OtherCode\Rest\Modules\Decoders\BaseDecoder
 
     /**
      * Decode the data of a request
-     * @return mixed
      */
     public function decode()
     {
