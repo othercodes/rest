@@ -3,7 +3,6 @@
 /**
  * Class XMLRPCDecoder
  * @author Unay Santisteban <usantisteban@othercode.es>
- * @version 1.0
  * @package OtherCode\Rest\Modules\Decoders
  */
 class XMLRPCDecoder extends \OtherCode\Rest\Modules\Decoders\BaseDecoder
@@ -21,12 +20,15 @@ class XMLRPCDecoder extends \OtherCode\Rest\Modules\Decoders\BaseDecoder
      */
     public function decode()
     {
-        $decode = xmlrpc_decode($this->body);
+        $response = xmlrpc_decode($this->body);
 
-        if ($decode) {
-            $this->body = $decode;
+        if (is_array($response) && xmlrpc_is_fault($response)) {
+            $faultString = base64_decode($response['faultString'], true);
+            if ($faultString !== false) {
+                $response['faultString'] = $faultString;
+            }
         }
 
+        $this->body = $response;
     }
-
 }
