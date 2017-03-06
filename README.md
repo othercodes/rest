@@ -61,7 +61,7 @@ The rest client will throw a `ConnectionException` if there any problem related 
 
 The available methods to work with are:
 
-#### `->get()`
+#### `get()`
 
 Perform a GET request.
 
@@ -82,7 +82,7 @@ Parameters                    | Type    | Description
 
 **Return**: Response object (no body)
 
-#### `->post()`
+#### `post()`
 
 Perform a POST request.
 
@@ -93,7 +93,7 @@ Parameters                    | Type    | Description
 
 **Return**: Response object
 
-#### `->delete()`
+#### `delete()`
 
 Perform a DELETE request.
 
@@ -104,7 +104,7 @@ Parameters                    | Type    | Description
 
 **Return**: Response object
 
-#### `->put()`
+#### `put()`
 
 Perform a PUT request.
 
@@ -115,7 +115,7 @@ Parameters                    | Type    | Description
 
 **Return**: Response object
 
-#### `->patch()`
+#### `patch()`
 
 Perform a PATCH request.
 
@@ -126,25 +126,25 @@ Parameters                    | Type    | Description
 
 **Return**: Response object
 
-#### `->getMetadata()`
+#### `getMetadata()`
 
 Return the metadata of the request.
 
 **Return**: Array
 
-#### `->getError()`
+#### `getError()`
 
 Return the last known error.
 
 **Return**: `Error` object
 
-#### `->getPayloads()`
+#### `getPayloads()`
 
 Return an array with the `Response` and `Request` objects.
 
 **Return**: Array
 
-#### `->setDecoder()`
+#### `setDecoder()`
 
 Set a new Decoder.
 
@@ -155,7 +155,7 @@ Parameters                    | Type    | Description
 
 **Return**: Rest object
 
-#### `->setEncoder()`
+#### `setEncoder()`
 
 Set a new Encoder.
 
@@ -166,7 +166,7 @@ Parameters                    | Type    | Description
 
 **Return**: Rest object
 
-#### `->setModule()`
+#### `setModule()`
 
 Set a new Module.
 
@@ -178,7 +178,7 @@ Parameters                    | Type    | Description
 
 **Return**: Rest object
 
-#### `->unsetModule()`
+#### `unsetModule()`
 
 Unregister a module.
 
@@ -189,7 +189,7 @@ Parameters                    | Type   | Description
 
 **Return**: Rest object
 
-#### `->addHeader()`
+#### `addHeader()`
 
 Add a new header.
 
@@ -200,7 +200,7 @@ Parameters                    | Type   | Description
 
 **Return**: Rest object
 
-#### `->addHeaders()`
+#### `addHeaders()`
 
 Add an array of headers.
 
@@ -224,7 +224,7 @@ $api->configuration->addHeader('some_header','some_value');
 $api->configuration->addHeaders(array('some_header' => 'some_value','other_header' => 'other_value'));
 ```
 
-#### `->removeHeader()`
+#### `removeHeader()`
 
 Remove a header offset.
 
@@ -234,7 +234,7 @@ Parameters                    | Type   | Description
 
 **Return**: Rest object
 
-#### `->removeHeaders()`
+#### `removeHeaders()`
 
 Remove an array of headers.
 
