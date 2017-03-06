@@ -1,0 +1,8 @@
+title: Rest
+description: Rest client to make GET, POST, PUT, DELETE, PATCH, etc calls.
+google_analytics: 
+show_downloads: true
+theme: jekyll-theme-cayman
+
+gems:
+  - jekyll-mentions
