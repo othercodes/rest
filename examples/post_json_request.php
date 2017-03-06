@@ -17,10 +17,6 @@ try {
     $payload->body = "Some test data";
 
     $response = $api->post("posts/", $payload);
-
-    if ($api->getError()->hasError() !== 0) {
-        echo $api->getError()->message;
-    }
     var_dump($response);
 
 } catch (\Exception $e) {

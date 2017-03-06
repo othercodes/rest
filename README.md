@@ -34,8 +34,16 @@ establish the configuration accessing to the `->configuration->configure_propert
 to configure the url of the call we only have to set the `->configuration->url parameter` like we can see as follows:
 
 ```php
-$api = new OtherCode\Rest\Rest();
+$api = new \OtherCode\Rest\Rest();
 $api->configuration->url = "http://jsonplaceholder.typicode.com/";
+```
+
+or
+
+```php
+$api = new \OtherCode\Rest\Rest(new \OtherCode\Rest\Core\Configuration(array(
+    'url' => 'http://jsonplaceholder.typicode.com/',
+)));
 ```
 
 After this we have to set the type of call and the parameters that we wil use, in this case we are
@@ -45,13 +53,7 @@ going to perform a **GET** request to the **"posts/1"** endpoint:
 $response = $api->get("posts/1");
 ```
 
-To control the possible error we only have to check if the code error is different of 0.
-
-```php
-if ($api->getError()->hasError() !== 0) {
-    echo $api->getError()->message;
-}
-```
+The rest client will throw a `ConnectionException` if there any problem related to the connection.
 
 **NOTE: These errors are related to the session cURL, here is the [complete list](https://curl.haxx.se/libcurl/c/libcurl-errors.html)**
 
@@ -69,6 +71,16 @@ Parameters                    | Type    | Description
 `$data`                       | Array   | Optional. Associative array of data parameters
 
 **Return**: Response object
+
+#### `head()`
+
+Perform a HEAD request.
+
+Parameters                    | Type    | Description
+----------------------------- | ------- | -------------------------------------------
+`$url`                        | String  | Required. The URL to which the request is made
+
+**Return**: Response object (no body)
 
 #### `->post()`
 
@@ -212,6 +224,26 @@ $api->configuration->addHeader('some_header','some_value');
 $api->configuration->addHeaders(array('some_header' => 'some_value','other_header' => 'other_value'));
 ```
 
+#### `->removeHeader()`
+
+Remove a header offset.
+
+Parameters                    | Type   | Description
+----------------------------- | ------ | -------------------------------------------
+`$header`                     | String | Required. The unique name of the header.
+
+**Return**: Rest object
+
+#### `->removeHeaders()`
+
+Remove an array of headers.
+
+Parameters                    | Type   | Description
+----------------------------- | ------ | -------------------------------------------
+`$headers`                    | String | Required. An array of headers to remove.
+
+**Return**: Rest object
+
 ## Modules
 
 This package allow you to create modules to perform task before and after the request..
@@ -241,12 +273,20 @@ $api->setModule('module_name','Module\Complete\Namespace','after');
 
 For "before" modules you can use all the properties of the Request object.
 
-* `->method`
-* `->url` 
-* `->headers`
-* `->body`
+* `method`
+* `url` 
+* `headers`
+* `body`
 
 For "after" modules you can use all the properties of the Response object.
+
+* `code`
+* `content_type`
+* `charset`
+* `body`
+* `headers`
+* `error`
+* `metadata`
 
 All modules are executed in the order that we register them into the Rest client, this also affect 
 to Decoders and Encoders.
@@ -288,16 +328,20 @@ trigger this decoder.
 ```php
 require_once '../autoload.php';
 
-$api = new OtherCode\Rest\Rest();
-$api->configuration->url = "http://jsonplaceholder.typicode.com/";
-$api->configuration->addHeader('some_header','some_value');
+try {
 
-$api->setDecoder("json");
-
-$response = $api->get("posts/1");
-
-if ($api->getError()->hasError() !== 0) {
-    echo $api->getError()->message;
+    $api = new \OtherCode\Rest\Rest(new \OtherCode\Rest\Core\Configuration(array(
+        'url' => 'http://jsonplaceholder.typicode.com/',
+        'httpheader' => array(
+            'some_header' => 'some_value',
+        )
+    )));
+    $api->setDecoder("json");
+    
+    $response = $api->get("posts/1");
+    var_dump($response);
+    
+} catch (\Exception $e) {
+    print "> " . $e->getMessage() . "\n"
 }
-var_dump($response);
 ```
