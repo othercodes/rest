@@ -31,13 +31,19 @@ require_once "rest/autoload.php".
 
 To use the Rest we only have to instantiate it and configure the params we want. We can 
 establish the configuration accessing to the `->configuration->configure_property`, for example 
-to configure the url of the call we only have to set the `->configuration->url parameter` and the 
-confirm the changes with the `->configure()` method, like we can see as follows:
+to configure the url of the call we only have to set the `->configuration->url parameter` like we can see as follows:
 
 ```php
-$api = new OtherCode\Rest\Rest();
+$api = new \OtherCode\Rest\Rest();
 $api->configuration->url = "http://jsonplaceholder.typicode.com/";
-$api->configure();
+```
+
+or
+
+```php
+$api = new \OtherCode\Rest\Rest(new \OtherCode\Rest\Core\Configuration(array(
+    'url' => 'http://jsonplaceholder.typicode.com/',
+)));
 ```
 
 After this we have to set the type of call and the parameters that we wil use, in this case we are
@@ -47,13 +53,7 @@ going to perform a **GET** request to the **"posts/1"** endpoint:
 $response = $api->get("posts/1");
 ```
 
-To control the possible error we only have to check if the code error is different of 0.
-
-```php
-if ($api->getError()->hasError() !== 0) {
-    echo $api->getError()->message;
-}
-```
+The rest client will throw a `ConnectionException` if there any problem related to the connection.
 
 **NOTE: These errors are related to the session cURL, here is the [complete list](https://curl.haxx.se/libcurl/c/libcurl-errors.html)**
 
@@ -61,7 +61,7 @@ if ($api->getError()->hasError() !== 0) {
 
 The available methods to work with are:
 
-#### `->get()`
+#### `get()`
 
 Perform a GET request.
 
@@ -72,7 +72,17 @@ Parameters                    | Type    | Description
 
 **Return**: Response object
 
-#### `->post()`
+#### `head()`
+
+Perform a HEAD request.
+
+Parameters                    | Type    | Description
+----------------------------- | ------- | -------------------------------------------
+`$url`                        | String  | Required. The URL to which the request is made
+
+**Return**: Response object (no body)
+
+#### `post()`
 
 Perform a POST request.
 
@@ -83,7 +93,7 @@ Parameters                    | Type    | Description
 
 **Return**: Response object
 
-#### `->delete()`
+#### `delete()`
 
 Perform a DELETE request.
 
@@ -94,7 +104,7 @@ Parameters                    | Type    | Description
 
 **Return**: Response object
 
-#### `->put()`
+#### `put()`
 
 Perform a PUT request.
 
@@ -105,7 +115,7 @@ Parameters                    | Type    | Description
 
 **Return**: Response object
 
-#### `->patch()`
+#### `patch()`
 
 Perform a PATCH request.
 
@@ -116,35 +126,25 @@ Parameters                    | Type    | Description
 
 **Return**: Response object
 
-#### `->getMetadata()`
+#### `getMetadata()`
 
 Return the metadata of the request.
 
 **Return**: Array
 
-#### `->getError()`
+#### `getError()`
 
 Return the last known error.
 
 **Return**: `Error` object
 
-#### `->getPayloads()`
+#### `getPayloads()`
 
 Return an array with the `Response` and `Request` objects.
 
 **Return**: Array
 
-#### `->configure()`
-
-Set the main configuration of the cURL instance
-
-Parameters                    | Type          | Description
------------------------------ | ------------- | -------------------------------------------
-`$configuration`              | Configuration | Optional. A new instance of Configuration object.
-
-**Return**: Boolean TRUE on success, FALSE on fail.
-
-#### `->setDecoder()`
+#### `setDecoder()`
 
 Set a new Decoder.
 
@@ -155,7 +155,7 @@ Parameters                    | Type    | Description
 
 **Return**: Rest object
 
-#### `->setEncoder()`
+#### `setEncoder()`
 
 Set a new Encoder.
 
@@ -166,7 +166,7 @@ Parameters                    | Type    | Description
 
 **Return**: Rest object
 
-#### `->setModule()`
+#### `setModule()`
 
 Set a new Module.
 
@@ -178,7 +178,7 @@ Parameters                    | Type    | Description
 
 **Return**: Rest object
 
-#### `->unsetModule()`
+#### `unsetModule()`
 
 Unregister a module.
 
@@ -189,7 +189,7 @@ Parameters                    | Type   | Description
 
 **Return**: Rest object
 
-#### `->addHeader()`
+#### `addHeader()`
 
 Add a new header.
 
@@ -200,7 +200,7 @@ Parameters                    | Type   | Description
 
 **Return**: Rest object
 
-#### `->addHeaders()`
+#### `addHeaders()`
 
 Add an array of headers.
 
@@ -223,6 +223,26 @@ is the same as
 $api->configuration->addHeader('some_header','some_value');
 $api->configuration->addHeaders(array('some_header' => 'some_value','other_header' => 'other_value'));
 ```
+
+#### `removeHeader()`
+
+Remove a header offset.
+
+Parameters                    | Type   | Description
+----------------------------- | ------ | -------------------------------------------
+`$header`                     | String | Required. The unique name of the header.
+
+**Return**: Rest object
+
+#### `removeHeaders()`
+
+Remove an array of headers.
+
+Parameters                    | Type   | Description
+----------------------------- | ------ | -------------------------------------------
+`$headers`                    | String | Required. An array of headers to remove.
+
+**Return**: Rest object
 
 ## Modules
 
@@ -253,12 +273,20 @@ $api->setModule('module_name','Module\Complete\Namespace','after');
 
 For "before" modules you can use all the properties of the Request object.
 
-* `->method`
-* `->url` 
-* `->headers`
-* `->body`
+* `method`
+* `url` 
+* `headers`
+* `body`
 
 For "after" modules you can use all the properties of the Response object.
+
+* `code`
+* `content_type`
+* `charset`
+* `body`
+* `headers`
+* `error`
+* `metadata`
 
 All modules are executed in the order that we register them into the Rest client, this also affect 
 to Decoders and Encoders.
@@ -300,17 +328,20 @@ trigger this decoder.
 ```php
 require_once '../autoload.php';
 
-$api = new OtherCode\Rest\Rest();
-$api->configuration->url = "http://jsonplaceholder.typicode.com/";
-$api->configuration->addHeader('some_header','some_value');
-$api->configure();
+try {
 
-$api->setDecoder("json");
-
-$response = $api->get("posts/1");
-
-if ($api->getError()->hasError() !== 0) {
-    echo $api->getError()->message;
+    $api = new \OtherCode\Rest\Rest(new \OtherCode\Rest\Core\Configuration(array(
+        'url' => 'http://jsonplaceholder.typicode.com/',
+        'httpheader' => array(
+            'some_header' => 'some_value',
+        )
+    )));
+    $api->setDecoder("json");
+    
+    $response = $api->get("posts/1");
+    var_dump($response);
+    
+} catch (\Exception $e) {
+    print "> " . $e->getMessage() . "\n"
 }
-var_dump($response);
 ```
