@@ -183,36 +183,4 @@ class RestTest extends \PHPUnit_Framework_TestCase
         $api->get("posts/1");
     }
 
-    /**
-     * @param \OtherCode\Rest\Rest $api
-     * @depends testInstantiationAndConfiguration
-     * @expectedException \OtherCode\Rest\Exceptions\RestException
-     */
-    public function testPostWrongBodyType(\OtherCode\Rest\Rest $api)
-    {
-        $api->configuration->url = "http://jsonplaceholder.typicode.com/";
-        $api->post("posts/", array('post' => 'will explode!'));
-    }
-
-    /**
-     * @param \OtherCode\Rest\Rest $api
-     * @depends testInstantiationAndConfiguration
-     * @expectedException \OtherCode\Rest\Exceptions\RestException
-     */
-    public function testPutWrongBodyType(\OtherCode\Rest\Rest $api)
-    {
-        $api->configuration->url = "http://jsonplaceholder.typicode.com/";
-        $api->put("posts/1", array('put' => 'will explode!'));
-    }
-
-    /**
-     * @param \OtherCode\Rest\Rest $api
-     * @depends testInstantiationAndConfiguration
-     * @expectedException \OtherCode\Rest\Exceptions\RestException
-     */
-    public function testPatchWrongBodyType(\OtherCode\Rest\Rest $api)
-    {
-        $api->configuration->url = "http://jsonplaceholder.typicode.com/";
-        $api->patch("posts/1", array('patch' => 'will explode!'));
-    }
 }
