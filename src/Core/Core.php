@@ -5,7 +5,7 @@ namespace OtherCode\Rest\Core;
 /**
  * Class Core
  * @author Unay Santisteban <usantisteban@othercode.es>
- * @version 1.3
+ * @version 1.3.1
  * @package OtherCode\Rest\Core
  */
 abstract class Core
@@ -14,7 +14,7 @@ abstract class Core
     /**
      * Core version
      */
-    const VERSION = "1.3";
+    const VERSION = "1.3.1";
 
     /**
      * Configuration class
@@ -115,22 +115,6 @@ abstract class Core
          * "before" hook, we run them here
          */
         $this->dispatchModules('before');
-
-        /**
-         * Ensure that the body is serialized,
-         * if not throw exception.
-         */
-        if (isset($this->request->body) && !is_string($this->request->body)) {
-            throw new \OtherCode\Rest\Exceptions\RestException('Cannot send an ' . gettype($this->request->body) . ' as body argument, it must be serialized (json, xml, query string, etc).');
-        }
-
-        /**
-         * Ensure that the body is serialized,
-         * if not throw exception.
-         */
-        if (isset($this->request->body) && !is_string($this->request->body)) {
-            throw new \OtherCode\Rest\Exceptions\RestException('Cannot send an ' . gettype($this->request->body) . ' as body argument, it must be serialized (json, xml or query string).');
-        }
 
         /**
          * Switch between the different configurations
