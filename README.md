@@ -1,6 +1,7 @@
 # Rest Client
 
 [![Build Status](https://travis-ci.org/othercodes/rest.svg?branch=master)](https://travis-ci.org/othercodes/rest) [![Latest Stable Version](https://poser.pugx.org/othercode/rest/v/stable)](https://packagist.org/packages/othercode/rest) [![License](https://poser.pugx.org/othercode/rest/license)](https://packagist.org/packages/othercode/rest)
+[![Total Downloads](https://poser.pugx.org/othercode/rest/downloads)](https://packagist.org/packages/othercode/rest)
 
 [Rest client](http://othercode.es/packages/rest-client.html) to make GET, POST, PUT, DELETE, PATCH, etc calls.
 
