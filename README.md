@@ -304,7 +304,7 @@ $api->setDecoder("json");
 The default allowed values for this method are: ***json***, ***xml*** and ***xmlrpc***. All the decoders are always executed 
 in the "after" hook. 
 
-###Custom Decoders
+### Custom Decoders
 
 To create a new decoder we only have to use this template:
 
