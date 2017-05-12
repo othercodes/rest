@@ -1,7 +1,7 @@
 <?php
 
 
-class DecodersTest extends \PHPUnit_Framework_TestCase
+class DecodersTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testJSonDecoderOFF()

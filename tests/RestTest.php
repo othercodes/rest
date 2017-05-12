@@ -1,6 +1,6 @@
 <?php
 
-class RestTest extends \PHPUnit_Framework_TestCase
+class RestTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @return \OtherCode\Rest\Rest
