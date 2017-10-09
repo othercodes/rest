@@ -7,9 +7,9 @@ class DecodersTest extends \PHPUnit\Framework\TestCase
     public function testJSonDecoderOFF()
     {
         $api = new OtherCode\Rest\Rest();
-        $api->configuration->url = "http://jsonplaceholder.typicode.com/";
+        $api->configuration->url = "http://www.mocky.io";
 
-        $response = $api->get("posts/1");
+        $response = $api->get("/v2/59db36550f0000120402a66f");
         $this->assertInternalType('string', $response->body);
 
         return $api;
@@ -29,7 +29,7 @@ class DecodersTest extends \PHPUnit\Framework\TestCase
      */
     public function testJSonDecoderON(\OtherCode\Rest\Rest $api)
     {
-        $response = $api->get("posts/1");
+        $response = $api->get("/v2/59db36550f0000120402a66f");
 
         $this->assertInternalType('object', $response->body);
         $this->assertInstanceOf('\stdClass', $response->body);
@@ -39,9 +39,9 @@ class DecodersTest extends \PHPUnit\Framework\TestCase
     public function testXMLDecoderOFF()
     {
         $api = new OtherCode\Rest\Rest();
-        $api->configuration->url = "http://www.thomas-bayer.com/";
+        $api->configuration->url = "http://www.mocky.io";
 
-        $response = $api->get("sqlrest/CUSTOMER/5");
+        $response = $api->get("/v2/59db37720f0000220402a676");
         $this->assertInternalType('string', $response->body);
 
         return $api;
@@ -61,9 +61,22 @@ class DecodersTest extends \PHPUnit\Framework\TestCase
      */
     public function testXMLDecoderON(\OtherCode\Rest\Rest $api)
     {
-        $response = $api->get("sqlrest/CUSTOMER/5");
+        $response = $api->get("/v2/59db37720f0000220402a676");
 
         $this->assertInternalType('object', $response->body);
         $this->assertInstanceOf('\SimpleXMLElement', $response->body);
+    }
+
+    public function testDecoderOn204Response()
+    {
+        $api = new OtherCode\Rest\Rest();
+        $api->configuration->url = "http://www.mocky.io";
+        $api->setDecoder("json");
+
+        $response = $api->get("/v2/59db36550f0000120402a66f");
+        $this->assertInternalType('object', $response->body);
+
+        $response = $api->get("/v2/59db35850f00000b0402a669");
+        $this->assertNull($response->body);
     }
 }
