@@ -58,6 +58,17 @@ class Headers implements \ArrayAccess, \Countable, \IteratorAggregate
     }
 
     /**
+     * Reset the headers content.
+     */
+    public function reset()
+    {
+        $headers = array_keys(get_object_vars($this));
+        foreach ($headers as $key) {
+            $this->offsetUnset($key);
+        }
+    }
+
+    /**
      * Return the iterator element
      * @return mixed
      */

@@ -8,5 +8,8 @@
         <testsuite name="rest">
             <directory>tests</directory>
         </testsuite>
+        <testsuite name="headers">
+            <file>tests/HeadersTest.php</file>
+        </testsuite>
     </testsuites>
 </phpunit>

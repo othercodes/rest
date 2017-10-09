@@ -35,12 +35,17 @@ abstract class BaseDecoder extends \OtherCode\Rest\Modules\BaseModule
             return false;
         }
 
-        /**
-         * match the content type and run the decoder
-         */
-        if ($this->contentType == $this->content_type) {
-            $this->decode();
+        $content_type = $this->content_type;
+        if (isset($content_type)) {
+
+            /**
+             * match the content type and run the decoder
+             */
+            if ($this->contentType == $this->content_type) {
+                $this->decode();
+            }
         }
+
         return true;
     }
 }
