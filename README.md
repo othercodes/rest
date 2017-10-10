@@ -324,6 +324,18 @@ Like in modules, we have the Response object available to work. The $contentType
 that will trigger the decoder, in the example above all responses with content-type "application/json" will 
 trigger this decoder.
 
+
+### Quick Calls
+
+We can do quick calls using the `\OtherCode\Rest\Payloads\Request::call()` method. This static method returns a
+Rest instance so we can use all the methods from it.
+
+```
+$response = \OtherCode\Rest\Payloads\Request::call('http://jsonplaceholder.typicode.com')
+    ->setDecoder('json')
+    ->get('/posts/1');
+```
+
 ## Complete Example
 
 ```php

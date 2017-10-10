@@ -62,4 +62,17 @@ class Request
             $this->headers = new \OtherCode\Rest\Payloads\Headers();
         }
     }
+
+    /**
+     * Initialize a short chained call.
+     * @param string $uri
+     * @return \OtherCode\Rest\Rest
+     */
+    public static function call($uri)
+    {
+        return new \OtherCode\Rest\Rest(new \OtherCode\Rest\Core\Configuration(array(
+            'url' => $uri
+        )));
+    }
+
 }
