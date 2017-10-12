@@ -1,7 +1,7 @@
 # Rest Client
 
 [![Build Status](https://travis-ci.org/othercodes/rest.svg?branch=master)](https://travis-ci.org/othercodes/rest) [![Latest Stable Version](https://poser.pugx.org/othercode/rest/v/stable)](https://packagist.org/packages/othercode/rest) [![License](https://poser.pugx.org/othercode/rest/license)](https://packagist.org/packages/othercode/rest)
-[![Total Downloads](https://poser.pugx.org/othercode/rest/downloads)](https://packagist.org/packages/othercode/rest)
+[![Total Downloads](https://poser.pugx.org/othercode/rest/downloads)](https://packagist.org/packages/othercode/rest) ![Codecov](https://codecov.io/gh/othercodes/rest/branch/master/graph/badge.svg)
 
 [Rest client](http://othercode.es/packages/rest-client.html) to make GET, POST, PUT, DELETE, PATCH, etc calls.
 
@@ -10,8 +10,10 @@
 To install the package we only have to add the dependency to ***scripts/composer.json*** file:
 
 ```javascript
-"require": {
-  "othercode/rest": "*"
+{
+    "require": {
+      "othercode/rest": "*"
+    }
 }
 ```
 
