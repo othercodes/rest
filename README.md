@@ -20,14 +20,7 @@ To install the package we only have to add the dependency to ***scripts/composer
 And run the following command:
 
 ```bash
-composer update
-```
-
-### Install without Composer
-
-Also we can use this library without Composer, we only have to include in our script the **"rest/autoload.php"** file.
-```php
-require_once "rest/autoload.php".
+composer install
 ```
 
 ## Usage

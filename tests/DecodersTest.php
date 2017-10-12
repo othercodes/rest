@@ -67,6 +67,15 @@ class DecodersTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf('\SimpleXMLElement', $response->body);
     }
 
+    /**
+     * @expectedException \OtherCode\Rest\Exceptions\ModuleNotFoundException
+     */
+    public function testExceptionOnBadDecoder()
+    {
+        $api = new OtherCode\Rest\Rest();
+        $api->setDecoder('non_existant_decoder');
+    }
+
     public function testDecoderOn204Response()
     {
         $api = new OtherCode\Rest\Rest();

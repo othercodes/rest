@@ -29,6 +29,31 @@ class RestTest extends \PHPUnit\Framework\TestCase
     /**
      * @param \OtherCode\Rest\Rest $api
      * @depends testInstantiationAndConfiguration
+     */
+    public function testDirectConfiguration(\OtherCode\Rest\Rest $api)
+    {
+        $api->addHeader('some_header', "some_value");
+        $this->assertCount(1, $api->configuration->httpheader);
+
+        $api->addHeaders(array(
+            'some_header_1' => 'some_value_1',
+            'some_header_2' => 'some_value_2',
+        ));
+        $this->assertCount(3, $api->configuration->httpheader);
+
+        $api->removeHeader('some_header');
+        $this->assertCount(2, $api->configuration->httpheader);
+
+        $api->removeHeaders(array(
+            'some_header_1',
+            'some_header_2',
+        ));
+        $this->assertCount(0, $api->configuration->httpheader);
+    }
+
+    /**
+     * @param \OtherCode\Rest\Rest $api
+     * @depends testInstantiationAndConfiguration
      * @return \OtherCode\Rest\Rest
      */
     public function testGetMethod(\OtherCode\Rest\Rest $api)
