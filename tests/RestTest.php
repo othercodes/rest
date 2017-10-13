@@ -199,6 +199,15 @@ class RestTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param \OtherCode\Rest\Rest $api
+     * @depends testGetMethod
+     */
+    public function testMetadata(\OtherCode\Rest\Rest $api)
+    {
+        $this->assertInternalType('array', $api->getMetadata());
+    }
+
+    /**
+     * @param \OtherCode\Rest\Rest $api
      * @depends testInstantiationAndConfiguration
      * @expectedException \OtherCode\Rest\Exceptions\ConnectionException
      */
