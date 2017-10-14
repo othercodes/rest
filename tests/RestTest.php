@@ -177,16 +177,6 @@ class RestTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param \OtherCode\Rest\Rest $api
-     * @depends testInstantiationAndConfiguration
-     */
-    public function testErrorControl(\OtherCode\Rest\Rest $api)
-    {
-        $this->assertInstanceOf('\OtherCode\Rest\Core\Error', $api->getError());
-        $this->assertInternalType('boolean', $api->hasError());
-    }
-
-    /**
-     * @param \OtherCode\Rest\Rest $api
      * @depends testGetMethod
      */
     public function testPayloads(\OtherCode\Rest\Rest $api)
