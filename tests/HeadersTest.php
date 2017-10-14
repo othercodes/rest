@@ -76,4 +76,19 @@ Via: 1.1 vegur';
         $this->assertCount(0, $headers);
     }
 
+    public function testGetArrayIterator()
+    {
+        $headers = new \OtherCode\Rest\Payloads\Headers();
+        $this->assertInstanceOf('\ArrayIterator', $headers->getIterator());
+    }
+
+    /**
+     * @depends testConstructWithArray
+     */
+    public function testGetValues(\OtherCode\Rest\Payloads\Headers $headers)
+    {
+        $this->assertNull($headers->offsetGet('nonExistantHeader'));
+        $this->assertEquals('some_value', $headers->offsetGet('some_header'));
+    }
+
 }

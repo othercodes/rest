@@ -26,7 +26,8 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
             )
         ));
         $this->assertInstanceOf('\OtherCode\Rest\Core\Configuration', $configuration);
-
+        $this->assertInstanceOf('\OtherCode\Rest\Payload\Headers', $configuration->httpheader);
+        $this->assertCount(2, $configuration->httpheader);
         $this->assertInternalType('array', $configuration->toArray());
         $this->assertCount(4, $configuration->toArray());
 
