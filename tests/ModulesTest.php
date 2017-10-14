@@ -14,7 +14,7 @@ class ModulesTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(0, $http->getModules('after'));
     }
 
-    public function testRegisterModule()
+    public function testSetModule()
     {
         $http = new \OtherCode\Rest\Rest();
 
@@ -34,7 +34,7 @@ class ModulesTest extends \PHPUnit\Framework\TestCase
     /**
      * @expectedException \OtherCode\Rest\Exceptions\ModuleNotFoundException
      */
-    public function testFailLoadSetModule()
+    public function testSetModuleFailed()
     {
         $http = new \OtherCode\Rest\Rest();
         $http->setModule('dummy', '\Tests\Modules\DummyNotExists');
@@ -43,9 +43,16 @@ class ModulesTest extends \PHPUnit\Framework\TestCase
     /**
      * @expectedException \InvalidArgumentException
      */
-    public function testInvalidHookName()
+    public function testSetModuleInvalidHookName()
     {
         $http = new \OtherCode\Rest\Rest();
         $http->setModule('dummy', '\Tests\Modules\Dummy', 'notexisthook');
+    }
+
+    public function testRegisterUnRegisterModule()
+    {
+        $core = new \Tests\Rest\CoreTester();
+        $this->assertTrue($core->returnRegisterModule('dummy', 'after'));
+        $this->assertFalse($core->returnRegisterModule('dummy', 'after'));
     }
 }

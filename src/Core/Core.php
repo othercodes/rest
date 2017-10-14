@@ -254,7 +254,7 @@ abstract class Core
             $this->modules[$hook][$moduleName] = $moduleInstance;
             return true;
         }
-        return null;
+        return false;
     }
 
     /**
@@ -272,7 +272,7 @@ abstract class Core
             unset($this->modules[$hook][$moduleName]);
             return true;
         }
-        return null;
+        return false;
     }
 
     /**
