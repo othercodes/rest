@@ -4,7 +4,7 @@
 class HeadersTest extends \PHPUnit\Framework\TestCase
 {
 
-    public function stestConstructWithString()
+    public function testConstructWithString()
     {
         $rawHeaders = 'HTTP/1.1 200 OK
 Server: Cowboy
@@ -27,7 +27,7 @@ Via: 1.1 vegur';
         $this->assertCount(14, $headers);
     }
 
-    public function stestConstructWithArray()
+    public function testConstructWithArray()
     {
         $arrayHeaders = array(
             'some_header' => 'some_value',
@@ -44,7 +44,7 @@ Via: 1.1 vegur';
     /**
      * @depends testConstructWithArray
      */
-    public function stestBuildHeaders(\OtherCode\Rest\Payloads\Headers $headers)
+    public function testBuildHeaders(\OtherCode\Rest\Payloads\Headers $headers)
     {
         $this->assertInternalType('array', $headers->build());
         $this->assertCount(2, $headers);

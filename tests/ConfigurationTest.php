@@ -21,7 +21,8 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
             'url' => 'http://jsonplaceholder.typicode.com/',
             'thisConfigurationIsNotAllowed' => 'Some invalid value',
             'httpheader' => array(
-                'some_header' => 'some_value'
+                'some_header1' => 'some_value1',
+                'some_header2' => 'some_value2'
             )
         ));
         $this->assertInstanceOf('\OtherCode\Rest\Core\Configuration', $configuration);
