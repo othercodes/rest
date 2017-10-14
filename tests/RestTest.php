@@ -58,7 +58,7 @@ class RestTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetMethod(\OtherCode\Rest\Rest $api)
     {
-        $response = $api->get("posts/1", "param=value");
+        $response = $api->get("posts/1");
 
         $this->assertInstanceOf('OtherCode\Rest\Payloads\Response', $response);
         $this->assertInstanceOf('OtherCode\Rest\Payloads\Headers', $response->headers);
@@ -223,9 +223,22 @@ class RestTest extends \PHPUnit\Framework\TestCase
     public function testCoreCallWrongVerb()
     {
         $core = new \Tests\Rest\CoreTester();
-        $core->returnCall('wrong', 'http://jsonplaceholder.typicode.com/posts/1', array(
-            'param' => 'value'
-        ));
+        $core->returnCall('wrong', 'http://jsonplaceholder.typicode.com/posts/1');
+    }
+
+    public function testGetRawCoreCall()
+    {
+        $core = new \Tests\Rest\CoreTester();
+        $response = $core->returnCall('GET', 'http://jsonplaceholder.typicode.com/posts/1', 'param=value');
+
+        $this->assertInstanceOf('OtherCode\Rest\Payloads\Response', $response);
+        $this->assertInstanceOf('OtherCode\Rest\Payloads\Headers', $response->headers);
+        $this->assertInstanceOf('OtherCode\Rest\Core\Error', $response->error);
+
+        $this->assertInternalType('array', $response->metadata);
+        $this->assertInternalType('int', $response->code);
+        $this->assertInternalType('string', $response->content_type);
+        $this->assertInternalType('string', $response->charset);
     }
 
 }
