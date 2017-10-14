@@ -21,12 +21,17 @@
     "php": ">=5.5",
     "ext-curl": "*"
   },
+  "require-dev": {
+    "phpunit/phpunit": "*"
+  },
   "autoload": {
     "psr-4": {
       "OtherCode\\Rest\\": "src/"
     }
   },
-  "require-dev": {
-    "phpunit/phpunit": "*"
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
   }
 }

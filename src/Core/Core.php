@@ -275,4 +275,18 @@ abstract class Core
         return null;
     }
 
+    /**
+     * Return the list of registered modules.
+     * @param string $hook
+     * @return array
+     */
+    public function getModules($hook = null)
+    {
+        if (isset($hook) && in_array($hook, array_keys($this->modules))) {
+            return $this->modules[$hook];
+        }
+
+        return $this->modules;
+    }
+
 }

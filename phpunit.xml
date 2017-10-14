@@ -5,11 +5,16 @@
         </whitelist>
     </filter>
     <testsuites>
-        <testsuite name="rest">
-            <directory>tests</directory>
-        </testsuite>
-        <testsuite name="headers">
+        <testsuite name="Base">
+            <file>tests/ConfigurationTest</file>
+            <file>tests/ErrorTest.php</file>
             <file>tests/HeadersTest.php</file>
+            <file>tests/RestTest.php</file>
+            <file>tests/QuickCallsTest.php</file>
+        </testsuite>
+        <testsuite name="Modules">
+            <file>tests/DecodersTest.php</file>
+            <file>tests/ModulesTest.php</file>
         </testsuite>
     </testsuites>
 </phpunit>
