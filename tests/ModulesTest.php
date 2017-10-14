@@ -49,10 +49,16 @@ class ModulesTest extends \PHPUnit\Framework\TestCase
         $http->setModule('dummy', '\Tests\Modules\Dummy', 'notexisthook');
     }
 
-    public function testRegisterUnRegisterModule()
+    public function testCoreRegisterUnRegisterModule()
     {
         $core = new \Tests\Rest\CoreTester();
+
         $this->assertTrue($core->returnRegisterModule('dummy', 'after'));
+        $this->assertFalse($core->returnRegisterModule('dummy', 'wrong'));
         $this->assertFalse($core->returnRegisterModule('dummy', 'after'));
+
+        $this->assertTrue($core->returnUnRegisterModule('dummy', 'after'));
+        $this->assertFalse($core->returnUnRegisterModule('dummy', 'wrong'));
+        $this->assertFalse($core->returnUnRegisterModule('dummy', 'after'));
     }
 }

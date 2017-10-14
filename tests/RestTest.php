@@ -58,7 +58,7 @@ class RestTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetMethod(\OtherCode\Rest\Rest $api)
     {
-        $response = $api->get("posts/1");
+        $response = $api->get("posts/1", "param=value");
 
         $this->assertInstanceOf('OtherCode\Rest\Payloads\Response', $response);
         $this->assertInstanceOf('OtherCode\Rest\Payloads\Headers', $response->headers);
@@ -215,6 +215,17 @@ class RestTest extends \PHPUnit\Framework\TestCase
     {
         $api->configuration->url = "http://thisurlnotexists.com/";
         $api->get("posts/1");
+    }
+
+    /**
+     * @expectedException \OtherCode\Rest\Exceptions\RestException
+     */
+    public function testCoreCallWrongVerb()
+    {
+        $core = new \Tests\Rest\CoreTester();
+        $core->returnCall('wrong', 'http://jsonplaceholder.typicode.com/posts/1', array(
+            'param' => 'value'
+        ));
     }
 
 }

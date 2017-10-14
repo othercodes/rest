@@ -8,6 +8,12 @@ namespace Tests\Rest;
  */
 class CoreTester extends \OtherCode\Rest\Core\Core
 {
+
+    public function returnCall($method, $url, $body = null)
+    {
+        return $this->call($method, $url, $body);
+    }
+
     /**
      * Register a new module.
      * @return bool
