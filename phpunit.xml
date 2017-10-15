@@ -6,7 +6,7 @@
     </filter>
     <testsuites>
         <testsuite name="Base">
-            <file>tests/ConfigurationTest</file>
+            <file>tests/ConfigurationTest.php</file>
             <file>tests/ErrorTest.php</file>
             <file>tests/HeadersTest.php</file>
             <file>tests/RestTest.php</file>

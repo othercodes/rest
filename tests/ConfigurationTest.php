@@ -26,7 +26,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
             )
         ));
         $this->assertInstanceOf('\OtherCode\Rest\Core\Configuration', $configuration);
-        $this->assertInstanceOf('\OtherCode\Rest\Payload\Headers', $configuration->httpheader);
+        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Headers', $configuration->httpheader);
         $this->assertCount(2, $configuration->httpheader);
         $this->assertInternalType('array', $configuration->toArray());
         $this->assertCount(4, $configuration->toArray());
@@ -42,7 +42,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
     public function testAddHeader(\OtherCode\Rest\Core\Configuration $configuration)
     {
         $configuration->addHeader('one_more_header', 'one_more_value');
-        $this->assertCount(2, $configuration->httpheader);
+        $this->assertCount(3, $configuration->httpheader);
 
         return $configuration;
     }
@@ -54,7 +54,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
     public function testRemoveHeader(\OtherCode\Rest\Core\Configuration $configuration)
     {
         $configuration->removeHeader('one_more_header');
-        $this->assertCount(1, $configuration->httpheader);
+        $this->assertCount(2, $configuration->httpheader);
     }
 
     /**
@@ -68,7 +68,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
             'one_more_header' => 'one_more_value',
             'two_more_header' => 'two_more_value'
         ));
-        $this->assertCount(3, $configuration->httpheader);
+        $this->assertCount(4, $configuration->httpheader);
 
         return $configuration;
     }
@@ -83,7 +83,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
             'one_more_header',
             'two_more_header'
         ));
-        $this->assertCount(1, $configuration->httpheader);
+        $this->assertCount(2, $configuration->httpheader);
     }
 
     /**
@@ -94,6 +94,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
     {
         $configuration->basicAuth('username', 'password');
         $this->assertCount(5, $configuration->toArray());
+        $this->assertEquals('username=password', $configuration->userpwd);
     }
 
     /**
@@ -104,6 +105,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
     {
         $configuration->setSSLCertificate('/some/path/to/ssl.cert');
         $this->assertCount(6, $configuration->toArray());
+        $this->assertEquals('/some/path/to/ssl.cert', $configuration->sslcert);
     }
 
     /**
@@ -114,6 +116,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
     {
         $configuration->setCACertificates('/some/path/to/capath', 'capath');
         $this->assertCount(8, $configuration->toArray());
+        $this->assertEquals('/some/path/to/capath', $configuration->capath);
     }
 
     /**
@@ -124,6 +127,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
     {
         $configuration->setCACertificates('/some/path/to/cainfo', 'cainfo');
         $this->assertCount(9, $configuration->toArray());
+        $this->assertEquals('/some/path/to/cainfo', $configuration->cainfo);
     }
 
     /**
