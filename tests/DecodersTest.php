@@ -105,4 +105,43 @@ class DecodersTest extends \PHPUnit\Framework\TestCase
         $response = $api->get("/v2/59db35850f00000b0402a669");
         $this->assertNull($response->body);
     }
+
+    public function testXMLRPCDecoderOFF()
+    {
+        $api = new OtherCode\Rest\Rest();
+        $api->configuration->url = "http://www.mocky.io";
+
+        $response = $api->get("/v2/59e3e9481100006b02aabec3");
+        $this->assertInternalType('string', $response->body);
+
+        return $api;
+    }
+
+    /**
+     * @depends testXMLRPCDecoderOFF
+     */
+    public function testSetXMLRPCDecoder(\OtherCode\Rest\Rest $api)
+    {
+        $this->assertInstanceOf('\OtherCode\Rest\Rest', $api->setDecoder("xmlrpc"));
+        return $api;
+    }
+
+    /**
+     * @depends testSetXMLRPCDecoder
+     */
+    public function testXMLRPCDecoderON(\OtherCode\Rest\Rest $api)
+    {
+        $response = $api->get("/v2/59e3e9481100006b02aabec3");
+
+        $this->assertInternalType('array', $response->body);
+    }
+
+    /**
+     * @depends testSetXMLRPCDecoder
+     * @expectedException \OtherCode\Rest\Exceptions\RestException
+     */
+    public function testXMLRPCDecoderONFail(\OtherCode\Rest\Rest $api)
+    {
+        $api->get("/v2/59e3ed1f1100005b01aabec5");
+    }
 }

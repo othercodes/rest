@@ -16,17 +16,13 @@ class XMLRPCDecoder extends \OtherCode\Rest\Modules\Decoders\BaseDecoder
 
     /**
      * Decode the data of a request
-     * @return mixed
      */
     public function decode()
     {
         $response = xmlrpc_decode($this->body);
 
         if (is_array($response) && xmlrpc_is_fault($response)) {
-            $faultString = base64_decode($response['faultString'], true);
-            if ($faultString !== false) {
-                $response['faultString'] = $faultString;
-            }
+            throw new \OtherCode\Rest\Exceptions\RestException($response['faultString'], $response['faultCode']);
         }
 
         $this->body = $response;
