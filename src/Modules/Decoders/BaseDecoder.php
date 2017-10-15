@@ -1,4 +1,6 @@
-<?php namespace OtherCode\Rest\Modules\Decoders;
+<?php
+
+namespace OtherCode\Rest\Modules\Decoders;
 
 /**
  * Class BaseDecoder
@@ -6,21 +8,13 @@
  * @version 1.0
  * @package OtherCode\Rest\Modules\Decoders
  */
-abstract class BaseDecoder extends \OtherCode\Rest\Modules\BaseModule
+abstract class BaseDecoder extends \OtherCode\Rest\Modules\BaseModule implements \OtherCode\Rest\Modules\Decoders\DecoderInterface
 {
     /**
      * The content type that trigger the decoder
      * @var string
      */
     protected $contentType = 'text/plain';
-
-    /**
-     * Perform the main decode of the data
-     */
-    protected function decode()
-    {
-        // do something with ->response
-    }
 
     /**
      * Run the main decode method

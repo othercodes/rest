@@ -19,7 +19,7 @@ class JSONDecoder extends \OtherCode\Rest\Modules\Decoders\BaseDecoder
      * Decode the data of a request
      * @throws \OtherCode\Rest\Exceptions\RestException
      */
-    protected function decode()
+    public function decode()
     {
         /**
          * Preform the actual decode
