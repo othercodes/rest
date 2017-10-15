@@ -26,13 +26,13 @@ abstract class BaseEncoder extends \OtherCode\Rest\Modules\BaseModule implements
      */
     public function run()
     {
+        if (!is_array($this->methods)) {
+            throw new \OtherCode\Rest\Exceptions\RestException('The "methods" property MUST be an array.');
+        }
+
         $body = $this->body;
         $method = $this->method;
         if (!empty($body) && isset($method)) {
-
-            if (!is_array($this->methods)) {
-                throw new \OtherCode\Rest\Exceptions\RestException('The "methods" property MUST be an array.');
-            }
 
             if (in_array($this->method, $this->methods)) {
                 $this->encode();

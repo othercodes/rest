@@ -1,11 +1,11 @@
 <?php
 
-namespace Tests\Modules;
+namespace Tests\Modules\Encoders;
 
 
 class DummyEncoder extends \OtherCode\Rest\Modules\Encoders\BaseEncoder
 {
-    protected $methods = array('POST', 'PUT', 'PATCH');
+    protected $methods = 'POST';
 
     public function encode()
     {

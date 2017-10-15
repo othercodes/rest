@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Modules;
+namespace Tests\Modules\Decoders;
 
 
 class DummyDecoder extends \OtherCode\Rest\Modules\Decoders\BaseDecoder
