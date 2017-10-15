@@ -35,6 +35,14 @@ class DecodersTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf('\stdClass', $response->body);
     }
 
+    /**
+     * @depends testSetJSonDecoder
+     * @expectedException \OtherCode\Rest\Exceptions\RestException
+     */
+    public function testJSonDecoderONFail(\OtherCode\Rest\Rest $api)
+    {
+        $api->get("/v2/59e3e2211100006602aabeac");
+    }
 
     public function testXMLDecoderOFF()
     {
@@ -65,6 +73,15 @@ class DecodersTest extends \PHPUnit\Framework\TestCase
 
         $this->assertInternalType('object', $response->body);
         $this->assertInstanceOf('\SimpleXMLElement', $response->body);
+    }
+
+    /**
+     * @depends testSetXMLDecoder
+     * @expectedException \OtherCode\Rest\Exceptions\RestException
+     */
+    public function testXMLDecoderONFail(\OtherCode\Rest\Rest $api)
+    {
+        $api->get("/v2/59e3de1e1100006302aabeaa");
     }
 
     /**

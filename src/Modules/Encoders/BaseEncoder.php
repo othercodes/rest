@@ -7,6 +7,11 @@ namespace OtherCode\Rest\Modules\Encoders;
  * @author Unay Santisteban <usantisteban@othercode.es>
  * @version 1.0
  * @package OtherCode\Rest\Modules\Encoders
+ *
+ * @property string $method
+ * @property string $url
+ * @property \OtherCode\Rest\Payloads\Headers $headers
+ * @property string $body
  */
 abstract class BaseEncoder extends \OtherCode\Rest\Modules\BaseModule implements \OtherCode\Rest\Modules\Encoders\EncoderInterface
 {
@@ -21,12 +26,17 @@ abstract class BaseEncoder extends \OtherCode\Rest\Modules\BaseModule implements
      */
     public function run()
     {
-        if (!is_array($this->methods)) {
-            throw new \OtherCode\Rest\Exceptions\RestException('The "methods" property MUST be an array.');
-        }
+        $body = $this->body;
+        $method = $this->method;
+        if (!empty($body) && isset($method)) {
 
-        if (in_array($this->method, $this->methods)) {
-            $this->encode();
+            if (!is_array($this->methods)) {
+                throw new \OtherCode\Rest\Exceptions\RestException('The "methods" property MUST be an array.');
+            }
+
+            if (in_array($this->method, $this->methods)) {
+                $this->encode();
+            }
         }
     }
 }

@@ -21,29 +21,10 @@ class JSONDecoder extends \OtherCode\Rest\Modules\Decoders\BaseDecoder
      */
     public function decode()
     {
-        /**
-         * Preform the actual decode
-         */
         $this->body = json_decode($this->body);
 
         $errorCode = json_last_error();
-        switch ($errorCode) {
-            case JSON_ERROR_DEPTH:
-                $errorMessage = 'The maximum stack depth has been exceeded';
-                break;
-            case JSON_ERROR_STATE_MISMATCH:
-                $errorMessage = 'Invalid or malformed JSON';
-                break;
-            case JSON_ERROR_CTRL_CHAR:
-                $errorMessage = 'Control character error, possibly incorrectly encoded';
-                break;
-            case JSON_ERROR_SYNTAX:
-                $errorMessage = 'Syntax error';
-                break;
-            case JSON_ERROR_UTF8:
-                $errorMessage = 'Malformed UTF-8 characters, possibly incorrectly encoded';
-                break;
-        }
+        $errorMessage = json_last_error_msg();
 
         if ($errorCode !== 0 && isset($errorMessage)) {
             throw new \OtherCode\Rest\Exceptions\RestException($errorMessage, $errorCode);

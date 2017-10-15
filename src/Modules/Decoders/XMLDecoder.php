@@ -19,20 +19,12 @@ class XMLDecoder extends \OtherCode\Rest\Modules\Decoders\BaseDecoder
      */
     public function decode()
     {
-        /**
-         * Preform the actual decode
-         */
-        $this->body = new \SimpleXMLElement($this->body);
+        try {
 
-        /**
-         * set the new error code and message
-         */
-        if (!$this->body) {
-            $errors = libxml_get_errors();
-            $this->error->code = $errors['code'];
-            $this->error->message = $errors['message'];
+            $this->body = new \SimpleXMLElement($this->body, LIBXML_NOWARNING);
+        } catch (\Exception $e) {
+
+            throw new \OtherCode\Rest\Exceptions\RestException($e->getMessage(), $e->getCode());
         }
-
     }
-
 }
