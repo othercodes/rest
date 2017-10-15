@@ -8,7 +8,7 @@
 
 ## Installation
 
-To install the package we only have to add the dependency to ***scripts/composer.json*** file:
+To install the package we only have to add the dependency to ***composer.json*** file:
 
 ```javascript
 {
