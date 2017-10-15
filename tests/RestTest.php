@@ -197,6 +197,14 @@ class RestTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @depends testInstantiationAndConfiguration
+     */
+    public function testGetError(\OtherCode\Rest\Rest $api)
+    {
+        $this->assertInstanceOf('\OtherCode\Rest\Core\Error', $api->getError());
+    }
+
+    /**
      * @param \OtherCode\Rest\Rest $api
      * @depends testInstantiationAndConfiguration
      * @expectedException \OtherCode\Rest\Exceptions\ConnectionException

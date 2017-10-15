@@ -8,6 +8,7 @@
         <testsuite name="Base">
             <file>tests/ConfigurationTest.php</file>
             <file>tests/ErrorTest.php</file>
+            <file>tests/ResponseTest.php</file>
             <file>tests/HeadersTest.php</file>
             <file>tests/RestTest.php</file>
             <file>tests/QuickCallsTest.php</file>
