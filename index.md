@@ -1,30 +1,27 @@
 # Rest Client
 
 [![Build Status](https://travis-ci.org/othercodes/rest.svg?branch=master)](https://travis-ci.org/othercodes/rest) [![Latest Stable Version](https://poser.pugx.org/othercode/rest/v/stable)](https://packagist.org/packages/othercode/rest) [![License](https://poser.pugx.org/othercode/rest/license)](https://packagist.org/packages/othercode/rest)
+[![Total Downloads](https://poser.pugx.org/othercode/rest/downloads)](https://packagist.org/packages/othercode/rest) [![codecov](https://codecov.io/gh/othercodes/rest/branch/master/graph/badge.svg)](https://codecov.io/gh/othercodes/rest)
+
 
 [Rest client](http://othercode.es/packages/rest-client.html) to make GET, POST, PUT, DELETE, PATCH, etc calls.
 
 ## Installation
 
-To install the package we only have to add the dependency to ***scripts/composer.json*** file:
+To install the package we only have to add the dependency to ***composer.json*** file:
 
 ```javascript
-"require": {
-  "othercode/rest": "*"
+{
+    "require": {
+      "othercode/rest": "*"
+    }
 }
 ```
 
 And run the following command:
 
 ```bash
-composer update
-```
-
-### Install without Composer
-
-Also we can use this library without Composer, we only have to include in our script the **"rest/autoload.php"** file.
-```php
-require_once "rest/autoload.php".
+composer install
 ```
 
 ## Usage
@@ -303,7 +300,7 @@ $api->setDecoder("json");
 The default allowed values for this method are: ***json***, ***xml*** and ***xmlrpc***. All the decoders are always executed 
 in the "after" hook. 
 
-###Custom Decoders
+### Custom Decoders
 
 To create a new decoder we only have to use this template:
 
@@ -322,6 +319,18 @@ class CustomDecoder extends BaseDecoder
 Like in modules, we have the Response object available to work. The $contentType property is the content-type 
 that will trigger the decoder, in the example above all responses with content-type "application/json" will 
 trigger this decoder.
+
+
+### Quick Calls
+
+We can do quick calls using the `\OtherCode\Rest\Payloads\Request::call()` method. This static method returns a
+Rest instance so we can use all the methods from it.
+
+```
+$response = \OtherCode\Rest\Payloads\Request::call('http://jsonplaceholder.typicode.com')
+    ->setDecoder('json')
+    ->get('/posts/1');
+```
 
 ## Complete Example
 
