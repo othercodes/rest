@@ -61,4 +61,12 @@ class ModulesTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($core->returnUnRegisterModule('dummy', 'wrong'));
         $this->assertFalse($core->returnUnRegisterModule('dummy', 'after'));
     }
+
+
+    public function testRunModuleOnResponse()
+    {
+        $dummy = new \Tests\Modules\Dummy(new \OtherCode\Rest\Payloads\Response());
+        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Response', $dummy->output());
+        $this->assertNull($dummy->run());
+    }
 }

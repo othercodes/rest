@@ -7,6 +7,6 @@ class Dummy extends \OtherCode\Rest\Modules\BaseModule
 {
     public function run()
     {
-
+        return null;
     }
 }

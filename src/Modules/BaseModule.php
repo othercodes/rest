@@ -6,7 +6,7 @@
  * @version 1.0
  * @package OtherCode\Rest
  */
-abstract class BaseModule
+abstract class BaseModule implements \OtherCode\Rest\Modules\ModuleInterface
 {
     /**
      * Main data to work with
@@ -21,14 +21,6 @@ abstract class BaseModule
     public function __construct($bindings)
     {
         $this->bindings = $bindings;
-    }
-
-    /**
-     * Perform the main module process
-     */
-    public function run()
-    {
-        // perform custom actions
     }
 
     /**
