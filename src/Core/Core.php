@@ -101,10 +101,7 @@ abstract class Core
         curl_setopt($this->curl, CURLOPT_FRESH_CONNECT, true);
         curl_setopt($this->curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($this->curl, CURLOPT_HEADER, true);
-
-        if (!curl_setopt_array($this->curl, $this->configuration->toArray())) {
-            throw new \OtherCode\Rest\Exceptions\ConfigurationException("It has not been possible to configure the instance, check your configuration options");
-        }
+        curl_setopt_array($this->curl, $this->configuration->toArray());
 
         $this->request->body = $body;
         $this->request->method = strtoupper($method);
