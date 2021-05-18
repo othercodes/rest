@@ -133,7 +133,7 @@ class Configuration extends \OtherCode\Rest\Core\CurlOpts
         $allowed = get_class_vars(get_class($this));
         foreach (get_object_vars($this) as $key => $item) {
             if (array_key_exists($key, $allowed) && isset($item)) {
-                $array[constant(strtoupper("CURLOPT_" . $key))] = (method_exists($item, 'build') ? $item->build() : $item);
+                $array[constant(strtoupper("CURLOPT_" . $key))] = ((is_string($item) || is_object($item)) && method_exists($item, 'build') ? $item->build() : $item);
             }
         }
         return $array;
