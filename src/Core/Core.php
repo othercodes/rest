@@ -2,10 +2,15 @@
 
 namespace OtherCode\Rest\Core;
 
+use OtherCode\Rest\Exceptions\ConnectionException;
+use OtherCode\Rest\Exceptions\RestException;
+use OtherCode\Rest\Modules\BaseModule;
+use OtherCode\Rest\Payloads\Request;
+use OtherCode\Rest\Payloads\Response;
+
 /**
  * Class Core
  * @author Unay Santisteban <usantisteban@othercode.es>
- * @version 1.3.1
  * @package OtherCode\Rest\Core
  */
 abstract class Core
@@ -14,39 +19,39 @@ abstract class Core
     /**
      * Core version
      */
-    const VERSION = "1.4.0";
+    const VERSION = "1.5.0";
 
     /**
      * Configuration class
-     * @var \OtherCode\Rest\Core\Configuration
+     * @var Configuration
      */
-    public $configuration;
+    public Configuration $configuration;
 
     /**
      * Last known error
-     * @var \OtherCode\Rest\Core\Error
+     * @var Error
      */
-    public $error;
+    public Error $error;
 
     /**
-     * The data to be send
-     * @var \OtherCode\Rest\Payloads\Request
+     * The data to be sent
+     * @var Request
      */
-    protected $request;
+    protected Request $request;
 
     /**
      * Stack with the response data
-     * @var \OtherCode\Rest\Payloads\Response
+     * @var Response
      */
-    protected $response;
+    protected Response $response;
 
     /**
      * List of loaded modules
      * @var array
      */
-    protected $modules = array(
-        'before' => array(),
-        'after' => array(),
+    protected array $modules = array(
+        'before' => [],
+        'after' => [],
     );
 
     /**
@@ -57,28 +62,28 @@ abstract class Core
 
     /**
      * Main constructor
-     * @param Configuration $configuration
+     * @param  Configuration|null  $configuration
+     * @throws RestException
      */
-    public function __construct(\OtherCode\Rest\Core\Configuration $configuration = null)
+    public function __construct(Configuration $configuration = null)
     {
-        $this->response = new \OtherCode\Rest\Payloads\Response();
-        $this->request = new \OtherCode\Rest\Payloads\Request();
+        $this->response = new Response();
+        $this->request = new Request();
 
         $this->configure($configuration);
     }
 
     /**
      * Configure main options
-     * @param Configuration $configuration
-     * @throws \OtherCode\Rest\Exceptions\RestException
+     * @param  Configuration|null  $configuration
      * @return $this
      */
-    public function configure(\OtherCode\Rest\Core\Configuration $configuration = null)
+    public function configure(Configuration $configuration = null): Core
     {
         if (isset($configuration)) {
             $this->configuration = $configuration;
         } else {
-            $this->configuration = new \OtherCode\Rest\Core\Configuration();
+            $this->configuration = new Configuration();
         }
         $this->request->setHeaders($this->configuration->httpheader);
         return $this;
@@ -86,15 +91,14 @@ abstract class Core
 
     /**
      * Method: POST, PUT, GET etc
-     * @param string $method
-     * @param string $url
-     * @param mixed $body
-     * @throws \OtherCode\Rest\Exceptions\RestException
-     * @throws \OtherCode\Rest\Exceptions\ConfigurationException
-     * @throws \OtherCode\Rest\Exceptions\ConnectionException
-     * @return \OtherCode\Rest\Payloads\Response
+     * @param  string  $method
+     * @param  string  $url
+     * @param  mixed  $body
+     * @return Response
+     * @throws ConnectionException
+     * @throws RestException
      */
-    protected function call($method, $url, $body = null)
+    protected function call(string $method, string $url, $body = null): Response
     {
         $this->curl = curl_init();
 
@@ -105,7 +109,10 @@ abstract class Core
 
         $this->request->body = $body;
         $this->request->method = strtoupper($method);
-        $this->request->url = $this->configuration->url . $url;
+
+        $this->request->url = isset($this->configuration->url)
+            ? $this->configuration->url.$url
+            : $url;
 
         /**
          * In case we have some modules attached to
@@ -115,7 +122,7 @@ abstract class Core
 
         /**
          * Switch between the different configurations
-         * depending the method used
+         * depending on the method used.
          */
         switch ($this->request->method) {
             case "HEAD":
@@ -135,7 +142,7 @@ abstract class Core
                 curl_setopt($this->curl, CURLOPT_POSTFIELDS, $this->request->body);
                 break;
             default:
-                throw new \OtherCode\Rest\Exceptions\RestException('Method "' . $this->request->method . '" not supported!');
+                throw new RestException('Method "'.$this->request->method.'" not supported!');
         }
 
         /**
@@ -151,12 +158,12 @@ abstract class Core
 
         /**
          * we get the last request headers and the
-         * possible error and description. Also
+         * possible error and description. Also,
          * we launch a ConnectionException if needed.
          */
         $this->setError(curl_errno($this->curl), curl_error($this->curl));
         if ($this->error->code !== 0) {
-            throw new \OtherCode\Rest\Exceptions\ConnectionException($this->error->message, $this->error->code);
+            throw new ConnectionException($this->error->message, $this->error->code);
         }
 
         $this->response->parseResponse($response);
@@ -185,7 +192,7 @@ abstract class Core
      * Return the payloads of the las call
      * @return array
      */
-    public function getPayloads()
+    public function getPayloads(): array
     {
         return array(
             'request' => $this->request,
@@ -197,16 +204,16 @@ abstract class Core
      * Get the curl request headers
      * @return array
      */
-    public function getMetadata()
+    public function getMetadata(): array
     {
         return $this->response->metadata;
     }
 
     /**
      * Return the last error.
-     * @return \OtherCode\Rest\Core\Error
+     * @return Error
      */
-    public function getError()
+    public function getError(): Error
     {
         return $this->error;
     }
@@ -218,15 +225,15 @@ abstract class Core
      */
     protected function setError($code, $message)
     {
-        $this->error = new \OtherCode\Rest\Core\Error($code, $message);
+        $this->error = new Error($code, $message);
     }
 
     /**
      * Run all the registered modules
-     * @param string $hook Hook module name
-     * @throws \OtherCode\Rest\Exceptions\RestException
+     * @param  string  $hook  Hook module name
+     * @throws RestException
      */
-    private function dispatchModules($hook)
+    private function dispatchModules(string $hook)
     {
         foreach ($this->modules[$hook] as $module) {
             if (method_exists($module, 'run')) {
@@ -237,12 +244,12 @@ abstract class Core
 
     /**
      * Register a new module instance
-     * @param string $moduleName
-     * @param \OtherCode\Rest\Modules\BaseModule $moduleInstance
-     * @param string $hook
+     * @param  string  $moduleName
+     * @param  BaseModule  $moduleInstance
+     * @param  string  $hook
      * @return boolean
      */
-    protected function registerModule($moduleName, \OtherCode\Rest\Modules\BaseModule $moduleInstance, $hook)
+    protected function registerModule(string $moduleName, BaseModule $moduleInstance, string $hook): bool
     {
         if (!in_array($hook, array_keys($this->modules))) {
             return false;
@@ -257,10 +264,10 @@ abstract class Core
     /**
      * Unregister the module specified by $moduleName
      * @param $moduleName string
-     * @param string $hook
+     * @param  string  $hook
      * @return boolean
      */
-    protected function unregisterModule($moduleName, $hook)
+    protected function unregisterModule(string $moduleName, string $hook): bool
     {
         if (!in_array($hook, array_keys($this->modules))) {
             return false;
@@ -274,10 +281,10 @@ abstract class Core
 
     /**
      * Return the list of registered modules.
-     * @param string $hook
+     * @param  string|null  $hook
      * @return array
      */
-    public function getModules($hook = null)
+    public function getModules(string $hook = null): array
     {
         if (isset($hook) && in_array($hook, array_keys($this->modules))) {
             return $this->modules[$hook];

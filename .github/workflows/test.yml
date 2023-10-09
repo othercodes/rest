@@ -1,0 +1,44 @@
+name: Tests
+
+on:
+  pull_request:
+    types: [ opened, synchronize, reopened ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php-version:
+          - "7.4"
+          - "8.0"
+          - "8.1"
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+
+      - name: Install PHP ${{ matrix.php-version }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: mbstring,xmlrpc,xml,json
+          coverage: pcov
+          tools: composer:v2
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.composer/cache
+          key: php-${{ matrix.php-version }}-composer-${{ hashFiles('**/composer.json') }}
+          restore-keys: php-${{ matrix.php-version }}-composer-
+
+      - name: Validate composer.json and composer.lock
+        run: composer validate
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-suggest
+
+      - name: Execute tests (Unit and Feature tests) via PHPUnit
+        run: composer test

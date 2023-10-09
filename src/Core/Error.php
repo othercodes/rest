@@ -5,7 +5,6 @@ namespace OtherCode\Rest\Core;
 /**
  * Class Error
  * @author Unay Santisteban <usantisteban@othercode.es>
- * @version 1.0
  * @package OtherCode\Rest\Core
  */
 class Error
@@ -14,19 +13,19 @@ class Error
      * The last error code
      * @var int
      */
-    public $code = 0;
+    public int $code = 0;
 
     /**
      * The last error message
      * @var string
      */
-    public $message;
+    public string $message;
 
     /**
-     * @param $code
-     * @param $message
+     * @param  int  $code
+     * @param  string  $message
      */
-    public function __construct($code = 0, $message = 'none')
+    public function __construct(int $code = 0, string $message = 'none')
     {
         $this->code = $code;
         $this->message = $message;
@@ -34,10 +33,10 @@ class Error
 
     /**
      * Return if an error exists
-     * @deprecated Will be removed in v2
      * @return bool
+     * @deprecated Will be removed in v2
      */
-    public function hasError()
+    public function hasError(): bool
     {
         if ($this->code !== 0) {
             return true;
@@ -49,8 +48,8 @@ class Error
      * Return the object in string format
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
-        return 'There was a connection error, code: ' . $this->code . ' ' . $this->message;
+        return 'There was a connection error, code: '.$this->code.' '.$this->message;
     }
 }

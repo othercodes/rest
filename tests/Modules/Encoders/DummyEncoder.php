@@ -3,7 +3,9 @@
 namespace Tests\Modules\Encoders;
 
 
-class DummyEncoder extends \OtherCode\Rest\Modules\Encoders\BaseEncoder
+use OtherCode\Rest\Modules\Encoders\BaseEncoder;
+
+class DummyEncoder extends BaseEncoder
 {
     protected $methods = 'POST';
 

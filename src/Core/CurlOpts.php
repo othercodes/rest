@@ -2,11 +2,12 @@
 
 namespace OtherCode\Rest\Core;
 
+use OtherCode\Rest\Payloads\Headers;
+
 /**
  * Class CurlOpts
  * @see http://php.net/manual/es/function.curl-setopt.php
  * @author Unay Santisteban <usantisteban@othercode.es>
- * @version 1.0
  * @package OtherCode\Rest\Core
  */
 abstract class CurlOpts
@@ -17,27 +18,27 @@ abstract class CurlOpts
      * follows a Location: redirect.
      * @var boolean
      */
-    public $autoreferer;
+    public bool $autoreferer;
 
     /**
      * TRUE to return the raw output when CURLOPT_RETURNTRANSFER is used.
      * @var boolean
      */
-    public $binarytransfer;
+    public bool $binarytransfer;
 
     /**
      * TRUE to reset the HTTP request method to GET. Since GET is the default,
      * this is only necessary if the request method has been changed.
      * @var boolean
      */
-    public $httpget;
+    public bool $httpget;
 
     /**
      * TRUE to output verbose information. Writes output to STDERR, or
      * the file specified using CURLOPT_STDERR.
      * @var boolean
      */
-    public $verbose = false;
+    public bool $verbose = false;
 
     /**
      * FALSE to stop cURL from verifying the peer's certificate. Alternate
@@ -46,7 +47,7 @@ abstract class CurlOpts
      * option.
      * @var boolean
      */
-    public $ssl_verifypeer = false;
+    public bool $ssl_verifypeer = false;
 
     /**
      * 1 to check the existence of a common name in the SSL peer
@@ -56,7 +57,7 @@ abstract class CurlOpts
      * kept at 2 (default value).
      * @var int
      */
-    public $ssl_verifyhost;
+    public int $ssl_verifyhost;
 
     /**
      * The HTTP authentication method(s) to use. The options are:
@@ -74,7 +75,7 @@ abstract class CurlOpts
      * CURLAUTH_GSSNEGOTIATE | CURLAUTH_NTLM.
      * @var int
      */
-    public $httpauth;
+    public int $httpauth;
 
     /**
      * CURL_HTTP_VERSION_NONE (default, lets CURL decide which version
@@ -82,20 +83,20 @@ abstract class CurlOpts
      * (forces HTTP/1.1).
      * @var int
      */
-    public $http_version;
+    public int $http_version;
 
     /**
      * An alternative port number to connect to.
      * @var int
      */
-    public $port;
+    public int $port;
 
     /**
      * The number of seconds to wait while trying to connect.
      * Use 0 to wait indefinitely.
      * @var int
      */
-    public $connecttimeout;
+    public int $connecttimeout;
 
     /**
      * The number of milliseconds to wait while trying to connect.
@@ -105,24 +106,24 @@ abstract class CurlOpts
      * minimum timeout allowed of one second.
      * @var int
      */
-    public $connecttimeout_ms;
+    public int $connecttimeout_ms;
 
     /**
      * The maximum number of seconds to allow cURL functions
      * to execute.
      * @var int
      */
-    public $timeout;
+    public int $timeout;
 
     /**
      * The maximum number of milliseconds to allow cURL functions
      * to execute. If libcurl is built to use the standard system
-     * name resolver, that portion of the connect will still use
+     * name resolver, that portion of the connection will still use
      * full-second resolution for timeouts with a minimum timeout
      * allowed of one second.
      * @var int
      */
-    public $timeout_ms;
+    public int $timeout_ms;
 
     /**
      * The contents of the "Cookie: " header to be used in
@@ -131,7 +132,7 @@ abstract class CurlOpts
      * (e.g., "fruit=apple; colour=red")
      * @var string
      */
-    public $cookie;
+    public string $cookie;
 
     /**
      * The name of the file containing the cookie data. The cookie
@@ -140,21 +141,21 @@ abstract class CurlOpts
      * no cookies are loaded, but cookie handling is still enabled.
      * @var string
      */
-    public $cookiefile;
+    public string $cookiefile;
 
     /**
      * The name of a file to save all internal cookies to when the handle
      * is closed, e.g. after a call to curl_close.
      * @var string
      */
-    public $cookiejar;
+    public string $cookiejar;
 
     /**
      * A directory that holds multiple CA certificates.
      * Use this option alongside CURLOPT_SSL_VERIFYPEER.
      * @var string
      */
-    public $capath;
+    public string $capath;
 
     /**
      * The name of a file holding one or more certificates
@@ -162,7 +163,7 @@ abstract class CurlOpts
      * used in combination with CURLOPT_SSL_VERIFYPEER.
      * @var string
      */
-    public $cainfo;
+    public string $cainfo;
 
     /**
      * The contents of the "Accept-Encoding: " header. This
@@ -172,14 +173,14 @@ abstract class CurlOpts
      * encoding types is sent.
      * @var string
      */
-    public $encoding;
+    public string $encoding;
 
     /**
      * The password required to use the CURLOPT_SSLKEY
      * or CURLOPT_SSH_PRIVATE_KEYFILE private key.
      * @var string
      */
-    public $keypasswd;
+    public string $keypasswd;
 
     /**
      * A string containing 32 hexadecimal digits. The
@@ -189,7 +190,7 @@ abstract class CurlOpts
      * This option is only for SCP and SFTP transfers.
      * @var string
      */
-    public $ssh_host_public_key_md5;
+    public string $ssh_host_public_key_md5;
 
     /**
      * The file name for your public key. If not used, libcurl
@@ -198,7 +199,7 @@ abstract class CurlOpts
      * directory if HOME is not set.
      * @var string
      */
-    public $ssh_public_keyfile;
+    public string $ssh_public_keyfile;
 
     /**
      * The file name for your private key. If not used, libcurl
@@ -208,67 +209,67 @@ abstract class CurlOpts
      * set the password with CURLOPT_KEYPASSWD.
      * @var string
      */
-    public $ssh_private_keyfile;
+    public string $ssh_private_keyfile;
 
     /**
      * A list of ciphers to use for SSL. For example, RC4-SHA
      * and TLSv1 are valid cipher lists.
      * @var string
      */
-    public $ssl_cipher_list;
+    public string $ssl_cipher_list;
 
     /**
      * The name of a file containing a PEM formatted certificate
      * @var string
      */
-    public $sslcert;
+    public string $sslcert;
 
     /**
      * The password required to use the CURLOPT_SSLCERT certificate.
      * @var string
      */
-    public $sslcertpasswd;
+    public string $sslcertpasswd;
 
     /**
      * The format of the certificate. Supported formats are
      * "PEM" (default), "DER", and "ENG"
      * @var string
      */
-    public $sslcerttype;
+    public string $sslcerttype;
 
     /**
      * The identifier for the crypto engine of the private SSL
      * key specified in CURLOPT_SSLKEY.
      * @var string
      */
-    public $sslengine;
+    public string $sslengine;
 
     /**
      * The identifier for the crypto engine used for
      * asymmetric crypto operations.
      * @var string
      */
-    public $sslengine_default;
+    public string $sslengine_default;
 
     /**
      * The name of a file containing a private SSL key.
      * @var string
      */
-    public $sslkey;
+    public string $sslkey;
 
     /**
      * The secret password needed to use the private
      * SSL key specified in CURLOPT_SSLKEY.
      * @var string
      */
-    public $sslkeypasswd;
+    public string $sslkeypasswd;
 
     /**
      * The identifier for the CURLOPT_SSLVERSION
      * property.
      * @var integer
      */
-    public $sslversion;
+    public int $sslversion;
 
     /**
      * The key type of the private SSL key specified in
@@ -276,7 +277,7 @@ abstract class CurlOpts
      * (default), "DER", and "ENG".
      * @var string
      */
-    public $sslkeytype;
+    public string $sslkeytype;
 
     /**
      * The KRB4 (Kerberos 4) security level. Any of the following
@@ -287,79 +288,79 @@ abstract class CurlOpts
      * security only works with FTP transactions.
      * @var string
      */
-    public $krb4level;
+    public string $krb4level;
 
     /**
      * The HTTP proxy to tunnel requests through.
      * @var string
      */
-    public $proxy;
+    public string $proxy;
 
     /**
      * A username and password formatted as "[username]:[password]"
      * to use for the connection to the proxy.
      * @var string
      */
-    public $proxyuserpwd;
+    public string $proxyuserpwd;
 
     /**
      * The contents of the "Referer: " header to be used
-     * in a HTTP request.
+     * in an HTTP request.
      * @var string
      */
-    public $referer;
+    public string $referer;
 
     /**
      * The contents of the "User-Agent: " header to be used
-     * in a HTTP request.
+     * in an HTTP request.
      * @var string
      */
-    public $useragent;
+    public string $useragent;
 
     /**
      * The URL to fetch.
      * @var string
      */
-    public $url;
+    public string $url;
 
     /**
      * User and password in
      * format user=pass
      * @var string
      */
-    public $userpwd;
+    public string $userpwd;
 
     /**
      * Main headers
-     * @var \OtherCode\Rest\Payloads\Headers
+     * @var Headers
      */
-    public $httpheader;
+    public Headers $httpheader;
 
     /**
      * Array of 200 codes that will be
      * considered as success
      * @var array
      */
-    public $http200aliases;
+    public array $http200aliases;
 
     /**
      * Array of ftp commands o perform
      * before the request
      * @var array
      */
-    public $postquote;
+    public array $postquote;
 
     /**
      * Array of ftp commands o perform
      * after the request
      * @var array
      */
-    public $quote;
+    public array $quote;
 
     /**
      * File path for log errors
      * @var string
      */
-    public $stderr;
+    public string $stderr;
 
 }

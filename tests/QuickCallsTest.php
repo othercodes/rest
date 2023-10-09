@@ -1,114 +1,100 @@
 <?php
 
-class QuickCallsTest extends \PHPUnit\Framework\TestCase
-{
+use OtherCode\Rest\Payloads\Request;
+use OtherCode\Rest\Payloads\Response;
+use OtherCode\Rest\Payloads\Headers;
+use OtherCode\Rest\Core\Error;
 
-    public function testQuickGetJSON()
-    {
-        $response = \OtherCode\Rest\Payloads\Request::call('http://jsonplaceholder.typicode.com')
-            ->setDecoder('json')
-            ->get('/posts/1');
+test('quick get JSON', function () {
+    $response = Request::call('http://jsonplaceholder.typicode.com')
+        ->setDecoder('json')
+        ->get('/posts/1');
 
-        $this->assertInstanceOf('OtherCode\Rest\Payloads\Response', $response);
-        $this->assertInstanceOf('OtherCode\Rest\Payloads\Headers', $response->headers);
-        $this->assertInstanceOf('OtherCode\Rest\Core\Error', $response->error);
+    expect($response)->toBeInstanceOf(Response::class);
+    expect($response->headers)->toBeInstanceOf(Headers::class);
+    expect($response->error)->toBeInstanceOf(Error::class);
+    expect($response->metadata)->toBeArray();
+    expect($response->code)->toBeInt();
+    expect($response->content_type)->toBeString();
+    expect($response->charset)->toBeString();
+});
 
-        $this->assertInternalType('array', $response->metadata);
-        $this->assertInternalType('int', $response->code);
-        $this->assertInternalType('string', $response->content_type);
-        $this->assertInternalType('string', $response->charset);
-    }
+test('quick post JSON', function () {
+    $response = Request::call('http://jsonplaceholder.typicode.com')
+        ->setEncoder('json')
+        ->post("/posts", array(
+            'title' => 'foo',
+            'body' => 'bar',
+            'userId' => 1
+        ));
 
-    public function testQuickPostJSON()
-    {
-        $response = \OtherCode\Rest\Payloads\Request::call('http://jsonplaceholder.typicode.com')
-            ->setEncoder('json')
-            ->post("/posts", array(
-                'title' => 'foo',
-                'body' => 'bar',
-                'userId' => 1
-            ));
+    expect($response)->toBeInstanceOf('\OtherCode\Rest\Payloads\Response');
+    expect($response->headers)->toBeInstanceOf('\OtherCode\Rest\Payloads\Headers');
+    expect($response->error)->toBeInstanceOf('\OtherCode\Rest\Core\Error');
+    expect($response->metadata)->toBeArray();
+    expect($response->code)->toBeInt();
+    expect($response->content_type)->toBeString();
+    expect($response->charset)->toBeString();
+});
 
-        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Response', $response);
-        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Headers', $response->headers);
-        $this->assertInstanceOf('\OtherCode\Rest\Core\Error', $response->error);
+test('quick put JSON', function () {
+    $response = Request::call('http://jsonplaceholder.typicode.com')
+        ->setEncoder('json')
+        ->put("/posts/1", array(
+            'id' => 1,
+            'title' => 'foo',
+            'body' => 'bar',
+            'userId' => 1
+        ));
 
-        $this->assertInternalType('array', $response->metadata);
-        $this->assertInternalType('int', $response->code);
-        $this->assertInternalType('string', $response->content_type);
-        $this->assertInternalType('string', $response->charset);
-    }
+    expect($response)->toBeInstanceOf('\OtherCode\Rest\Payloads\Response');
+    expect($response->headers)->toBeInstanceOf('\OtherCode\Rest\Payloads\Headers');
+    expect($response->error)->toBeInstanceOf('\OtherCode\Rest\Core\Error');
+    expect($response->metadata)->toBeArray();
+    expect($response->code)->toBeInt();
+    expect($response->content_type)->toBeString();
+    expect($response->charset)->toBeString();
+});
 
-    public function testQuickPutJSON()
-    {
-        $response = \OtherCode\Rest\Payloads\Request::call('http://jsonplaceholder.typicode.com')
-            ->setEncoder('json')
-            ->put("/posts/1", array(
-                'id' => 1,
-                'title' => 'foo',
-                'body' => 'bar',
-                'userId' => 1
-            ));
+test('quick patch', function () {
+    $response = Request::call('http://jsonplaceholder.typicode.com')
+        ->setEncoder('json')
+        ->patch("/posts/1", array(
+            'body' => 'bar',
+        ));
 
-        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Response', $response);
-        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Headers', $response->headers);
-        $this->assertInstanceOf('\OtherCode\Rest\Core\Error', $response->error);
+    expect($response)->toBeInstanceOf('\OtherCode\Rest\Payloads\Response');
+    expect($response->headers)->toBeInstanceOf('\OtherCode\Rest\Payloads\Headers');
+    expect($response->error)->toBeInstanceOf('\OtherCode\Rest\Core\Error');
+    expect($response->metadata)->toBeArray();
+    expect($response->code)->toBeInt();
+    expect($response->content_type)->toBeString();
+    expect($response->charset)->toBeString();
+});
 
-        $this->assertInternalType('array', $response->metadata);
-        $this->assertInternalType('int', $response->code);
-        $this->assertInternalType('string', $response->content_type);
-        $this->assertInternalType('string', $response->charset);
+test('quick delete', function () {
+    $response = Request::call('http://jsonplaceholder.typicode.com')
+        ->delete("/posts/1");
 
-    }
+    expect($response)->toBeInstanceOf('\OtherCode\Rest\Payloads\Response');
+    expect($response->headers)->toBeInstanceOf('\OtherCode\Rest\Payloads\Headers');
+    expect($response->error)->toBeInstanceOf('\OtherCode\Rest\Core\Error');
+    expect($response->metadata)->toBeArray();
+    expect($response->code)->toBeInt();
+    expect($response->content_type)->toBeString();
+    expect($response->charset)->toBeString();
+});
 
-    public function testQuickPatch()
-    {
-        $response = \OtherCode\Rest\Payloads\Request::call('http://jsonplaceholder.typicode.com')
-            ->setEncoder('json')
-            ->patch("/posts/1", array(
-                'body' => 'bar',
-            ));
+test('quick head', function () {
+    $response = Request::call('http://jsonplaceholder.typicode.com')
+        ->head("/posts");
 
-        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Response', $response);
-        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Headers', $response->headers);
-        $this->assertInstanceOf('\OtherCode\Rest\Core\Error', $response->error);
-
-        $this->assertInternalType('array', $response->metadata);
-        $this->assertInternalType('int', $response->code);
-        $this->assertInternalType('string', $response->content_type);
-        $this->assertInternalType('string', $response->charset);
-    }
-
-    public function testQuickDelete()
-    {
-        $response = \OtherCode\Rest\Payloads\Request::call('http://jsonplaceholder.typicode.com')
-            ->delete("/posts/1");
-
-        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Response', $response);
-        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Headers', $response->headers);
-        $this->assertInstanceOf('\OtherCode\Rest\Core\Error', $response->error);
-
-        $this->assertInternalType('array', $response->metadata);
-        $this->assertInternalType('int', $response->code);
-        $this->assertInternalType('string', $response->content_type);
-        $this->assertInternalType('string', $response->charset);
-    }
-
-    public function testQuickHead()
-    {
-        $response = \OtherCode\Rest\Payloads\Request::call('http://jsonplaceholder.typicode.com')
-            ->head("/posts");
-
-        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Response', $response);
-        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Headers', $response->headers);
-        $this->assertInstanceOf('\OtherCode\Rest\Core\Error', $response->error);
-
-        $this->assertInternalType('array', $response->metadata);
-        $this->assertInternalType('int', $response->code);
-        $this->assertInternalType('string', $response->content_type);
-        $this->assertInternalType('string', $response->charset);
-
-        $this->assertNull($response->body);
-    }
-
-}
+    expect($response)->toBeInstanceOf('\OtherCode\Rest\Payloads\Response');
+    expect($response->headers)->toBeInstanceOf('\OtherCode\Rest\Payloads\Headers');
+    expect($response->error)->toBeInstanceOf('\OtherCode\Rest\Core\Error');
+    expect($response->metadata)->toBeArray();
+    expect($response->code)->toBeInt();
+    expect($response->content_type)->toBeString();
+    expect($response->charset)->toBeString();
+    expect($response->body)->toBeNull();
+});

@@ -2,11 +2,13 @@
 
 namespace Tests\Rest;
 
+use OtherCode\Rest\Core\Core;
+
 /**
  * Class CoreTester
  * @package Tests\Rest
  */
-class CoreTester extends \OtherCode\Rest\Core\Core
+class CoreTester extends Core
 {
 
     public function returnCall($method, $url, $body = null)

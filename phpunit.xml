@@ -1,9 +1,9 @@
-<phpunit bootstrap="vendor/autoload.php">
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">./src/</directory>
-        </whitelist>
-    </filter>
+<?xml version="1.0"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         bootstrap="vendor/autoload.php"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.4/phpunit.xsd"
+         cacheDirectory=".phpunit.cache">
+    <coverage/>
     <testsuites>
         <testsuite name="Base">
             <file>tests/ConfigurationTest.php</file>
@@ -19,4 +19,9 @@
             <file>tests/ModulesTest.php</file>
         </testsuite>
     </testsuites>
+    <source>
+        <include>
+            <directory suffix=".php">./src/</directory>
+        </include>
+    </source>
 </phpunit>

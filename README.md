@@ -1,8 +1,7 @@
 # Rest Client
 
-[![Build Status](https://travis-ci.org/othercodes/rest.svg?branch=master)](https://travis-ci.org/othercodes/rest) [![Latest Stable Version](https://poser.pugx.org/othercode/rest/v/stable)](https://packagist.org/packages/othercode/rest) [![License](https://poser.pugx.org/othercode/rest/license)](https://packagist.org/packages/othercode/rest)
-[![Total Downloads](https://poser.pugx.org/othercode/rest/downloads)](https://packagist.org/packages/othercode/rest) [![codecov](https://codecov.io/gh/othercodes/rest/branch/master/graph/badge.svg)](https://codecov.io/gh/othercodes/rest)
-
+[![Latest Stable Version](https://poser.pugx.org/othercode/rest/v/stable)](https://packagist.org/packages/othercode/rest) [![License](https://poser.pugx.org/othercode/rest/license)](https://packagist.org/packages/othercode/rest)
+[![Total Downloads](https://poser.pugx.org/othercode/rest/downloads)](https://packagist.org/packages/othercode/rest)
 
 [Rest client](http://othercode.es/packages/rest-client.html) to make GET, POST, PUT, DELETE, PATCH, etc calls.
 
@@ -12,8 +11,12 @@ To install the package we only have to add the dependency to ***composer.json***
 
 ```javascript
 {
-    "require": {
-      "othercode/rest": "*"
+    "require"
+:
+    {
+        "othercode/rest"
+    :
+        "*"
     }
 }
 ```
@@ -26,8 +29,8 @@ composer install
 
 ## Usage
 
-To use the Rest we only have to instantiate it and configure the params we want. We can 
-establish the configuration accessing to the `->configuration->configure_property`, for example 
+To use the Rest we only have to instantiate it and configure the params we want. We can
+establish the configuration accessing to the `->configuration->configure_property`, for example
 to configure the url of the call we only have to set the `->configuration->url parameter` like we can see as follows:
 
 ```php
@@ -52,9 +55,10 @@ $response = $api->get("posts/1");
 
 The rest client will throw a `ConnectionException` if there any problem related to the connection.
 
-**NOTE: These errors are related to the session cURL, here is the [complete list](https://curl.haxx.se/libcurl/c/libcurl-errors.html)**
+**NOTE: These errors are related to the session cURL, here is
+the [complete list](https://curl.haxx.se/libcurl/c/libcurl-errors.html)**
 
-## Methods 
+## Methods
 
 The available methods to work with are:
 
@@ -62,10 +66,10 @@ The available methods to work with are:
 
 Perform a GET request.
 
-Parameters                    | Type    | Description
------------------------------ | ------- | -------------------------------------------
-`$url`                        | String  | Required. The URL to which the request is made
-`$data`                       | Array   | Optional. Associative array of data parameters
+ Parameters | Type   | Description                                    
+------------|--------|------------------------------------------------
+ `$url`     | String | Required. The URL to which the request is made 
+ `$data`    | Array  | Optional. Associative array of data parameters 
 
 **Return**: Response object
 
@@ -73,9 +77,9 @@ Parameters                    | Type    | Description
 
 Perform a HEAD request.
 
-Parameters                    | Type    | Description
------------------------------ | ------- | -------------------------------------------
-`$url`                        | String  | Required. The URL to which the request is made
+ Parameters | Type   | Description                                    
+------------|--------|------------------------------------------------
+ `$url`     | String | Required. The URL to which the request is made 
 
 **Return**: Response object (no body)
 
@@ -83,10 +87,10 @@ Parameters                    | Type    | Description
 
 Perform a POST request.
 
-Parameters                    | Type    | Description
------------------------------ | ------- | -------------------------------------------
-`$url`                        | String  | Required. The URL to which the request is made
-`$data`                       | Array   | Optional. Associative array of data parameters
+ Parameters | Type   | Description                                    
+------------|--------|------------------------------------------------
+ `$url`     | String | Required. The URL to which the request is made 
+ `$data`    | Array  | Optional. Associative array of data parameters 
 
 **Return**: Response object
 
@@ -94,10 +98,10 @@ Parameters                    | Type    | Description
 
 Perform a DELETE request.
 
-Parameters                    | Type    | Description
------------------------------ | ------- | -------------------------------------------
-`$url`                        | String  | Required. The URL to which the request is made
-`$data`                       | Array   | Optional. Associative array of data parameters
+ Parameters | Type   | Description                                    
+------------|--------|------------------------------------------------
+ `$url`     | String | Required. The URL to which the request is made 
+ `$data`    | Array  | Optional. Associative array of data parameters 
 
 **Return**: Response object
 
@@ -105,10 +109,10 @@ Parameters                    | Type    | Description
 
 Perform a PUT request.
 
-Parameters                    | Type    | Description
------------------------------ | ------- | -------------------------------------------
-`$url`                        | String  | Required. The URL to which the request is made
-`$data`                       | Array   | Optional. Associative array of data parameters
+ Parameters | Type   | Description                                    
+------------|--------|------------------------------------------------
+ `$url`     | String | Required. The URL to which the request is made 
+ `$data`    | Array  | Optional. Associative array of data parameters 
 
 **Return**: Response object
 
@@ -116,10 +120,10 @@ Parameters                    | Type    | Description
 
 Perform a PATCH request.
 
-Parameters                    | Type    | Description
------------------------------ | ------- | -------------------------------------------
-`$url`                        | String  | Required. The URL to which the request is made
-`$data`                       | Array   | Optional. Associative array of data parameters
+ Parameters | Type   | Description                                    
+------------|--------|------------------------------------------------
+ `$url`     | String | Required. The URL to which the request is made 
+ `$data`    | Array  | Optional. Associative array of data parameters 
 
 **Return**: Response object
 
@@ -145,10 +149,10 @@ Return an array with the `Response` and `Request` objects.
 
 Set a new Decoder.
 
-Parameters                    | Type    | Description
------------------------------ | ------- | -------------------------------------------
-`$name`                       | String  | Required. The unique name of the decoder.
-`$decoder`                    | String  | Optional. The class name with namespace of the new decoder.
+ Parameters | Type   | Description                                                 
+------------|--------|-------------------------------------------------------------
+ `$name`    | String | Required. The unique name of the decoder.                   
+ `$decoder` | String | Optional. The class name with namespace of the new decoder. 
 
 **Return**: Rest object
 
@@ -156,10 +160,10 @@ Parameters                    | Type    | Description
 
 Set a new Encoder.
 
-Parameters                    | Type    | Description
------------------------------ | ------- | -------------------------------------------
-`$name`                       | String  | Required. The unique name of the encoder.
-`$encoder`                    | String  | Optional. The class name with namespace of the new encoder.
+ Parameters | Type   | Description                                                 
+------------|--------|-------------------------------------------------------------
+ `$name`    | String | Required. The unique name of the encoder.                   
+ `$encoder` | String | Optional. The class name with namespace of the new encoder. 
 
 **Return**: Rest object
 
@@ -167,11 +171,11 @@ Parameters                    | Type    | Description
 
 Set a new Module.
 
-Parameters                    | Type    | Description
------------------------------ | ------- | -------------------------------------------
-`$name`                       | String  | Required. The unique name of the module.
-`$module`                     | String  | Required. The class name with namespace of the new module.
-`$hook`                       | String  | Optional. The hook name (after/before) that will trigger the module, 'after' by default.
+ Parameters | Type   | Description                                                                              
+------------|--------|------------------------------------------------------------------------------------------
+ `$name`    | String | Required. The unique name of the module.                                                 
+ `$module`  | String | Required. The class name with namespace of the new module.                               
+ `$hook`    | String | Optional. The hook name (after/before) that will trigger the module, 'after' by default. 
 
 **Return**: Rest object
 
@@ -179,10 +183,10 @@ Parameters                    | Type    | Description
 
 Unregister a module.
 
-Parameters                    | Type   | Description
------------------------------ | ------ | -------------------------------------------
-`$moduleName`                 | String | Required. The unique name of the decoder.
-`$hook`                       | String | Optional. The hook name (after/before) from where delete the module.
+ Parameters    | Type   | Description                                                          
+---------------|--------|----------------------------------------------------------------------
+ `$moduleName` | String | Required. The unique name of the decoder.                            
+ `$hook`       | String | Optional. The hook name (after/before) from where delete the module. 
 
 **Return**: Rest object
 
@@ -190,10 +194,10 @@ Parameters                    | Type   | Description
 
 Add a new header.
 
-Parameters                    | Type   | Description
------------------------------ | ------ | -------------------------------------------
-`$header`                     | String | Required. The unique name of the header.
-`$value`                      | String | Requires. The value of the header.
+ Parameters | Type   | Description                              
+------------|--------|------------------------------------------
+ `$header`  | String | Required. The unique name of the header. 
+ `$value`   | String | Requires. The value of the header.       
 
 **Return**: Rest object
 
@@ -201,13 +205,14 @@ Parameters                    | Type   | Description
 
 Add an array of headers.
 
-Parameters                    | Type   | Description
------------------------------ | ------ | -------------------------------------------
-`$headers`                    | String | Required. An array of headers.
+ Parameters | Type   | Description                    
+------------|--------|--------------------------------
+ `$headers` | String | Required. An array of headers. 
 
 **Return**: Rest object
 
-**NOTE: We can use the `addHeader()` and `addHeaders()` methods with the `Rest` instance or with the `configuration` object**
+**NOTE: We can use the `addHeader()` and `addHeaders()` methods with the `Rest` instance or with the `configuration`
+object**
 
 ```php
 $api->addHeader('some_header','some_value');
@@ -225,9 +230,9 @@ $api->configuration->addHeaders(array('some_header' => 'some_value','other_heade
 
 Remove a header offset.
 
-Parameters                    | Type   | Description
------------------------------ | ------ | -------------------------------------------
-`$header`                     | String | Required. The unique name of the header.
+ Parameters | Type   | Description                              
+------------|--------|------------------------------------------
+ `$header`  | String | Required. The unique name of the header. 
 
 **Return**: Rest object
 
@@ -235,9 +240,9 @@ Parameters                    | Type   | Description
 
 Remove an array of headers.
 
-Parameters                    | Type   | Description
------------------------------ | ------ | -------------------------------------------
-`$headers`                    | String | Required. An array of headers to remove.
+ Parameters | Type   | Description                              
+------------|--------|------------------------------------------
+ `$headers` | String | Required. An array of headers to remove. 
 
 **Return**: Rest object
 
@@ -261,9 +266,9 @@ class CustomModule extends BaseModule
 The only method that is mandatory is `->run()`, this method execute your custom code of the module.
 
 Once we have our module we can register it with the `->setModule()` method. This method needs three parameters,
-the first one is the name of the module, the second one is the complete namespace of the module, and the third one 
+the first one is the name of the module, the second one is the complete namespace of the module, and the third one
 is the hook name for our module, it can be "before" and "after" depends when we want to launch our module.
- 
+
 ```php
 $api->setModule('module_name','Module\Complete\Namespace','after');
 ```
@@ -271,7 +276,7 @@ $api->setModule('module_name','Module\Complete\Namespace','after');
 For "before" modules you can use all the properties of the Request object.
 
 * `method`
-* `url` 
+* `url`
 * `headers`
 * `body`
 
@@ -285,20 +290,21 @@ For "after" modules you can use all the properties of the Response object.
 * `error`
 * `metadata`
 
-All modules are executed in the order that we register them into the Rest client, this also affect 
+All modules are executed in the order that we register them into the Rest client, this also affect
 to Decoders and Encoders.
 
 ## Decoders
 
-A decoder is a kind of module that allows you to automatically decode de response in xml or json, to use them 
+A decoder is a kind of module that allows you to automatically decode de response in xml or json, to use them
 we only have to set the decoder we want with the `->setDecoder()` method:
 
 ```php
 $api->setDecoder("json");
 ```
 
-The default allowed values for this method are: ***json***, ***xml*** and ***xmlrpc***. All the decoders are always executed 
-in the "after" hook. 
+The default allowed values for this method are: ***json***, ***xml*** and ***xmlrpc***. All the decoders are always
+executed
+in the "after" hook.
 
 ### Custom Decoders
 
@@ -316,10 +322,9 @@ class CustomDecoder extends BaseDecoder
 }
 ```
 
-Like in modules, we have the Response object available to work. The $contentType property is the content-type 
-that will trigger the decoder, in the example above all responses with content-type "application/json" will 
+Like in modules, we have the Response object available to work. The $contentType property is the content-type
+that will trigger the decoder, in the example above all responses with content-type "application/json" will
 trigger this decoder.
-
 
 ### Quick Calls
 

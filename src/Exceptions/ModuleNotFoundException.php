@@ -2,13 +2,14 @@
 
 namespace OtherCode\Rest\Exceptions;
 
+use Exception;
+
 /**
  * Class ModuleNotFoundException
  * @author Unay Santisteban <usantisteban@othercode.es>
- * @version 1.0
  * @package OtherCode\Rest\Exceptions
  */
-class ModuleNotFoundException extends \Exception
+class ModuleNotFoundException extends Exception
 {
 
 }

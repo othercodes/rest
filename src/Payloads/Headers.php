@@ -2,17 +2,21 @@
 
 namespace OtherCode\Rest\Payloads;
 
+use ArrayAccess;
+use ArrayIterator;
+use Countable;
+use IteratorAggregate;
+
 /**
  * Class Headers
  * @author Unay Santisteban <usantisteban@othercode.es>
- * @version 1.0
  * @package OtherCode\Rest\Payloads
  */
-class Headers implements \ArrayAccess, \Countable, \IteratorAggregate
+class Headers implements ArrayAccess, Countable, IteratorAggregate
 {
     /**
      * Class constructor
-     * @param string|array $headers
+     * @param  string|array  $headers
      */
     public function __construct($headers = null)
     {
@@ -30,23 +34,20 @@ class Headers implements \ArrayAccess, \Countable, \IteratorAggregate
         }
     }
 
-    /**
-     * Build the headers
-     */
-    public function build()
+    public function build(): array
     {
         $headers = array();
         foreach (get_object_vars($this) as $header => $value) {
-            $headers[] = $header . ": " . (string)$value;
+            $headers[] = "$header: $value";
         }
         return $headers;
     }
 
     /**
      * Parse a header string into the object
-     * @param $headers
+     * @param  string  $headers
      */
-    public function parse($headers)
+    public function parse(string $headers)
     {
         $lines = preg_split("/(\r|\n)+/", $headers, -1, PREG_SPLIT_NO_EMPTY);
         array_shift($lines);
@@ -70,28 +71,29 @@ class Headers implements \ArrayAccess, \Countable, \IteratorAggregate
 
     /**
      * Return the iterator element
-     * @return mixed
+     * @return ArrayIterator
      */
-    public function getIterator()
+    public function getIterator(): ArrayIterator
     {
-        return new \ArrayIterator($this);
+        return new ArrayIterator($this);
     }
 
     /**
      * Check if an offset exists
-     * @param string $offset
+     * @param  mixed  $offset
      * @return bool
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->{strtolower($offset)});
     }
 
     /**
      * Return an offset
-     * @param string $offset
+     * @param  mixed  $offset
      * @return mixed
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         if (isset($this->{$name = strtolower($offset)})) {
@@ -102,9 +104,11 @@ class Headers implements \ArrayAccess, \Countable, \IteratorAggregate
 
     /**
      * Set an offset
-     * @param string $offset
-     * @param string $value
+     * @param  mixed  $offset
+     * @param  mixed  $value
+     * @return void
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         $this->{strtolower($offset)} = $value;
@@ -112,9 +116,10 @@ class Headers implements \ArrayAccess, \Countable, \IteratorAggregate
 
     /**
      * Unset an offset
-     * @param string $offset
+     * @param  mixed  $offset
+     * @return void
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->{strtolower($offset)});
     }
@@ -123,7 +128,7 @@ class Headers implements \ArrayAccess, \Countable, \IteratorAggregate
      * Return the number of properties
      * @return int
      */
-    public function count()
+    public function count(): int
     {
         return count(get_object_vars($this));
     }

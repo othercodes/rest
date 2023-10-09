@@ -1,72 +1,59 @@
 <?php
 
+use OtherCode\Rest\Exceptions\ModuleNotFoundException;
+use OtherCode\Rest\Payloads\Response;
+use OtherCode\Rest\Rest;
+use Tests\Modules\Dummy;
+use Tests\Rest\CoreTester;
+use Tests\Modules\DummyNotExist;
 
-class ModulesTest extends \PHPUnit\Framework\TestCase
-{
+test('get modules', function () {
+    $http = new Rest();
+    expect($http->getModules())->toBeArray();
+    expect($http->getModules())->toHaveCount(2);
+    expect($http->getModules('before'))->toHaveCount(0);
+    expect($http->getModules('after'))->toHaveCount(0);
+});
 
-    public function testGetModules()
-    {
-        $http = new \OtherCode\Rest\Rest();
-        $this->assertInternalType('array', $http->getModules());
-        $this->assertCount(2, $http->getModules());
+test('set module', function () {
+    $http = new Rest();
 
-        $this->assertCount(0, $http->getModules('before'));
-        $this->assertCount(0, $http->getModules('after'));
-    }
+    $http->setModule('dummy', '\Tests\Modules\Dummy', 'after');
+    expect($http->getModules('after'))->toHaveCount(1);
 
-    public function testSetModule()
-    {
-        $http = new \OtherCode\Rest\Rest();
+    $http->unsetModule('dummy', 'after');
+    expect($http->getModules('after'))->toHaveCount(0);
 
-        $http->setModule('dummy', '\Tests\Modules\Dummy', 'after');
-        $this->assertCount(1, $http->getModules('after'));
+    $http->setModule('dummy', '\Tests\Modules\Dummy', 'before');
+    expect($http->getModules('before'))->toHaveCount(1);
 
-        $http->unsetModule('dummy', 'after');
-        $this->assertCount(0, $http->getModules('after'));
+    $http->unsetModule('dummy', 'before');
+    expect($http->getModules('before'))->toHaveCount(0);
+});
 
-        $http->setModule('dummy', '\Tests\Modules\Dummy', 'before');
-        $this->assertCount(1, $http->getModules('before'));
+test('set module failed', function () {
+    $http = new Rest();
+    $http->setModule('dummy', DummyNotExists::class);
+})->throws(ModuleNotFoundException::class);
 
-        $http->unsetModule('dummy', 'before');
-        $this->assertCount(0, $http->getModules('before'));
-    }
+test('set module invalid hook name', function () {
+    $http = new Rest();
+    $http->setModule('dummy', Dummy::class, 'notexisthook');
+})->throws(InvalidArgumentException::class);
 
-    /**
-     * @expectedException \OtherCode\Rest\Exceptions\ModuleNotFoundException
-     */
-    public function testSetModuleFailed()
-    {
-        $http = new \OtherCode\Rest\Rest();
-        $http->setModule('dummy', '\Tests\Modules\DummyNotExists');
-    }
+test('core register un register module', function () {
+    $core = new CoreTester();
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testSetModuleInvalidHookName()
-    {
-        $http = new \OtherCode\Rest\Rest();
-        $http->setModule('dummy', '\Tests\Modules\Dummy', 'notexisthook');
-    }
+    expect($core->returnRegisterModule('dummy', 'after'))->toBeTrue();
+    expect($core->returnRegisterModule('dummy', 'wrong'))->toBeFalse();
+    expect($core->returnRegisterModule('dummy', 'after'))->toBeFalse();
+    expect($core->returnUnRegisterModule('dummy', 'after'))->toBeTrue();
+    expect($core->returnUnRegisterModule('dummy', 'wrong'))->toBeFalse();
+    expect($core->returnUnRegisterModule('dummy', 'after'))->toBeFalse();
+});
 
-    public function testCoreRegisterUnRegisterModule()
-    {
-        $core = new \Tests\Rest\CoreTester();
-
-        $this->assertTrue($core->returnRegisterModule('dummy', 'after'));
-        $this->assertFalse($core->returnRegisterModule('dummy', 'wrong'));
-        $this->assertFalse($core->returnRegisterModule('dummy', 'after'));
-
-        $this->assertTrue($core->returnUnRegisterModule('dummy', 'after'));
-        $this->assertFalse($core->returnUnRegisterModule('dummy', 'wrong'));
-        $this->assertFalse($core->returnUnRegisterModule('dummy', 'after'));
-    }
-
-
-    public function testRunModuleOnResponse()
-    {
-        $dummy = new \Tests\Modules\Dummy(new \OtherCode\Rest\Payloads\Response());
-        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Response', $dummy->output());
-        $this->assertNull($dummy->run());
-    }
-}
+test('run module on response', function () {
+    $dummy = new Dummy(new Response());
+    expect($dummy->output())->toBeInstanceOf(OtherCode\Rest\Payloads\Response::class);
+    expect($dummy->run())->toBeNull();
+});

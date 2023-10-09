@@ -1,24 +1,25 @@
-<?php namespace OtherCode\Rest\Modules;
+<?php
+
+namespace OtherCode\Rest\Modules;
 
 /**
  * Class BaseModule
  * @author Unay Santisteban <usantisteban@othercode.es>
- * @version 1.0
  * @package OtherCode\Rest
  */
-abstract class BaseModule implements \OtherCode\Rest\Modules\ModuleInterface
+abstract class BaseModule implements ModuleInterface
 {
     /**
      * Main data to work with
-     * @var \stdClass
+     * @var object
      */
-    private $bindings;
+    private object $bindings;
 
     /**
      * Class constructor
-     * @param $bindings
+     * @param  object  $bindings
      */
-    public function __construct($bindings)
+    public function __construct(object $bindings)
     {
         $this->bindings = $bindings;
     }
@@ -27,7 +28,7 @@ abstract class BaseModule implements \OtherCode\Rest\Modules\ModuleInterface
      * Return the processed data
      * @return object
      */
-    public function output()
+    public function output(): object
     {
         return $this->bindings;
     }
@@ -37,7 +38,7 @@ abstract class BaseModule implements \OtherCode\Rest\Modules\ModuleInterface
      * @param $key string
      * @return mixed
      */
-    public function __get($key)
+    public function __get(string $key)
     {
         if (isset($this->bindings->$key)) {
             return $this->bindings->$key;
@@ -49,13 +50,12 @@ abstract class BaseModule implements \OtherCode\Rest\Modules\ModuleInterface
      * Provide an access set the linked data
      * @param $key string
      * @param $value mixed
-     * @return mixed
+     * @return void
      */
-    public function __set($key, $value)
+    public function __set(string $key, $value)
     {
         if (isset($this->bindings->$key)) {
             $this->bindings->$key = $value;
         }
     }
-
 }
