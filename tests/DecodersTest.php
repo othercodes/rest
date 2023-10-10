@@ -1,147 +1,91 @@
 <?php
 
+use OtherCode\Rest\Exceptions\ModuleNotFoundException;
+use OtherCode\Rest\Rest;
+use OtherCode\Rest\Exceptions\RestException;
 
-class DecodersTest extends \PHPUnit\Framework\TestCase
-{
+test('JSON decoder off', function () {
+    $api = new Rest();
+    $api->configuration->url = "https://run.mocky.io";
 
-    public function testJSonDecoderOFF()
-    {
-        $api = new OtherCode\Rest\Rest();
-        $api->configuration->url = "http://www.mocky.io";
+    $response = $api->get("/v3/150aee50-5361-46e1-b7ce-6c67f3985fe7");
+    expect($response->body)->toBeString();
 
-        $response = $api->get("/v2/59db36550f0000120402a66f");
-        $this->assertInternalType('string', $response->body);
+    return $api;
+});
 
-        return $api;
-    }
+test('set JSON decoder', function (Rest $api) {
+    expect($api->setDecoder("json"))->toBeInstanceOf(Rest::class);
+    return $api;
+})->depends('JSON decoder off');
 
-    /**
-     * @depends testJSonDecoderOFF
-     */
-    public function testSetJSonDecoder(\OtherCode\Rest\Rest $api)
-    {
-        $this->assertInstanceOf('\OtherCode\Rest\Rest', $api->setDecoder("json"));
-        return $api;
-    }
+test('JSON decoder on', function (Rest $api) {
+    $response = $api->get("/v3/150aee50-5361-46e1-b7ce-6c67f3985fe7");
 
-    /**
-     * @depends testSetJSonDecoder
-     */
-    public function testJSonDecoderON(\OtherCode\Rest\Rest $api)
-    {
-        $response = $api->get("/v2/59db36550f0000120402a66f");
+    expect($response->body)->toBeObject();
+    expect($response->body)->toBeInstanceOf('\stdClass');
+})->depends('set JSON decoder');
 
-        $this->assertInternalType('object', $response->body);
-        $this->assertInstanceOf('\stdClass', $response->body);
-    }
+test('JSON decoder on fail', function (Rest $api) {
+    $api->get("/v3/c288e024-7c1c-4233-9c53-6f6af83df800");
+})->throws(RestException::class)->depends('set JSON decoder');
 
-    /**
-     * @depends testSetJSonDecoder
-     * @expectedException \OtherCode\Rest\Exceptions\RestException
-     */
-    public function testJSonDecoderONFail(\OtherCode\Rest\Rest $api)
-    {
-        $api->get("/v2/59e3e2211100006602aabeac");
-    }
+test('XML decoder off', function () {
+    $api = new Rest();
+    $api->configuration->url = "https://run.mocky.io";
 
-    public function testXMLDecoderOFF()
-    {
-        $api = new OtherCode\Rest\Rest();
-        $api->configuration->url = "http://www.mocky.io";
+    $response = $api->get("/v2/59db37720f0000220402a676");
+    expect($response->body)->toBeString();
 
-        $response = $api->get("/v2/59db37720f0000220402a676");
-        $this->assertInternalType('string', $response->body);
+    return $api;
+});
 
-        return $api;
-    }
+test('set XML decoder', function (Rest $api) {
+    expect($api->setDecoder("xml"))->toBeInstanceOf(Rest::class);
+    return $api;
+})->depends('XML decoder off');
 
-    /**
-     * @depends testXMLDecoderOFF
-     */
-    public function testSetXMLDecoder(\OtherCode\Rest\Rest $api)
-    {
-        $this->assertInstanceOf('\OtherCode\Rest\Rest', $api->setDecoder("xml"));
-        return $api;
-    }
+test('XML decoder on', function (Rest $api) {
+    $response = $api->get("/v3/3939c8c3-46fe-423d-abb7-b57ac4eadb86");
 
-    /**
-     * @depends testSetXMLDecoder
-     */
-    public function testXMLDecoderON(\OtherCode\Rest\Rest $api)
-    {
-        $response = $api->get("/v2/59db37720f0000220402a676");
+    expect($response->body)->toBeObject();
+    expect($response->body)->toBeInstanceOf(SimpleXMLElement::class);
+})->depends('set XML decoder');
 
-        $this->assertInternalType('object', $response->body);
-        $this->assertInstanceOf('\SimpleXMLElement', $response->body);
-    }
+test('exception on bad decoder', function () {
+    $api = new Rest();
+    $api->setDecoder('non_existant_decoder');
+})->throws(ModuleNotFoundException::class);
 
-    /**
-     * @depends testSetXMLDecoder
-     * @expectedException \OtherCode\Rest\Exceptions\RestException
-     */
-    public function testXMLDecoderONFail(\OtherCode\Rest\Rest $api)
-    {
-        $api->get("/v2/59e3de1e1100006302aabeaa");
-    }
+test('decoder on 204 response', function () {
+    $api = new Rest();
+    $api->configuration->url = "https://run.mocky.io";
+    $api->setDecoder("json");
 
-    /**
-     * @expectedException \OtherCode\Rest\Exceptions\ModuleNotFoundException
-     */
-    public function testExceptionOnBadDecoder()
-    {
-        $api = new OtherCode\Rest\Rest();
-        $api->setDecoder('non_existant_decoder');
-    }
+    $response = $api->get("/v3/150aee50-5361-46e1-b7ce-6c67f3985fe7");
+    expect($response->body)->toBeObject();
 
-    public function testDecoderOn204Response()
-    {
-        $api = new OtherCode\Rest\Rest();
-        $api->configuration->url = "http://www.mocky.io";
-        $api->setDecoder("json");
+    $response = $api->get("/v3/a6f75a45-b2f1-4e7c-9ef7-851eff99fac1");
+    expect($response->body)->toBeNull();
+});
 
-        $response = $api->get("/v2/59db36550f0000120402a66f");
-        $this->assertInternalType('object', $response->body);
+test('XML-RPC decoder off', function () {
+    $api = new Rest();
+    $api->configuration->url = "https://run.mocky.io";
 
-        $response = $api->get("/v2/59db35850f00000b0402a669");
-        $this->assertNull($response->body);
-    }
+    $response = $api->get("/v3/35d914d0-0934-4abb-9f8f-7a656e425c1e");
+    expect($response->body)->toBeString();
 
-    public function testXMLRPCDecoderOFF()
-    {
-        $api = new OtherCode\Rest\Rest();
-        $api->configuration->url = "http://www.mocky.io";
+    return $api;
+});
 
-        $response = $api->get("/v2/59e3e9481100006b02aabec3");
-        $this->assertInternalType('string', $response->body);
+test('set XML-RPC decoder', function (Rest $api) {
+    expect($api->setDecoder("xmlrpc"))->toBeInstanceOf(Rest::class);
+    return $api;
+})->depends('XML-RPC decoder off');
 
-        return $api;
-    }
+test('XML-RPC decoder on', function (Rest $api) {
+    $response = $api->get("/v3/35d914d0-0934-4abb-9f8f-7a656e425c1e");
 
-    /**
-     * @depends testXMLRPCDecoderOFF
-     */
-    public function testSetXMLRPCDecoder(\OtherCode\Rest\Rest $api)
-    {
-        $this->assertInstanceOf('\OtherCode\Rest\Rest', $api->setDecoder("xmlrpc"));
-        return $api;
-    }
-
-    /**
-     * @depends testSetXMLRPCDecoder
-     */
-    public function testXMLRPCDecoderON(\OtherCode\Rest\Rest $api)
-    {
-        $response = $api->get("/v2/59e3e9481100006b02aabec3");
-
-        $this->assertInternalType('array', $response->body);
-    }
-
-    /**
-     * @depends testSetXMLRPCDecoder
-     * @expectedException \OtherCode\Rest\Exceptions\RestException
-     */
-    public function testXMLRPCDecoderONFail(\OtherCode\Rest\Rest $api)
-    {
-        $api->get("/v2/59e3ed1f1100005b01aabec5");
-    }
-}
+    expect($response->body)->toBeArray();
+})->depends('set XML-RPC decoder');

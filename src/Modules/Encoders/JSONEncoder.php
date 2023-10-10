@@ -2,12 +2,14 @@
 
 namespace OtherCode\Rest\Modules\Encoders;
 
+use OtherCode\Rest\Exceptions\RestException;
+
 /**
  * Class JSONEncoder
  * @author Unay Santisteban <usantisteban@othercode.es>
  * @package OtherCode\Rest\Modules\Encoders
  */
-class JSONEncoder extends \OtherCode\Rest\Modules\Encoders\BaseEncoder
+class JSONEncoder extends BaseEncoder
 {
     /**
      * Method
@@ -17,7 +19,7 @@ class JSONEncoder extends \OtherCode\Rest\Modules\Encoders\BaseEncoder
 
     /**
      * create a xml rpc document based on the provided data.
-     * @throws \OtherCode\Rest\Exceptions\RestException
+     * @throws RestException
      */
     public function encode()
     {
@@ -28,7 +30,7 @@ class JSONEncoder extends \OtherCode\Rest\Modules\Encoders\BaseEncoder
         $errorMessage = json_last_error_msg();
 
         if ($errorCode !== 0 && isset($errorMessage)) {
-            throw new \OtherCode\Rest\Exceptions\RestException($errorMessage, $errorCode);
+            throw new RestException($errorMessage, $errorCode);
         }
     }
 }

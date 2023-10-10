@@ -2,22 +2,24 @@
 
 namespace OtherCode\Rest\Modules\Decoders;
 
+use OtherCode\Rest\Exceptions\RestException;
+
 /**
  * Class JSONDecoder
  * @author Unay Santisteban <usantisteban@othercode.es>
  * @package OtherCode\Rest\Modules\Decoders
  */
-class JSONDecoder extends \OtherCode\Rest\Modules\Decoders\BaseDecoder
+class JSONDecoder extends BaseDecoder
 {
     /**
      * The content type that trigger the decoder
      * @var string
      */
-    protected $contentType = 'application/json';
+    protected string $contentType = 'application/json';
 
     /**
      * Decode the data of a request
-     * @throws \OtherCode\Rest\Exceptions\RestException
+     * @throws RestException
      */
     public function decode()
     {
@@ -27,7 +29,7 @@ class JSONDecoder extends \OtherCode\Rest\Modules\Decoders\BaseDecoder
         $errorMessage = json_last_error_msg();
 
         if ($errorCode !== 0 && isset($errorMessage)) {
-            throw new \OtherCode\Rest\Exceptions\RestException($errorMessage, $errorCode);
+            throw new RestException($errorMessage, $errorCode);
         }
     }
 }

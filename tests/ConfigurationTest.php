@@ -1,143 +1,86 @@
 <?php
 
-class ConfigurationTest extends \PHPUnit\Framework\TestCase
-{
+use OtherCode\Rest\Core\Configuration;
+use OtherCode\Rest\Exceptions\RestException;
+use OtherCode\Rest\Payloads\Headers;
 
-    public function testBasicInstantiation()
-    {
-        $configuration = new \OtherCode\Rest\Core\Configuration();
-        $this->assertInstanceOf('\OtherCode\Rest\Core\Configuration', $configuration);
+test('basic instantiation', function () {
+    $configuration = new Configuration();
+    expect($configuration)->toBeInstanceOf(Configuration::class);
+    expect($configuration->toArray())->toBeArray();
+    expect($configuration->toArray())->toHaveCount(3);
+});
 
-        $this->assertInternalType('array', $configuration->toArray());
-        $this->assertCount(3, $configuration->toArray());
-    }
+test('instantiation with params', function () {
+    $configuration = new Configuration(array(
+        'url' => 'http://jsonplaceholder.typicode.com/',
+        'thisConfigurationIsNotAllowed' => 'Some invalid value',
+        'httpheader' => array(
+            'some_header1' => 'some_value1',
+            'some_header2' => 'some_value2'
+        )
+    ));
+    expect($configuration)->toBeInstanceOf(Configuration::class);
+    expect($configuration->httpheader)->toBeInstanceOf(Headers::class);
+    expect($configuration->httpheader)->toHaveCount(2);
+    expect($configuration->toArray())->toBeArray();
+    expect($configuration->toArray())->toHaveCount(4);
+    return $configuration;
+});
 
-    /**
-     * @return \OtherCode\Rest\Core\Configuration
-     */
-    public function testInstantiationWithParams()
-    {
-        $configuration = new \OtherCode\Rest\Core\Configuration(array(
-            'url' => 'http://jsonplaceholder.typicode.com/',
-            'thisConfigurationIsNotAllowed' => 'Some invalid value',
-            'httpheader' => array(
-                'some_header1' => 'some_value1',
-                'some_header2' => 'some_value2'
-            )
-        ));
-        $this->assertInstanceOf('\OtherCode\Rest\Core\Configuration', $configuration);
-        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Headers', $configuration->httpheader);
-        $this->assertCount(2, $configuration->httpheader);
-        $this->assertInternalType('array', $configuration->toArray());
-        $this->assertCount(4, $configuration->toArray());
+test('add header', function (Configuration $configuration) {
+    $configuration->addHeader('one_more_header', 'one_more_value');
+    expect($configuration->httpheader)->toHaveCount(3);
+    return $configuration;
+})->depends('instantiation with params');
 
-        return $configuration;
-    }
+test('remove header', function (Configuration $configuration) {
+    $configuration->removeHeader('one_more_header');
+    expect($configuration->httpheader)->toHaveCount(2);
+})->depends('add header');
 
-    /**
-     * @depends testInstantiationWithParams
-     * @param \OtherCode\Rest\Core\Configuration $configuration
-     * @return \OtherCode\Rest\Core\Configuration
-     */
-    public function testAddHeader(\OtherCode\Rest\Core\Configuration $configuration)
-    {
-        $configuration->addHeader('one_more_header', 'one_more_value');
-        $this->assertCount(3, $configuration->httpheader);
+test('add headers', function (Configuration $configuration) {
+    $configuration->addHeaders(array(
+        'one_more_header' => 'one_more_value',
+        'two_more_header' => 'two_more_value'
+    ));
+    expect($configuration->httpheader)->toHaveCount(4);
+    return $configuration;
+})->depends('instantiation with params');
 
-        return $configuration;
-    }
+test('remove headers', function (Configuration $configuration) {
+    $configuration->removeHeaders(array(
+        'one_more_header',
+        'two_more_header'
+    ));
+    expect($configuration->httpheader)->toHaveCount(2);
+})->depends('add headers');
 
-    /**
-     * @depends testAddHeader
-     * @param \OtherCode\Rest\Core\Configuration $configuration
-     */
-    public function testRemoveHeader(\OtherCode\Rest\Core\Configuration $configuration)
-    {
-        $configuration->removeHeader('one_more_header');
-        $this->assertCount(2, $configuration->httpheader);
-    }
+test('basic auth', function (Configuration $configuration) {
+    $configuration->basicAuth('username', 'password');
+    expect($configuration->toArray())->toHaveCount(5);
+    expect($configuration->userpwd)->toEqual('username=password');
+})->depends('instantiation with params');
 
-    /**
-     * @depends testInstantiationWithParams
-     * @param \OtherCode\Rest\Core\Configuration $configuration
-     * @return \OtherCode\Rest\Core\Configuration
-     */
-    public function testAddHeaders(\OtherCode\Rest\Core\Configuration $configuration)
-    {
-        $configuration->addHeaders(array(
-            'one_more_header' => 'one_more_value',
-            'two_more_header' => 'two_more_value'
-        ));
-        $this->assertCount(4, $configuration->httpheader);
+test('set SSL certificate', function (Configuration $configuration) {
+    $configuration->setSSLCertificate('/some/path/to/ssl.cert');
+    expect($configuration->toArray())->toHaveCount(6);
+    expect($configuration->sslcert)->toEqual('/some/path/to/ssl.cert');
+})->depends('instantiation with params');
 
-        return $configuration;
-    }
+test('set CA certificates capath', function (Configuration $configuration) {
+    $configuration->setCACertificates('/some/path/to/capath', 'capath');
+    expect($configuration->toArray())->toHaveCount(8);
+    expect($configuration->capath)->toEqual('/some/path/to/capath');
+})->depends('instantiation with params');
 
-    /**
-     * @depends testAddHeaders
-     * @param \OtherCode\Rest\Core\Configuration $configuration
-     */
-    public function testRemoveHeaders(\OtherCode\Rest\Core\Configuration $configuration)
-    {
-        $configuration->removeHeaders(array(
-            'one_more_header',
-            'two_more_header'
-        ));
-        $this->assertCount(2, $configuration->httpheader);
-    }
+test('set CA certificates cainfo', function (Configuration $configuration) {
+    $configuration->setCACertificates('/some/path/to/cainfo', 'cainfo');
+    expect($configuration->toArray())->toHaveCount(9);
+    expect($configuration->cainfo)->toEqual('/some/path/to/cainfo');
+})->depends('instantiation with params');
 
-    /**
-     * @depends testInstantiationWithParams
-     * @param \OtherCode\Rest\Core\Configuration $configuration
-     */
-    public function testBasicAuth(\OtherCode\Rest\Core\Configuration $configuration)
-    {
-        $configuration->basicAuth('username', 'password');
-        $this->assertCount(5, $configuration->toArray());
-        $this->assertEquals('username=password', $configuration->userpwd);
-    }
-
-    /**
-     * @depends testInstantiationWithParams
-     * @param \OtherCode\Rest\Core\Configuration $configuration
-     */
-    public function testSetSSLCertificate(\OtherCode\Rest\Core\Configuration $configuration)
-    {
-        $configuration->setSSLCertificate('/some/path/to/ssl.cert');
-        $this->assertCount(6, $configuration->toArray());
-        $this->assertEquals('/some/path/to/ssl.cert', $configuration->sslcert);
-    }
-
-    /**
-     * @depends testInstantiationWithParams
-     * @param \OtherCode\Rest\Core\Configuration $configuration
-     */
-    public function testSetCACertificatesCapath(\OtherCode\Rest\Core\Configuration $configuration)
-    {
-        $configuration->setCACertificates('/some/path/to/capath', 'capath');
-        $this->assertCount(8, $configuration->toArray());
-        $this->assertEquals('/some/path/to/capath', $configuration->capath);
-    }
-
-    /**
-     * @depends testInstantiationWithParams
-     * @param \OtherCode\Rest\Core\Configuration $configuration
-     */
-    public function testSetCACertificatesCainfo(\OtherCode\Rest\Core\Configuration $configuration)
-    {
-        $configuration->setCACertificates('/some/path/to/cainfo', 'cainfo');
-        $this->assertCount(9, $configuration->toArray());
-        $this->assertEquals('/some/path/to/cainfo', $configuration->cainfo);
-    }
-
-    /**
-     * @depends testInstantiationWithParams
-     * @param \OtherCode\Rest\Core\Configuration $configuration
-     * @expectedException \OtherCode\Rest\Exceptions\RestException
-     */
-    public function testWrongSetCACertificates(\OtherCode\Rest\Core\Configuration $configuration)
-    {
-        $configuration->setCACertificates('/some/path/to/wrong', 'wrong');
-        $this->assertCount(8, $configuration->toArray());
-    }
-}
+test('wrong set CA certificates', function (Configuration $configuration) {
+    $configuration->setCACertificates('/some/path/to/wrong', 'wrong');
+    expect($configuration->toArray())->toHaveCount(8);
+})->throws(RestException::class)->depends('instantiation with params');
