@@ -36,13 +36,17 @@ class Request
 
     /**
      * Request constructor.
-     * @param string $method
-     * @param string $url
-     * @param array|object $body
-     * @param Headers|null $headers
+     * @param  string  $method
+     * @param  string  $url
+     * @param  array|object  $body
+     * @param  Headers|null  $headers
      */
-    public function __construct($method = null, $url = null, $body = null, \OtherCode\Rest\Payloads\Headers $headers = null)
-    {
+    public function __construct(
+        $method = null,
+        $url = null,
+        $body = null,
+        \OtherCode\Rest\Payloads\Headers $headers = null
+    ) {
         $this->method = $method;
         $this->url = $url;
         $this->body = $body;
@@ -52,7 +56,7 @@ class Request
 
     /**
      * Set the headers
-     * @param Headers $headers
+     * @param  Headers  $headers
      */
     public function setHeaders(\OtherCode\Rest\Payloads\Headers $headers = null)
     {
@@ -65,7 +69,7 @@ class Request
 
     /**
      * Initialize a short chained call.
-     * @param string $uri
+     * @param  string  $uri
      * @return \OtherCode\Rest\Rest
      */
     public static function call($uri)

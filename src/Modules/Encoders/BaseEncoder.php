@@ -2,41 +2,42 @@
 
 namespace OtherCode\Rest\Modules\Encoders;
 
+use OtherCode\Rest\Exceptions\RestException;
+use OtherCode\Rest\Modules\BaseModule;
+use OtherCode\Rest\Payloads\Headers;
+
 /**
  * Class BaseEncoder
  * @author Unay Santisteban <usantisteban@othercode.es>
- * @version 1.0
  * @package OtherCode\Rest\Modules\Encoders
  *
  * @property string $method
  * @property string $url
- * @property \OtherCode\Rest\Payloads\Headers $headers
+ * @property Headers $headers
  * @property string $body
  */
-abstract class BaseEncoder extends \OtherCode\Rest\Modules\BaseModule implements \OtherCode\Rest\Modules\Encoders\EncoderInterface
+abstract class BaseEncoder extends BaseModule implements EncoderInterface
 {
     /**
      * The content type that trigger the decoder
-     * @var string
+     * @var mixed
      */
-    protected $methods = array('POST', 'PUT', 'PATCH');
+    protected $methods = ['POST', 'PUT', 'PATCH'];
 
     /**
      * Run the main decode method
+     * @throws RestException
      */
     public function run()
     {
         if (!is_array($this->methods)) {
-            throw new \OtherCode\Rest\Exceptions\RestException('The "methods" property MUST be an array.');
+            throw new RestException('The "methods" property MUST be an array.');
         }
 
         $body = $this->body;
         $method = $this->method;
-        if (!empty($body) && isset($method)) {
-
-            if (in_array($this->method, $this->methods)) {
-                $this->encode();
-            }
+        if (!empty($body) && isset($method) && in_array($this->method, $this->methods)) {
+            $this->encode();
         }
     }
 }

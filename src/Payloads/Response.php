@@ -2,6 +2,8 @@
 
 namespace OtherCode\Rest\Payloads;
 
+use OtherCode\Rest\Core\Error;
+
 /**
  * Class Response
  * @author Unay Santisteban <usantisteban@othercode.es>
@@ -15,50 +17,50 @@ class Response
      * Http status code
      * @var int
      */
-    public $code;
+    public int $code;
 
     /**
      * The Content Type
      * @var string
      */
-    public $content_type;
+    public string $content_type;
 
     /**
      * The Charset
      * @var string
      */
-    public $charset;
+    public string $charset;
 
     /**
      * The response body
-     * @var string
+     * @var mixed
      */
     public $body;
 
     /**
      * The response headers
-     * @var \OtherCode\Rest\Payloads\Headers
+     * @var Headers
      */
-    public $headers;
+    public Headers $headers;
 
     /**
      * The last known error
-     * @var \OtherCode\Rest\Core\Error
+     * @var Error
      */
-    public $error;
+    public Error $error;
 
     /**
      * Metadata array
      * @var array
      */
-    public $metadata;
+    public array $metadata;
 
     /**
-     * @param null $response
-     * @param null $error
-     * @param null $metadata
+     * @param  null  $response
+     * @param  Error|null  $error
+     * @param  null  $metadata
      */
-    public function __construct($response = null, $error = null, $metadata = null)
+    public function __construct($response = null, Error $error = null, $metadata = null)
     {
         if (isset($response)) {
             $this->parseResponse($response);
@@ -67,7 +69,7 @@ class Response
         if (isset($error)) {
             $this->setError($error);
         } else {
-            $this->setError(new \OtherCode\Rest\Core\Error());
+            $this->setError(new Error());
         }
 
         if (isset($metadata)) {
@@ -88,8 +90,7 @@ class Response
             $this->body = null;
         }
 
-        $this->headers = new \OtherCode\Rest\Payloads\Headers(array_pop($response));
-
+        $this->headers = new Headers(array_pop($response));
 
         if (isset($this->headers['Content-Type'])) {
             $content_type = explode(';', $this->headers['Content-Type']);
@@ -97,15 +98,17 @@ class Response
         }
 
         if (!isset($this->charset)) {
-            $this->charset = substr($this->content_type, 5) === 'text/' ? 'iso-8859-1' : 'utf-8';
+            $this->charset = substr($this->content_type, 5) === 'text/'
+                ? 'iso-8859-1'
+                : 'utf-8';
         }
     }
 
     /**
      * Set the Metadata
-     * @param $metadata
+     * @param  array  $metadata
      */
-    public function setMetadata($metadata)
+    public function setMetadata(array $metadata)
     {
         $this->code = $metadata['http_code'];
         $this->metadata = $metadata;
@@ -113,9 +116,9 @@ class Response
 
     /**
      * Set the Error
-     * @param $error
+     * @param  Error  $error
      */
-    public function setError($error)
+    public function setError(Error $error)
     {
         $this->error = $error;
     }

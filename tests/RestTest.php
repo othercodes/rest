@@ -1,242 +1,175 @@
 <?php
 
-class RestTest extends \PHPUnit\Framework\TestCase
-{
-    /**
-     * @return \OtherCode\Rest\Rest
-     */
-    public function testInstantiationAndConfiguration()
-    {
-        $api = new \OtherCode\Rest\Rest();
+use OtherCode\Rest\Exceptions\ConnectionException;
+use OtherCode\Rest\Exceptions\RestException;
+use OtherCode\Rest\Payloads\Headers;
+use OtherCode\Rest\Payloads\Request;
+use OtherCode\Rest\Payloads\Response;
+use OtherCode\Rest\Rest;
+use OtherCode\Rest\Core\Configuration;
+use OtherCode\Rest\Core\Error;
+use Tests\Rest\CoreTester;
 
-        $this->assertInstanceOf('\OtherCode\Rest\Rest', $api);
-        $this->assertInstanceOf('\OtherCode\Rest\Core\Configuration', $api->configuration);
+test('instantiation and configuration', function () {
+    $api = new Rest();
 
-        $api->configuration->url = "http://jsonplaceholder.typicode.com/";
-        $api->configuration->timeout = 10;
+    expect($api)->toBeInstanceOf(Rest::class);
+    expect($api->configuration)->toBeInstanceOf(Configuration::class);
 
-        $this->assertInternalType('array', $api->configuration->toArray());
+    $api->configuration->url = "http://jsonplaceholder.typicode.com/";
+    $api->configuration->timeout = 10;
 
-        /**
-         * There are 3 options configured by default, so if we configure
-         * two we have a total of 5
-         */
-        $this->assertCount(5, $api->configuration->toArray());
-
-        return $api;
-    }
+    expect($api->configuration->toArray())->toBeArray();
 
     /**
-     * @param \OtherCode\Rest\Rest $api
-     * @depends testInstantiationAndConfiguration
+     * There are 3 options configured by default, so if we configure
+     * two we have a total of 5
      */
-    public function testDirectConfiguration(\OtherCode\Rest\Rest $api)
-    {
-        $api->addHeader('some_header', "some_value");
-        $this->assertCount(1, $api->configuration->httpheader);
+    expect($api->configuration->toArray())->toHaveCount(5);
 
-        $api->addHeaders(array(
-            'some_header_1' => 'some_value_1',
-            'some_header_2' => 'some_value_2',
-        ));
-        $this->assertCount(3, $api->configuration->httpheader);
+    return $api;
+});
 
-        $api->removeHeader('some_header');
-        $this->assertCount(2, $api->configuration->httpheader);
+test('direct configuration', function (Rest $api) {
+    $api->addHeader('some_header', "some_value");
+    expect($api->configuration->httpheader)->toHaveCount(1);
 
-        $api->removeHeaders(array(
-            'some_header_1',
-            'some_header_2',
-        ));
-        $this->assertCount(0, $api->configuration->httpheader);
-    }
+    $api->addHeaders(array(
+        'some_header_1' => 'some_value_1',
+        'some_header_2' => 'some_value_2',
+    ));
+    expect($api->configuration->httpheader)->toHaveCount(3);
 
-    /**
-     * @param \OtherCode\Rest\Rest $api
-     * @depends testInstantiationAndConfiguration
-     * @return \OtherCode\Rest\Rest
-     */
-    public function testGetMethod(\OtherCode\Rest\Rest $api)
-    {
-        $response = $api->get("posts/1");
+    $api->removeHeader('some_header');
+    expect($api->configuration->httpheader)->toHaveCount(2);
 
-        $this->assertInstanceOf('OtherCode\Rest\Payloads\Response', $response);
-        $this->assertInstanceOf('OtherCode\Rest\Payloads\Headers', $response->headers);
-        $this->assertInstanceOf('OtherCode\Rest\Core\Error', $response->error);
+    $api->removeHeaders(array(
+        'some_header_1',
+        'some_header_2',
+    ));
+    expect($api->configuration->httpheader)->toHaveCount(0);
+})->depends('instantiation and configuration');
 
-        $this->assertInternalType('array', $response->metadata);
-        $this->assertInternalType('int', $response->code);
-        $this->assertInternalType('string', $response->content_type);
-        $this->assertInternalType('string', $response->charset);
+test('get method', function (Rest $api) {
+    $response = $api->get("posts/1");
 
-        return $api;
-    }
+    expect($response)->toBeInstanceOf(Response::class);
+    expect($response->headers)->toBeInstanceOf(Headers::class);
+    expect($response->error)->toBeInstanceOf(Error::class);
+    expect($response->metadata)->toBeArray();
+    expect($response->code)->toBeInt();
+    expect($response->content_type)->toBeString();
+    expect($response->charset)->toBeString();
 
-    /**
-     * @param \OtherCode\Rest\Rest $api
-     * @depends testInstantiationAndConfiguration
-     */
-    public function testPostMethod(\OtherCode\Rest\Rest $api)
-    {
-        $response = $api->post("posts", json_encode(array(
-            'title' => 'foo',
-            'body' => 'bar',
-            'userId' => 1
-        )));
+    return $api;
+})->depends('instantiation and configuration');
 
-        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Response', $response);
-        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Headers', $response->headers);
-        $this->assertInstanceOf('\OtherCode\Rest\Core\Error', $response->error);
+test('post method', function (Rest $api) {
+    $response = $api->post("posts", json_encode(array(
+        'title' => 'foo',
+        'body' => 'bar',
+        'userId' => 1
+    )));
 
-        $this->assertInternalType('array', $response->metadata);
-        $this->assertInternalType('int', $response->code);
-        $this->assertInternalType('string', $response->content_type);
-        $this->assertInternalType('string', $response->charset);
-    }
+    expect($response)->toBeInstanceOf(Response::class);
+    expect($response->headers)->toBeInstanceOf(Headers::class);
+    expect($response->error)->toBeInstanceOf(Error::class);
+    expect($response->metadata)->toBeArray();
+    expect($response->code)->toBeInt();
+    expect($response->content_type)->toBeString();
+    expect($response->charset)->toBeString();
+})->depends('instantiation and configuration');
 
-    /**
-     * @param \OtherCode\Rest\Rest $api
-     * @depends testInstantiationAndConfiguration
-     */
-    public function testPutMethod(\OtherCode\Rest\Rest $api)
-    {
-        $response = $api->put("posts/1", json_encode(array(
-            'id' => 1,
-            'title' => 'foo',
-            'body' => 'bar',
-            'userId' => 1
-        )));
+test('put method', function (Rest $api) {
+    $response = $api->put("posts/1", json_encode(array(
+        'id' => 1,
+        'title' => 'foo',
+        'body' => 'bar',
+        'userId' => 1
+    )));
 
-        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Response', $response);
-        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Headers', $response->headers);
-        $this->assertInstanceOf('\OtherCode\Rest\Core\Error', $response->error);
+    expect($response)->toBeInstanceOf(Response::class);
+    expect($response->headers)->toBeInstanceOf(Headers::class);
+    expect($response->error)->toBeInstanceOf(Error::class);
+    expect($response->metadata)->toBeArray();
+    expect($response->code)->toBeInt();
+    expect($response->content_type)->toBeString();
+    expect($response->charset)->toBeString();
+})->depends('instantiation and configuration');
 
-        $this->assertInternalType('array', $response->metadata);
-        $this->assertInternalType('int', $response->code);
-        $this->assertInternalType('string', $response->content_type);
-        $this->assertInternalType('string', $response->charset);
-    }
+test('patch method', function (Rest $api) {
+    $response = $api->patch("posts/1", json_encode(array(
+        'body' => 'bar',
+    )));
 
-    /**
-     * @param \OtherCode\Rest\Rest $api
-     * @depends testInstantiationAndConfiguration
-     */
-    public function testPatchMethod(\OtherCode\Rest\Rest $api)
-    {
-        $response = $api->patch("posts/1", json_encode(array(
-            'body' => 'bar',
-        )));
+    expect($response)->toBeInstanceOf(Response::class);
+    expect($response->headers)->toBeInstanceOf(Headers::class);
+    expect($response->error)->toBeInstanceOf(Error::class);
+    expect($response->metadata)->toBeArray();
+    expect($response->code)->toBeInt();
+    expect($response->content_type)->toBeString();
+    expect($response->charset)->toBeString();
+})->depends('instantiation and configuration');
 
-        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Response', $response);
-        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Headers', $response->headers);
-        $this->assertInstanceOf('\OtherCode\Rest\Core\Error', $response->error);
+test('delete method', function (Rest $api) {
+    $response = $api->delete("posts/1");
 
-        $this->assertInternalType('array', $response->metadata);
-        $this->assertInternalType('int', $response->code);
-        $this->assertInternalType('string', $response->content_type);
-        $this->assertInternalType('string', $response->charset);
-    }
+    expect($response)->toBeInstanceOf(Response::class);
+    expect($response->headers)->toBeInstanceOf(Headers::class);
+    expect($response->error)->toBeInstanceOf(Error::class);
+    expect($response->metadata)->toBeArray();
+    expect($response->code)->toBeInt();
+    expect($response->content_type)->toBeString();
+    expect($response->charset)->toBeString();
+})->depends('instantiation and configuration');
 
-    /**
-     * @param \OtherCode\Rest\Rest $api
-     * @depends testInstantiationAndConfiguration
-     */
-    public function testDeleteMethod(\OtherCode\Rest\Rest $api)
-    {
-        $response = $api->delete("posts/1");
+test('head method', function (Rest $api) {
+    $response = $api->head("posts");
 
-        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Response', $response);
-        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Headers', $response->headers);
-        $this->assertInstanceOf('\OtherCode\Rest\Core\Error', $response->error);
+    expect($response)->toBeInstanceOf(Response::class);
+    expect($response->headers)->toBeInstanceOf(Headers::class);
+    expect($response->error)->toBeInstanceOf(Error::class);
+    expect($response->metadata)->toBeArray();
+    expect($response->code)->toBeInt();
+    expect($response->content_type)->toBeString();
+    expect($response->charset)->toBeString();
+    expect($response->body)->toBeNull();
+})->depends('instantiation and configuration');
 
-        $this->assertInternalType('array', $response->metadata);
-        $this->assertInternalType('int', $response->code);
-        $this->assertInternalType('string', $response->content_type);
-        $this->assertInternalType('string', $response->charset);
-    }
+test('payloads', function (Rest $api) {
+    $payloads = $api->getPayloads();
 
-    /**
-     * @param \OtherCode\Rest\Rest $api
-     * @depends testInstantiationAndConfiguration
-     */
-    public function testHeadMethod(\OtherCode\Rest\Rest $api)
-    {
-        $response = $api->head("posts");
+    expect($payloads['request'])->toBeInstanceOf(Request::class);
+    expect($payloads['response'])->toBeInstanceOf(Response::class);
+})->depends('get method');
 
-        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Response', $response);
-        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Headers', $response->headers);
-        $this->assertInstanceOf('\OtherCode\Rest\Core\Error', $response->error);
+test('metadata', function (Rest $api) {
+    expect($api->getMetadata())->toBeArray();
+})->depends('get method');
 
-        $this->assertInternalType('array', $response->metadata);
-        $this->assertInternalType('int', $response->code);
-        $this->assertInternalType('string', $response->content_type);
-        $this->assertInternalType('string', $response->charset);
+test('get error', function (Rest $api) {
+    expect($api->getError())->toBeInstanceOf(Error::class);
+})->depends('instantiation and configuration');
 
-        $this->assertNull($response->body);
-    }
+test('exception', function (Rest $api) {
+    $api->configuration->url = "http://thisurlnotexists.com/";
+    $api->get("posts/1");
+})->throws(ConnectionException::class)->depends('instantiation and configuration');
 
-    /**
-     * @param \OtherCode\Rest\Rest $api
-     * @depends testGetMethod
-     */
-    public function testPayloads(\OtherCode\Rest\Rest $api)
-    {
-        $payloads = $api->getPayloads();
+test('core call wrong verb', function () {
+    $core = new CoreTester();
+    $core->returnCall('wrong', 'http://jsonplaceholder.typicode.com/posts/1');
+})->throws(RestException::class);
 
-        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Request', $payloads['request']);
-        $this->assertInstanceOf('\OtherCode\Rest\Payloads\Response', $payloads['response']);
-    }
+test('get raw core call', function () {
+    $core = new CoreTester();
+    $response = $core->returnCall('GET', 'http://jsonplaceholder.typicode.com/posts/1', 'param=value');
 
-    /**
-     * @param \OtherCode\Rest\Rest $api
-     * @depends testGetMethod
-     */
-    public function testMetadata(\OtherCode\Rest\Rest $api)
-    {
-        $this->assertInternalType('array', $api->getMetadata());
-    }
-
-    /**
-     * @depends testInstantiationAndConfiguration
-     */
-    public function testGetError(\OtherCode\Rest\Rest $api)
-    {
-        $this->assertInstanceOf('\OtherCode\Rest\Core\Error', $api->getError());
-    }
-
-    /**
-     * @param \OtherCode\Rest\Rest $api
-     * @depends testInstantiationAndConfiguration
-     * @expectedException \OtherCode\Rest\Exceptions\ConnectionException
-     */
-    public function testException(\OtherCode\Rest\Rest $api)
-    {
-        $api->configuration->url = "http://thisurlnotexists.com/";
-        $api->get("posts/1");
-    }
-
-    /**
-     * @expectedException \OtherCode\Rest\Exceptions\RestException
-     */
-    public function testCoreCallWrongVerb()
-    {
-        $core = new \Tests\Rest\CoreTester();
-        $core->returnCall('wrong', 'http://jsonplaceholder.typicode.com/posts/1');
-    }
-
-    public function testGetRawCoreCall()
-    {
-        $core = new \Tests\Rest\CoreTester();
-        $response = $core->returnCall('GET', 'http://jsonplaceholder.typicode.com/posts/1', 'param=value');
-
-        $this->assertInstanceOf('OtherCode\Rest\Payloads\Response', $response);
-        $this->assertInstanceOf('OtherCode\Rest\Payloads\Headers', $response->headers);
-        $this->assertInstanceOf('OtherCode\Rest\Core\Error', $response->error);
-
-        $this->assertInternalType('array', $response->metadata);
-        $this->assertInternalType('int', $response->code);
-        $this->assertInternalType('string', $response->content_type);
-        $this->assertInternalType('string', $response->charset);
-    }
-
-}
+    expect($response)->toBeInstanceOf(Response::class);
+    expect($response->headers)->toBeInstanceOf(Headers::class);
+    expect($response->error)->toBeInstanceOf(Error::class);
+    expect($response->metadata)->toBeArray();
+    expect($response->code)->toBeInt();
+    expect($response->content_type)->toBeString();
+    expect($response->charset)->toBeString();
+});

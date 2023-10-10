@@ -2,21 +2,23 @@
 
 namespace OtherCode\Rest\Core;
 
+use OtherCode\Rest\Exceptions\RestException;
+use OtherCode\Rest\Payloads\Headers;
+
 /**
  * Class Configuration
  * @author Unay Santisteban <usantisteban@othercode.es>
- * @version 1.0
  * @package OtherCode\Rest\Core
  */
-class Configuration extends \OtherCode\Rest\Core\CurlOpts
+class Configuration extends CurlOpts
 {
     /**
      * Configuration constructor.
-     * @param array $source
+     * @param  array  $source
      */
-    public function __construct($source = array())
+    public function __construct(array $source = [])
     {
-        $this->httpheader = new \OtherCode\Rest\Payloads\Headers();
+        $this->httpheader = new Headers();
 
         $allowed = array_keys(get_class_vars(get_class($this)));
         foreach ($source as $key => $value) {
@@ -34,11 +36,11 @@ class Configuration extends \OtherCode\Rest\Core\CurlOpts
 
     /**
      * Add a single new header
-     * @param $header
-     * @param $value
+     * @param  string  $header
+     * @param  mixed  $value
      * @return $this
      */
-    public function addHeader($header, $value)
+    public function addHeader(string $header, $value): Configuration
     {
         $this->httpheader[$header] = $value;
         return $this;
@@ -46,10 +48,10 @@ class Configuration extends \OtherCode\Rest\Core\CurlOpts
 
     /**
      * Add a bunch of headers
-     * @param array $headers
+     * @param  array  $headers
      * @return $this
      */
-    public function addHeaders(array $headers)
+    public function addHeaders(array $headers): Configuration
     {
         foreach ($headers as $header => $value) {
             $this->addHeader($header, $value);
@@ -59,21 +61,21 @@ class Configuration extends \OtherCode\Rest\Core\CurlOpts
 
     /**
      * Remove a header
-     * @param string $header
+     * @param  string  $header
      * @return $this
      */
-    public function removeHeader($header)
+    public function removeHeader(string $header): Configuration
     {
         unset($this->httpheader[$header]);
         return $this;
     }
 
     /**
-     * Remove an set of headers
-     * @param array $headers
+     * Remove a set of headers
+     * @param  array  $headers
      * @return $this
      */
-    public function removeHeaders(array $headers)
+    public function removeHeaders(array $headers): Configuration
     {
         foreach ($headers as $header) {
             $this->removeHeader($header);
@@ -83,22 +85,22 @@ class Configuration extends \OtherCode\Rest\Core\CurlOpts
 
     /**
      * Set the basic http auth
-     * @param $username
-     * @param $password
+     * @param  string  $username
+     * @param  string  $password
      * @return $this
      */
-    public function basicAuth($username, $password)
+    public function basicAuth(string $username, string $password): Configuration
     {
-        $this->userpwd = $username . '=' . $password;
+        $this->userpwd = $username.'='.$password;
         return $this;
     }
 
     /**
      * Add a SSL Certificate
-     * @param string $certificate
+     * @param  string  $certificate
      * @return $this
      */
-    public function setSSLCertificate($certificate)
+    public function setSSLCertificate(string $certificate): Configuration
     {
         $this->sslcert = $certificate;
         return $this;
@@ -106,15 +108,15 @@ class Configuration extends \OtherCode\Rest\Core\CurlOpts
 
     /**
      * Set a CA Certificate to validate peers
-     * @param string $path
-     * @param string $type Can be capath or cainfo
-     * @throws \OtherCode\Rest\Exceptions\RestException
+     * @param  string  $path
+     * @param  string  $type  Can be capath or cainfo
      * @return $this
+     * @throws RestException
      */
-    public function setCACertificates($path, $type)
+    public function setCACertificates(string $path, string $type): Configuration
     {
-        if (!in_array($type, array('capath', 'cainfo'))) {
-            throw new \OtherCode\Rest\Exceptions\RestException('Invalid param "type" in for ' . __METHOD__ . 'method.');
+        if (!in_array($type, ['capath', 'cainfo'])) {
+            throw new RestException('Invalid param "type" in for '.__METHOD__.'method.');
         }
 
         $this->ssl_verifypeer = true;
@@ -127,13 +129,14 @@ class Configuration extends \OtherCode\Rest\Core\CurlOpts
      * Transform the object to array.
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
-        $array = array();
+        $array = [];
         $allowed = get_class_vars(get_class($this));
         foreach (get_object_vars($this) as $key => $item) {
             if (array_key_exists($key, $allowed) && isset($item)) {
-                $array[constant(strtoupper("CURLOPT_" . $key))] = ((is_string($item) || is_object($item)) && method_exists($item, 'build') ? $item->build() : $item);
+                $array[constant(strtoupper("CURLOPT_".$key))] = ((is_string($item) || is_object($item))
+                && method_exists($item, 'build') ? $item->build() : $item);
             }
         }
         return $array;
